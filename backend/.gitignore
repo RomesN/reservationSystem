@@ -1,0 +1,27 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+
+# dotenv environment variables file
+.env
+.env.test
+
+
+# Logs
+logs
+*.log
+
+ Output of 'npm pack'
+*.tgz
+
+
+# TypeScript cache
+*.tsbuildinfo
+
+
+# Personal settings
+notPublic/
+
+#Test JEST coverage
+coverage/

@@ -1,0 +1,25 @@
+{
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "nodemon": "^2.0.20",
+        "sequelize": "^6.25.6"
+    },
+    "name": "reservation_backend",
+    "version": "1.0.0",
+    "description": "Backend of the reservation system.",
+    "main": "server.js",
+    "scripts": {
+        "start": "nodemon --exec src/server.mjs",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RomesN/reservationSystem.git"
+    },
+    "author": "Roman Nemeth",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/RomesN/reservationSystem/issues"
+    },
+    "homepage": "https://github.com/RomesN/reservationSystem#readme"
+}
