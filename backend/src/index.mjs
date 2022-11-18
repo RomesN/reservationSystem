@@ -17,4 +17,4 @@ app.use(
 );
 app.use(cors());
 
-export { app };
+export default app;

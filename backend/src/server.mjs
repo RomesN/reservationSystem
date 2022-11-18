@@ -1,7 +1,8 @@
 import "dotenv/config";
+import app from "./index";
 import db from "./config/db.mjs";
-import { app } from "./index";
 import chalk from "chalk";
+import loadInitialData from "./config/initialData";
 
 const eraseDatabaseOnSync = process.env.NODE_ENV === "development";
 
@@ -15,7 +16,12 @@ const eraseDatabaseOnSync = process.env.NODE_ENV === "development";
     }
 
     // Initialize database
-    await db.sync({ force: eraseDatabaseOnSync }).then(async () => {});
+    await db.sync({ force: eraseDatabaseOnSync }).then(async () => {
+        if (eraseDatabaseOnSync) {
+            await loadInitialData();
+            console.log("data loaded");
+        }
+    });
 })();
 
 app.listen(process.env.PORT, () => {
