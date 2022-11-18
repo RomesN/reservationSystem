@@ -1,6 +1,6 @@
 const getModelStatus = (db, { DataTypes }) => {
     const Status = db.define(
-        "reservationStatus",
+        "status",
         {
             status: {
                 type: DataTypes.STRING(20),
@@ -10,16 +10,30 @@ const getModelStatus = (db, { DataTypes }) => {
         },
         {
             timestamps: false,
-            tableName: "reservation_status",
         }
     );
 
     Status.associate = (models) => {
         Status.hasMany(models.Reservation, {
-            sourceKey: "reservationStatus",
+            sourceKey: "status",
+            foreignKey: {
+                type: DataTypes.STRING(25),
+                name: "reservationStatus",
+            },
         });
         Status.hasMany(models.Admin, {
-            sourceKey: "adminStatus",
+            sourceKey: "status",
+            foreignKey: {
+                type: DataTypes.STRING(25),
+                name: "adminStatus",
+            },
+        });
+        Status.hasMany(models.Customer, {
+            sourceKey: "status",
+            foreignKey: {
+                type: DataTypes.STRING(25),
+                name: "customerStatus",
+            },
         });
     };
 

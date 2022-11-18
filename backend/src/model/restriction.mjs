@@ -23,7 +23,7 @@ const getModelRestriction = (db, { DataTypes }) => {
             targetKey: "type",
             foreignKey: {
                 type: DataTypes.STRING(25),
-                name: "type",
+                name: "restrictionType",
             },
         });
     };

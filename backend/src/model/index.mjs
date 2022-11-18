@@ -1,12 +1,12 @@
-import db from "./../config/db";
 import { Sequelize } from "sequelize";
-import getModelAdmin from "./admin";
-import getModelReservation from "./reservation";
-import getModelRestriction from "./restriction";
-import getModelService from "./service";
-import getModelStatus from "./status";
-import getModelType from "./type";
-import getModelUser from "./user";
+import db from "./../config/db.mjs";
+import getModelAdmin from "./admin.mjs";
+import getModelCustomer from "./customer.mjs";
+import getModelReservation from "./reservation.mjs";
+import getModelRestriction from "./restriction.mjs";
+import getModelService from "./service.mjs";
+import getModelStatus from "./status.mjs";
+import getModelType from "./type.mjs";
 
 const models = {
     Admin: getModelAdmin(db, Sequelize),
@@ -15,7 +15,7 @@ const models = {
     Service: getModelService(db, Sequelize),
     Status: getModelStatus(db, Sequelize),
     Type: getModelType(db, Sequelize),
-    User: getModelUser(db, Sequelize),
+    Customer: getModelCustomer(db, Sequelize),
 };
 
 Object.keys(models).forEach((key) => {

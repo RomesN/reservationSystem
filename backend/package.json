@@ -1,15 +1,21 @@
 {
     "dependencies": {
+        "chalk": "^5.1.2",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.3",
-        "nodemon": "^2.0.20",
+        "express": "^4.18.2",
+        "pg": "^8.8.0",
         "sequelize": "^6.25.6"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.20"
     },
     "name": "reservation_backend",
     "version": "1.0.0",
     "description": "Backend of the reservation system.",
-    "main": "server.js",
+    "main": "server.mjs",
     "scripts": {
-        "start": "nodemon --exec src/server.mjs",
+        "start": "nodemon --exec node src/server.mjs",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

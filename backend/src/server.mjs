@@ -1,8 +1,8 @@
 import "dotenv/config";
-import app from "./index";
-import db from "./config/db.mjs";
 import chalk from "chalk";
-import loadInitialData from "./config/initialData";
+import app from "./index.mjs";
+import db from "./config/db.mjs";
+import loadInitialData from "./config/initialData.mjs";
 
 const eraseDatabaseOnSync = process.env.NODE_ENV === "development";
 

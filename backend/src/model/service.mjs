@@ -5,16 +5,21 @@ const getModelService = (db, { DataTypes }) => {
             allowNull: false,
             unique: true,
         },
-        timeRquirement: {
-            type: DataTypes.DATE,
+        minutesRequired: {
+            type: DataTypes.INTEGER,
+            defaultValue: 60,
             allowNull: false,
         },
     });
-
     Service.associate = (models) => {
-        Service.belongsToMany(models.Reservation, { through: "reservation-service" });
+        Service.hasMany(models.Reservation, {
+            sourceKey: "name",
+            foreignKey: {
+                type: DataTypes.STRING(200),
+                name: "serviceName",
+            },
+        });
     };
-
     return Service;
 };
 

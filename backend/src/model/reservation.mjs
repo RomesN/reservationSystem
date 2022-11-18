@@ -1,6 +1,6 @@
 const getModelReservation = (db, { DataTypes }) => {
     const Reservation = db.define("reservation", {
-        startDate: {
+        date: {
             type: DataTypes.DATE,
             allowNull: false,
             unique: true,
@@ -9,21 +9,24 @@ const getModelReservation = (db, { DataTypes }) => {
             type: DataTypes.STRING(250),
             allowNull: true,
         },
-        status: {
-            type: DataTypes.STRING(20),
-            allowNull: false,
-        },
     });
 
     Reservation.associate = (models) => {
-        Reservation.belongsToMany(models.Service, { through: "reservation-service" });
+        Reservation.belongsTo(models.Service, {
+            targetKey: "name",
+            foreignKey: {
+                type: DataTypes.STRING(200),
+                name: "serviceName",
+            },
+        });
         Reservation.belongsTo(models.Status, {
             targetKey: "status",
             foreignKey: {
-                type: DataTypes.STRING(20),
+                type: DataTypes.STRING(25),
                 name: "reservationStatus",
             },
         });
+        Reservation.belongsTo(models.Customer);
     };
 
     return Reservation;

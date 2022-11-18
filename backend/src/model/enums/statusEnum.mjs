@@ -1,4 +1,4 @@
 export default {
-    ACTIVE: "Enabled",
+    ACTIVE: "Active",
     SOFT_DELETED: "Soft-deleted",
 };

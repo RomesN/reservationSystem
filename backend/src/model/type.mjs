@@ -12,7 +12,13 @@ const getModelType = (db, { DataTypes }) => {
     );
 
     Type.associate = (models) => {
-        Type.hasMany(models.Resctriction);
+        Type.hasMany(models.Restriction, {
+            sourceKey: "type",
+            foreignKey: {
+                type: DataTypes.STRING(25),
+                name: "restrictionType",
+            },
+        });
     };
 
     return Type;
