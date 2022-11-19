@@ -7,6 +7,12 @@ const LandingPage = () => {
         <div className={styles.wrapper}>
             <div className={styles.content}>
                 <div className={styles.contentRow}>
+                    <h2 className={styles.contentHeader}>Welcome!</h2>
+                </div>
+                <div className={styles.contentRow}>
+                    <hr className={styles.contentLine} />
+                </div>
+                <div className={styles.contentRow}>
                     <Link to="/">
                         <Button variant="primary" className={styles.buttonBook} size="lg">
                             Make a booking
