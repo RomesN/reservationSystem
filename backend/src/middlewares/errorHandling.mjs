@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import CoveredError from "../utils/index.mjs";
+import { CoveredError } from "../utils/index.mjs";
 import { errorJsonResponse } from "../utils/index.mjs";
 
-export const errorHandling = (error, req, res, next) => {
+export default (error, req, res, next) => {
     let httpStatusCode, message;
     if (error instanceof CoveredError) {
         console.log(chalk.red(`----> CustomError [${new Date()}] ----> ${error.errorMessage}`));
