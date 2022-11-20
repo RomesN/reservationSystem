@@ -4,7 +4,7 @@ Reservation system app
 
 ## 2. Project Description
 
-The goal of this project is to create an web application serving as a reservation system for beauty procedures.
+The goal of this project is to create a web application serving as a reservation system for beauty procedures.
 
 Backend part
 
@@ -33,4 +33,4 @@ Use the following commands:
 
 ## 4. Credits
 
-Atuhor: Roman Nemeth
+Author: Roman Nemeth
