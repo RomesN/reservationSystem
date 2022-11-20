@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Props, Service } from "../shared/types";
+import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 
 type NewBookingContext = {
+    getView: () => NewBookingView;
     getBookedService: () => Service | null;
     getBookedDate: () => Date | null;
     getBookedTime: () => Date | null;
     getBookedFormData: () => BookedFormData | null;
-    setBookedServiceState: (bookedService: Service) => void;
+    setBookingView: (view: NewBookingView) => void;
+    setBookedServiceState: (bookedService: Service | null) => void;
     setBookedDateState: (bookedService: Date) => void;
     setBookedTimeState: (bookedService: Date) => void;
     setBookedFormDataState: (bookedService: BookedFormData) => void;
@@ -27,10 +30,15 @@ export function useNewBookingContext() {
 }
 
 export const NewBookingDataProvider = ({ children }: Props) => {
+    const [view, setView] = useState(NewBookingView.Services);
     const [bookService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [bookedTime, setBookedTime] = useState<null | Date>(null);
     const [bookedFormData, setBookedFormData] = useState<null | BookedFormData>(null);
+
+    function getView() {
+        return view;
+    }
 
     function getBookedService() {
         return bookService;
@@ -48,7 +56,11 @@ export const NewBookingDataProvider = ({ children }: Props) => {
         return bookedFormData;
     }
 
-    function setBookedServiceState(bookedService: Service) {
+    function setBookingView(view: NewBookingView) {
+        setView(view);
+    }
+
+    function setBookedServiceState(bookedService: Service | null) {
         setBookedService(bookedService);
     }
 
@@ -67,10 +79,12 @@ export const NewBookingDataProvider = ({ children }: Props) => {
     return (
         <NewBookingDataContext.Provider
             value={{
+                getView,
                 getBookedService,
                 getBookedDate,
                 getBookedTime,
                 getBookedFormData,
+                setBookingView,
                 setBookedServiceState,
                 setBookedDateState,
                 setBookedTimeState,

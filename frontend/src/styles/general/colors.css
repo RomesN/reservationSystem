@@ -1,0 +1,8 @@
+:root {
+    --mainColor: #5163be;
+    --secondaryColor: #8a96d3;
+    --tertiaryColor: #c3c9e9;
+    --hoverColorFontDark: black;
+    --hoverColorFontBright: #ffffff;
+    --errorColor: red;
+}

@@ -1,7 +1,9 @@
+@import "./general/colors.css";
+
 /* COMMON */
 .contentHeader {
     font-weight: bold;
-    color: #5163be;
+    color: var(--mainColor);
     margin-bottom: 2px;
 }
 
@@ -9,7 +11,7 @@
     padding: 0;
     border: none;
     height: 1px;
-    background: #5163be;
+    background: var(--mainColor);
     margin: 0 0 30px 0;
 }
 
@@ -23,23 +25,23 @@
 }
 
 .buttonBook {
-    border: #5163be;
-    background-color: #5163be;
+    border: var(--mainColor);
+    background-color: var(--mainColor);
     margin-bottom: 10px;
 }
 
 .buttonCancel {
-    border: #8a96d3;
-    background-color: #8a96d3;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
     font-size: 20px;
 }
 
 .buttonBook:hover,
 .buttonCancel:hover {
-    background-color: #c3c9e9;
-    color: black;
-    --bs-btn-active-color: black;
-    --bs-btn-active-bg: #c3c9e9;
+    background-color: var(--tertiaryColor);
+    color: var(--hoverColorFontDark);
+    --bs-btn-active-color: var(--hoverColorFontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

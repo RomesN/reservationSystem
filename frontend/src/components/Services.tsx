@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 import { getServices } from "../api/reservationApi";
-import { AxiosError } from "axios";
-import ErrorBoundary from "./ErrorBoundary";
 import { Service } from "../shared/types";
-import styles from "../styles/loading.module.css";
+import ServiceBox from "./ServiceBox";
+import stylesLoading from "../styles/loading.module.css";
+import stylesServices from "../styles/services.module.css";
 
 type okServiceResponse = {
     status: string;
@@ -19,11 +19,21 @@ const Services = () => {
 
     const getServicesList = (serviceArray: Service[]) => {
         return (
-            <ul>
-                {serviceArray.map((service: Service) => {
-                    return <li key={service.id}>{service.name}</li>;
-                })}
-            </ul>
+            <div className={stylesServices.serviceList}>
+                {serviceArray
+                    .sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0))
+                    .map((service: Service) => {
+                        return (
+                            <ServiceBox
+                                key={service.id}
+                                id={service.id}
+                                name={service.name}
+                                minutesRequired={service.minutesRequired}
+                                services={serviceArray}
+                            />
+                        );
+                    })}
+            </div>
         );
     };
 
@@ -32,11 +42,13 @@ const Services = () => {
     }
 
     return (
-        <div className={styles["loadingio-spinner-pulse-5by9iuqunuc"]}>
-            <div className={styles["ldio-x6iswrgd0c"]}>
-                <div></div>
-                <div></div>
-                <div></div>
+        <div className={stylesLoading.loadingContainer}>
+            <div className={stylesLoading["loadingio-spinner-pulse-mvs7jy77wdr"]}>
+                <div className={stylesLoading["ldio-1zhfes7vwu4"]}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
         </div>
     );

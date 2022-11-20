@@ -1,0 +1,46 @@
+@import "./general/colors.css";
+
+.serviceBox {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border: 2px solid var(--mainColor);
+    color: var(--mainColor);
+    margin: 0 0 5px 0;
+}
+
+.serviceBox:hover {
+    color: var(--hoverColorFontBright);
+    background-color: var(--mainColor);
+    cursor: pointer;
+}
+
+.namePart {
+    padding: 0.3em 0 0.3em 0.3em;
+}
+
+.minutesPart {
+    padding: 0.3em 0.3em 0.3em 0;
+}
+
+.namePart > p {
+    margin: 0;
+}
+
+.minutesPart > p {
+    margin: 0;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .serviceBox {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .serviceBox {
+        font-size: 13px;
+    }
+}

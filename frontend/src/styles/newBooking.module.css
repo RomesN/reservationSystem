@@ -1,10 +1,12 @@
+@import "./general/colors.css";
+
 .newBookingContainer {
     display: block;
 }
 
 .contentLine {
     margin: 0 0 5px;
-    color: #5163be;
+    color: var(--mainColor);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

@@ -1,5 +1,8 @@
 import { Props } from "../shared/types";
 import React, { ErrorInfo } from "react";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from "../styles/errorBoundary.module.css";
 
 type State = {
     hasError: boolean;
@@ -20,7 +23,14 @@ class ErrorBoundary extends React.Component<Props, State> {
 
     render() {
         if (this.state.hasError) {
-            return <p>Sorry.. there was an error</p>;
+            return (
+                <div className={styles.errorContainer}>
+                    <p>
+                        <FontAwesomeIcon size="sm" icon={faCircleExclamation} />
+                        {` Sorry, something went wrong...`}
+                    </p>
+                </div>
+            );
         }
 
         return this.props.children;

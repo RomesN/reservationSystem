@@ -1,7 +1,7 @@
 body::before {
     position: absolute;
     content: "";
-    background-image: url("../assets/images/pexels-madison-inouye-1831234.jpg");
+    background-image: url("../../assets/images/pexels-madison-inouye-1831234.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;

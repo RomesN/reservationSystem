@@ -1,33 +1,30 @@
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import styles from "../styles/newBookingToolbar.module.css";
 
-type Props = {
-    view: string;
-    setView: React.Dispatch<React.SetStateAction<string>>;
-};
+const NewBookingToolbar = () => {
+    const { getView, setBookingView } = useNewBookingContext();
 
-const NewBookingToolbar = ({ view, setView }: Props) => {
     const handleClickBack = () => {
-        switch (view) {
+        switch (getView()) {
             case NewBookingView.Form:
-                setView(NewBookingView.Times);
+                setBookingView(NewBookingView.Times);
                 break;
             case NewBookingView.Times:
-                setView(NewBookingView.Calendar);
+                setBookingView(NewBookingView.Calendar);
                 break;
             case NewBookingView.Calendar:
-                setView(NewBookingView.Services);
+                setBookingView(NewBookingView.Services);
                 break;
         }
     };
 
     const backButton = () => {
-        if (view === NewBookingView.Services) {
+        if (getView() === NewBookingView.Services) {
             return (
                 <Link to="/">
                     <Button variant="primary" className={styles.backButton}>
@@ -47,32 +44,29 @@ const NewBookingToolbar = ({ view, setView }: Props) => {
     };
 
     const heading = () => {
-        switch (view) {
+        let text;
+        switch (getView()) {
             case NewBookingView.Services:
-                return (
-                    <>
-                        <h2 className={styles.heading}>Select service</h2>
-                    </>
-                );
+                text = " Select service";
+                break;
             case NewBookingView.Calendar:
-                return (
-                    <>
-                        <h2 className={styles.heading}>Select day</h2>
-                    </>
-                );
+                text = " Select day";
+                break;
             case NewBookingView.Times:
-                return (
-                    <>
-                        <h2 className={styles.heading}>Select time slot</h2>
-                    </>
-                );
+                text = " Select time slot";
+                break;
             case NewBookingView.Form:
-                return (
-                    <>
-                        <h2 className={styles.heading}>Fill in details</h2>
-                    </>
-                );
+                text = " Fill in details";
         }
+
+        return (
+            <>
+                <h2 className={styles.heading}>
+                    <FontAwesomeIcon size="sm" icon={faCheckDouble} />
+                    {text}
+                </h2>
+            </>
+        );
     };
 
     return (
