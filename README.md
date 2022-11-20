@@ -30,3 +30,7 @@ Use the following commands:
 -   `npm start` - start your app in dev mode
 
 -   `npm test` - start your test
+
+## 4. Credits
+
+Atuhor: Roman Nemeth
