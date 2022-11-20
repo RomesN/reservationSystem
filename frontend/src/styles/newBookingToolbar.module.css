@@ -1,0 +1,59 @@
+/* COMMON */
+.container {
+    display: flex;
+}
+
+.containeritemTwo {
+    flex-grow: 3;
+}
+
+.backButton {
+    border: #8a96d3;
+    background-color: #8a96d3;
+    margin: 10px 2px 5px 0;
+    font-weight: bolder;
+    border-radius: 3px;
+}
+
+.backButton:hover {
+    background-color: #c3c9e9;
+    color: black;
+    --bs-btn-active-color: black;
+    --bs-btn-active-bg: #c3c9e9;
+}
+
+.heading {
+    color: #ffffff;
+    font-weight: bolder;
+    line-height: 1.5em;
+    border-radius: 3px;
+    border: #5163be;
+    background-color: #5163be;
+    margin: 10px 0 5px 0;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .backButton {
+        font-size: 20px;
+        padding: 0.5em 3em;
+    }
+
+    .heading {
+        font-size: 20px;
+        padding: 0.5em 3em;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .backButton {
+        font-size: 15px;
+        padding: 0.5em 1em;
+    }
+
+    .heading {
+        font-size: 15px;
+        padding: 0.5em 1em;
+    }
+}

@@ -63,7 +63,7 @@
 }
 
 /* SMALLER DISPLAYS */
-@media screen and (max-width: 992px) and (orientation: landscape) {
+@media screen and (max-width: 992px) {
     .contentHeader {
         font-size: 55px;
     }

@@ -1,6 +1,8 @@
 import { useState } from "react";
-import BookingToolbar from "../components/BookingToolbar";
+import NewBookingToolbar from "../components/NewBookingToolbar";
+import ErrorBoundary from "../components/ErrorBoundary";
 import Services from "../components/Services";
+import styles from "../styles/newBooking.module.css";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 
 const NewBooking = () => {
@@ -21,8 +23,13 @@ const NewBooking = () => {
 
     return (
         <>
-            <BookingToolbar view={view} setView={setView} />
-            {content()}
+            <div className={styles.newBookingContainer}>
+                <NewBookingToolbar view={view} setView={setView} />
+                <div>
+                    <hr className={styles.contentLine} />
+                </div>
+                <ErrorBoundary>{content()}</ErrorBoundary>
+            </div>
         </>
     );
 };

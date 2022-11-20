@@ -1,19 +1,16 @@
-import React, { ReactNode, useContext } from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
+import { Props, Service } from "../shared/types";
 
 type NewBookingContext = {
-    getBookedService: () => string;
+    getBookedService: () => Service | null;
     getBookedDate: () => Date | null;
     getBookedTime: () => Date | null;
     getBookedFormData: () => BookedFormData | null;
-    setBookedServiceState: (bookedService: string) => void;
+    setBookedServiceState: (bookedService: Service) => void;
     setBookedDateState: (bookedService: Date) => void;
     setBookedTimeState: (bookedService: Date) => void;
     setBookedFormDataState: (bookedService: BookedFormData) => void;
-};
-
-type NewBookingContextProviderProps = {
-    children: ReactNode;
 };
 
 type BookedFormData = {
@@ -29,8 +26,8 @@ export function useNewBookingContext() {
     return useContext(NewBookingDataContext);
 }
 
-export const NewBookingDataProvider = ({ children }: NewBookingContextProviderProps) => {
-    const [bookService, setBookedService] = useState("");
+export const NewBookingDataProvider = ({ children }: Props) => {
+    const [bookService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [bookedTime, setBookedTime] = useState<null | Date>(null);
     const [bookedFormData, setBookedFormData] = useState<null | BookedFormData>(null);
@@ -51,7 +48,7 @@ export const NewBookingDataProvider = ({ children }: NewBookingContextProviderPr
         return bookedFormData;
     }
 
-    function setBookedServiceState(bookedService: string) {
+    function setBookedServiceState(bookedService: Service) {
         setBookedService(bookedService);
     }
 
