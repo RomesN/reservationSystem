@@ -17,7 +17,7 @@ app.use(
 );
 app.use(cors());
 
-app.use("/services", servicesRouter);
+app.use("/api/services", servicesRouter);
 
 // Error handler
 app.use(errorHandling);
