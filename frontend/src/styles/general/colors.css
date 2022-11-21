@@ -1,8 +1,8 @@
 :root {
-    --mainColor: #1f1f1f;
-    --secondaryColor: #80a247;
-    --tertiaryColor: #aec883;
-    --hoverColorFontDark: black;
-    --hoverColorFontBright: #ffffff;
+    --mainColor: #212121;
+    --secondaryColor: #6d9886;
+    --tertiaryColor: #d9cab3;
+    --hoverColorFontDark: #212121;
+    --hoverColorFontBright: #f6f6f6;
     --errorColor: #b63838;
 }

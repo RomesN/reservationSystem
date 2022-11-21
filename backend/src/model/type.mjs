@@ -3,7 +3,7 @@ const getModelType = (db, { DataTypes }) => {
         "resctrictionType",
         {
             type: {
-                type: DataTypes.STRING(25),
+                type: DataTypes.STRING(40),
                 unique: true,
                 allowNull: false,
             },
@@ -15,7 +15,7 @@ const getModelType = (db, { DataTypes }) => {
         Type.hasMany(models.Restriction, {
             sourceKey: "type",
             foreignKey: {
-                type: DataTypes.STRING(25),
+                type: DataTypes.STRING(40),
                 name: "restrictionType",
             },
         });

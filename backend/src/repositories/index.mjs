@@ -1,3 +1,5 @@
+import ReservationsRepository from "./reservationsRepository.mjs";
+import RestrictionsRepository from "./restrictionsRepository.mjs";
 import ServicesRepository from "./servicesRepository.mjs";
 
-export { ServicesRepository };
+export { ReservationsRepository, RestrictionsRepository, ServicesRepository };

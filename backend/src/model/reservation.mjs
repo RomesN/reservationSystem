@@ -12,13 +12,7 @@ const getModelReservation = (db, { DataTypes }) => {
     });
 
     Reservation.associate = (models) => {
-        Reservation.belongsTo(models.Service, {
-            targetKey: "name",
-            foreignKey: {
-                type: DataTypes.STRING(200),
-                name: "serviceName",
-            },
-        });
+        Reservation.belongsTo(models.Service);
         Reservation.belongsTo(models.Status, {
             targetKey: "status",
             foreignKey: {

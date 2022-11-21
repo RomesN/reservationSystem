@@ -12,13 +12,7 @@ const getModelService = (db, { DataTypes }) => {
         },
     });
     Service.associate = (models) => {
-        Service.hasMany(models.Reservation, {
-            sourceKey: "name",
-            foreignKey: {
-                type: DataTypes.STRING(200),
-                name: "serviceName",
-            },
-        });
+        Service.hasMany(models.Reservation);
     };
     return Service;
 };
