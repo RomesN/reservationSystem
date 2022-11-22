@@ -1,3 +1,4 @@
+import reservationsRouter from "./reservationsRouter.mjs";
 import servicesRouter from "./servicesRouter.mjs";
 
-export { servicesRouter };
+export { reservationsRouter, servicesRouter };

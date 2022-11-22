@@ -1,4 +1,5 @@
 import { parseISO } from "date-fns";
+import CoveredError from "./coveredError.mjs";
 
 const getDaysInMonth = (year, month) => {
     return new Date(Date.UTC(year, month, 0)).getDate();
@@ -20,5 +21,31 @@ const getUTCFromDateAndLocalTimeString = (date, timeString) => {
 
     return parseISO(dateString);
 };
+const sortIntervalList = (intervalList) => {
+    return intervalList.sort((resA, resB) => {
+        if (resA.startTime < resB.date) {
+            return -1;
+        } else {
+            return 1;
+        }
+    });
+};
 
-export { getDaysInMonth, getWeekdayNumberMonIsOne, getUTCFromDateAndLocalTimeString };
+const getUTCDate = (year, month, day) => {
+    const yearAsNumber = parseInt(year);
+    const monthAsNumber = parseInt(month);
+    const dayAsNumber = parseInt(day);
+
+    if (
+        !Number.isInteger(yearAsNumber) ||
+        !Number.isInteger(monthAsNumber) ||
+        !Number.isInteger(dayAsNumber) ||
+        monthAsNumber > 12
+    ) {
+        throw new CoveredError(400, "Input in wrong format.");
+    }
+
+    return new Date(Date.UTC(yearAsNumber, monthAsNumber - 1, dayAsNumber));
+};
+
+export { getDaysInMonth, getUTCDate, getWeekdayNumberMonIsOne, getUTCFromDateAndLocalTimeString, sortIntervalList };

@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import errorHandling from "./middlewares/errorHandling.mjs";
-import { servicesRouter } from "./routers/index.mjs";
+import { reservationsRouter, servicesRouter } from "./routers/index.mjs";
 
 const app = express();
 
@@ -18,6 +18,7 @@ app.use(
 app.use(cors());
 
 app.use("/api/services", servicesRouter);
+app.use("/api/reservations", reservationsRouter);
 
 // Error handler
 app.use(errorHandling);
