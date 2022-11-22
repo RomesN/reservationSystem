@@ -3,6 +3,7 @@
 .selectionToolbar {
     width: 100%;
     display: flex;
+    animation: fadeIn 0.5s;
 }
 
 .selectionToolbar .buttonPrevious {
@@ -89,18 +90,28 @@
     vertical-align: center;
     border-collapse: separate;
     border-spacing: 1px;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .daySelectionTable th {
     background-color: var(--fontDark);
     color: var(--fontBright);
-    border-radius: 2px;
 }
 
 .daySelectionTable th,
 td {
     padding: 10px 0;
     margin: 10px;
+    border-radius: 2px;
 }
 
 .daySelectionTable .unavailable {
