@@ -6,7 +6,7 @@
 }
 
 .selectionToolbar .buttonPrevious {
-    width: 15%;
+    width: 14.3%;
     margin: 0 2px 0 0;
     border: var(--secondaryColor);
     background-color: var(--secondaryColor);
@@ -22,7 +22,7 @@
 }
 
 .selectionToolbar .buttonNext {
-    width: 15%;
+    width: 14.3%;
     margin: 0 0 0 2px;
     border: var(--secondaryColor);
     background-color: var(--secondaryColor);
@@ -38,19 +38,94 @@
 }
 
 .selectionToolbar .heading {
-    width: 70%;
+    width: 71.4%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--fontBright);
     background-color: var(--fontDark);
     font-weight: bolder;
-
     border-radius: 3px;
 }
 
 .selectionToolbar .heading > p {
-    font-size: 18px;
     margin: 0;
     padding: 0;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .selectionToolbar .heading > p {
+        font-size: 18px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 18px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .selectionToolbar .heading > p {
+        font-size: 13px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 13px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 13px;
+    }
+}
+
+.daySelectionTable {
+    width: 100%;
+    table-layout: fixed;
+    margin: 2px 0 0 0;
+    text-align: center;
+    vertical-align: center;
+    border-collapse: separate;
+    border-spacing: 1px;
+}
+
+.daySelectionTable th {
+    background-color: var(--fontDark);
+    color: var(--fontBright);
+    border-radius: 2px;
+}
+
+.daySelectionTable th,
+td {
+    padding: 10px 0;
+    margin: 10px;
+}
+
+.daySelectionTable .unavailable {
+    background-color: var(--fontDark);
+    color: var(--fontBright);
+}
+
+.daySelectionTable .available {
+    background-color: var(--secondaryColor);
+}
+
+.daySelectionTable .available:hover {
+    background-color: var(--tertiaryColor);
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 992px) {
+    .daySelectionTable {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .daySelectionTable {
+        font-size: 13px;
+    }
 }
