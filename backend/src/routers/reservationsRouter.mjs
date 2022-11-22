@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ReservationsController } from "../controllers/index.mjs";
 
-const router = Router();
+const router = new Router();
 
 router.get("/available-days/:serviceId", ReservationsController.getAvailableDays);
 

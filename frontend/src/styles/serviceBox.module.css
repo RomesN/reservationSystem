@@ -11,7 +11,7 @@
 }
 
 .serviceBox:hover {
-    color: var(--hoverColorFontBright);
+    color: var(--fontBright);
     background-color: var(--mainColor);
     cursor: pointer;
 }

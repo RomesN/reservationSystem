@@ -19,8 +19,8 @@
 
 .backButton:hover {
     background-color: var(--tertiaryColor);
-    color: var(--hoverColorFontDark);
-    --bs-btn-active-color: var(--hoverColorFontDark);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
     --bs-btn-active-bg: var(--tertiaryColor);
 }
 

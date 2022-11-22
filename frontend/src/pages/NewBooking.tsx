@@ -4,6 +4,7 @@ import Services from "../components/Services";
 import styles from "../styles/newBooking.module.css";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
+import DaySelection from "../components/DaySelection";
 
 const NewBooking = () => {
     const { getView } = useNewBookingContext();
@@ -13,7 +14,7 @@ const NewBooking = () => {
             case NewBookingView.Services:
                 return <Services />;
             case NewBookingView.Calendar:
-                return;
+                return <DaySelection />;
             case NewBookingView.Times:
                 return;
             case NewBookingView.Form:

@@ -10,13 +10,7 @@ import {
     roundToNearestMinutes,
     isAfter,
 } from "date-fns";
-import {
-    CoveredError,
-    getDaysInMonth,
-    getUTCDate,
-    getUTCFromDateAndLocalTimeString,
-    monthsOfTheYearNumString,
-} from "../utils/index.mjs";
+import { CoveredError, getDaysInMonth, getUTCDate, getUTCFromDateAndLocalTimeString } from "../utils/index.mjs";
 import { ReservationsRepository } from "../repositories/index.mjs";
 
 class ReservationsService {
@@ -36,15 +30,15 @@ class ReservationsService {
             throw new CoveredError(400, "Input in wrong format.");
         }
 
-        if (yearAsNumber < new Date().getFullYear() || monthAsNumber < new Date().getMonth() + 1) {
+        if (yearAsNumber < new Date().getFullYear() && monthAsNumber < new Date().getMonth() + 1) {
             throw new CoveredError(400, "The month/year combination in the past.");
         }
 
         const numberOfDays = getDaysInMonth(year, monthAsNumber);
 
         const infoObject = {
-            year,
-            month: monthsOfTheYearNumString[monthAsNumber],
+            year: yearAsNumber,
+            month: monthAsNumber,
             numberOfDays,
             timesOffsetedByMinutes: new Date().getTimezoneOffset(),
             serviceRequiredId: serviceRequired.id,

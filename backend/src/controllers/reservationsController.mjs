@@ -21,7 +21,12 @@ class ReservationsController {
                 month,
                 RestrictionsService
             );
-            return res.json(okJsonResponse("Free slots with month and service info can be found bewlow.", infoObject));
+            return res.json(
+                okJsonResponse(
+                    "Free slots with month and service info can be found below. Months numbered on scale 1-12.",
+                    infoObject
+                )
+            );
         } catch (error) {
             next(error);
         }

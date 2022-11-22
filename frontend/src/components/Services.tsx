@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { getServices } from "../api/reservationApi";
 import { Service } from "../shared/types";
 import ServiceBox from "./ServiceBox";
-import stylesLoading from "../styles/loading.module.css";
+import Loading from "./Loading";
 import stylesServices from "../styles/services.module.css";
 
 type okServiceResponse = {
@@ -41,17 +41,7 @@ const Services = () => {
         return <>{getServicesList(services.data.data)}</>;
     }
 
-    return (
-        <div className={stylesLoading.loadingContainer}>
-            <div className={stylesLoading["loadingio-spinner-pulse-mvs7jy77wdr"]}>
-                <div className={stylesLoading["ldio-1zhfes7vwu4"]}>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
-    );
+    return <Loading />;
 };
 
 export default Services;

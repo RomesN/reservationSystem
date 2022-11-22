@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import enums from "../model/enums/index.mjs";
 import models from "../model/index.mjs";
 
 class ReservationsRepository {
@@ -7,6 +8,7 @@ class ReservationsRepository {
             date: {
                 [Op.between]: [startDate, endDate],
             },
+            reservationStatus: enums.status.ACTIVE,
         };
 
         return await models.Reservation.findAll({ where });

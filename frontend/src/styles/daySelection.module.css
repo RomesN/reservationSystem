@@ -1,0 +1,56 @@
+@import "./general/colors.css";
+
+.selectionToolbar {
+    width: 100%;
+    display: flex;
+}
+
+.selectionToolbar .buttonPrevious {
+    width: 15%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+}
+
+.selectionToolbar .buttonPrevious:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+}
+
+.selectionToolbar .buttonNext {
+    width: 15%;
+    margin: 0 0 0 2px;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+}
+
+.selectionToolbar .buttonNext:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+}
+
+.selectionToolbar .heading {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--fontBright);
+    background-color: var(--fontDark);
+    font-weight: bolder;
+
+    border-radius: 3px;
+}
+
+.selectionToolbar .heading > p {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}

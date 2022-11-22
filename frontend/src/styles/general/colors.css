@@ -2,7 +2,7 @@
     --mainColor: #212121;
     --secondaryColor: #6d9886;
     --tertiaryColor: #d9cab3;
-    --hoverColorFontDark: #212121;
-    --hoverColorFontBright: #f6f6f6;
+    --fontDark: #212121;
+    --fontBright: #f6f6f6;
     --errorColor: #b63838;
 }
