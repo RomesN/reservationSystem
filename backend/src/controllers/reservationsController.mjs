@@ -14,8 +14,8 @@ class ReservationsController {
         const year = req.query.year;
 
         try {
-            const serviceRequired = await ServicesService.getServiceRequired(serviceId);
-            const infoObject = await ReservationsService.getMonthServiceInfoObject(
+            const serviceRequired = await this.ServicesService.getServiceRequired(serviceId);
+            const infoObject = await this.ReservationsService.getMonthServiceInfoObject(
                 serviceRequired,
                 year,
                 month,

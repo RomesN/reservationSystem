@@ -8,7 +8,7 @@ class ServicesController {
 
     async getAllServices(req, res, next) {
         try {
-            const data = await ServicesService.getServicesList();
+            const data = await this.ServicesService.getServicesList();
             return res.json(okJsonResponse("Following services available.", data));
         } catch (error) {
             next(error);
