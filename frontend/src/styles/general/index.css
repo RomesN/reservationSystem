@@ -1,3 +1,21 @@
+:root {
+    --mainColor: #212121;
+    --secondaryColor: #6d9886;
+    --tertiaryColor: #d9cab3;
+    --fontDark: #212121;
+    --fontBright: #f6f6f6;
+    --errorColor: #b63838;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 body::before {
     position: absolute;
     content: "";

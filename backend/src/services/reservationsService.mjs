@@ -130,7 +130,7 @@ class ReservationsService {
                 if (!areIntervalsOverlapping(testingSuitableInterval, comparingInterval)) {
                     result.push(testingSuitableInterval);
                     testingSuitableInterval.start = roundToNearestMinutes(testingSuitableInterval.end, {
-                        nearestTo: 15,
+                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
                         roundingMethod: "ceil",
                     });
                     testingSuitableInterval.end = add(testingSuitableInterval.start, {
@@ -138,7 +138,7 @@ class ReservationsService {
                     });
                 } else {
                     testingSuitableInterval.start = roundToNearestMinutes(comparingInterval.end, {
-                        nearestTo: 15,
+                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
                         roundingMethod: "ceil",
                     });
                     testingSuitableInterval.end = add(testingSuitableInterval.start, {
@@ -154,7 +154,7 @@ class ReservationsService {
                             parseInt(process.env.BREAK_BETWEEN_BOOKINGS),
                     }),
                     {
-                        nearestTo: 15,
+                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
                         roundingMethod: "ceil",
                     }
                 );

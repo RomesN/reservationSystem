@@ -11,7 +11,7 @@ type ServiceBoxProps = {
 };
 
 const ServiceBox = ({ id, name, minutesRequired, services }: ServiceBoxProps) => {
-    const { setBookedServiceState, setBookingView } = useNewBookingContext();
+    const { getBookedService, setBookedServiceState, setBookingView } = useNewBookingContext();
 
     const handleClick = (id: number) => {
         const serviceObject = services.find((service) => service.id === id) || null;
@@ -21,7 +21,7 @@ const ServiceBox = ({ id, name, minutesRequired, services }: ServiceBoxProps) =>
 
     return (
         <div
-            className={styles.serviceBox}
+            className={getBookedService()?.id === id ? styles.serviceBoxSelected : styles.serviceBox}
             onClick={() => {
                 handleClick(id);
             }}

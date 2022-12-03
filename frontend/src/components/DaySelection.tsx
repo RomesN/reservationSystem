@@ -1,24 +1,24 @@
 import { Button } from "react-bootstrap";
+import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getTimeSlots } from "../api/reservationApi";
 import Loading from "./Loading";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import { numberMonthEnum } from "../utils/enums/numberMonthEnum";
-import { Interval, okServiceResponseTimeSlots } from "../shared/types";
+import { IntervalString, okServiceResponseTimeSlots } from "../shared/types";
 import styles from "../styles/daySelection.module.css";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
-import { useState } from "react";
 
-type tableArray = { available: boolean; date: number; intervalsConnected: Interval[] };
+type tableArray = { available: boolean; date: number; intervalsConnected: IntervalString[] };
 
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const { getBookedService, setBookedDateState, setBookingView, setAvailableIntervalsState } = useNewBookingContext();
-    const queryClient = useQueryClient();
-    //
+    const { getBookedDate, getBookedService, setBookedDateState, setBookingView, setAvailableIntervalsState } =
+        useNewBookingContext();
+
     const timeSlots = useQuery<okServiceResponseTimeSlots>(
         ["timeSlotsObject", [getBookedService()?.id || null, year, month]],
         getTimeSlots,
@@ -53,8 +53,8 @@ const DaySelection = () => {
         return tableObject;
     };
 
-    const handleClick = (date: number, availableIntervals: Interval[]) => {
-        setBookedDateState(new Date(year, month, date));
+    const handleClick = (day: number, availableIntervals: IntervalString[]) => {
+        setBookedDateState(new Date(year, month - 1, day));
         setBookingView(NewBookingView.Times);
         setAvailableIntervalsState(availableIntervals);
     };
@@ -79,7 +79,15 @@ const DaySelection = () => {
                                         : undefined
                                 }
                                 key={keyCell++}
-                                className={cell.available ? styles.available : styles.unavailable}
+                                className={
+                                    getBookedDate()?.getDate() === cell.date &&
+                                    (getBookedDate()?.getMonth() || -2) + 1 === month &&
+                                    getBookedDate()?.getFullYear() === year
+                                        ? styles.selected
+                                        : cell.available
+                                        ? styles.available
+                                        : styles.unavailable
+                                }
                             >
                                 {cell.date !== 0 ? `${cell.date}` : ""}
                             </td>

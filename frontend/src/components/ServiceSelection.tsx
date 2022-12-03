@@ -3,7 +3,7 @@ import { getServices } from "../api/reservationApi";
 import { Service } from "../shared/types";
 import ServiceBox from "./ServiceBox";
 import Loading from "./Loading";
-import stylesServices from "../styles/services.module.css";
+import stylesServices from "../styles/serviceSelection.module.css";
 
 type okServiceResponse = {
     status: string;
@@ -11,7 +11,7 @@ type okServiceResponse = {
     data: Service[];
 };
 
-const Services = () => {
+const ServiceSelection = () => {
     const services = useQuery<okServiceResponse>("services", getServices, {
         staleTime: 60000,
         useErrorBoundary: true,
@@ -44,4 +44,4 @@ const Services = () => {
     return <Loading />;
 };
 
-export default Services;
+export default ServiceSelection;

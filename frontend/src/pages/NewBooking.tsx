@@ -1,10 +1,11 @@
 import NewBookingToolbar from "../components/NewBookingToolbar";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Services from "../components/Services";
+import ServiceSelection from "../components/ServiceSelection";
 import styles from "../styles/newBooking.module.css";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
 import DaySelection from "../components/DaySelection";
+import TimeSelection from "../components/TimeSelection";
 
 const NewBooking = () => {
     const { getView } = useNewBookingContext();
@@ -12,11 +13,11 @@ const NewBooking = () => {
     const content = () => {
         switch (getView()) {
             case NewBookingView.Services:
-                return <Services />;
+                return <ServiceSelection />;
             case NewBookingView.Calendar:
                 return <DaySelection />;
             case NewBookingView.Times:
-                return;
+                return <TimeSelection />;
             case NewBookingView.Form:
                 return;
         }

@@ -1,0 +1,44 @@
+.timeBox {
+    width: calc(25% - 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-weight: 500;
+    border: 1px solid var(--mainColor);
+    animation: fadeIn 0.5s;
+}
+
+.timeBox:hover {
+    color: var(--fontDark);
+    background-color: var(--tertiaryColor);
+    border: 1px solid var(--mainColor);
+    cursor: pointer;
+}
+
+.timeBox > p {
+    margin: 2px 2px;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .timeBox {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .timeBox {
+        font-size: 12.5px;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

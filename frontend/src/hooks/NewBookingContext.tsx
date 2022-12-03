@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import { Props, Service, Interval } from "../shared/types";
+import { Props, Service, IntervalString } from "../shared/types";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 
 type NewBookingContext = {
     getView: () => NewBookingView;
     getBookedService: () => Service | null;
     getBookedDate: () => Date | null;
-    getAvailableIntervals: () => Interval[] | null;
-    getBookedTime: () => Date | null;
+    getAvailableIntervals: () => IntervalString[] | null;
     getBookedFormData: () => BookedFormData | null;
     setBookingView: (view: NewBookingView) => void;
     setBookedServiceState: (bookedService: Service | null) => void;
     setBookedDateState: (bookedData: Date) => void;
-    setAvailableIntervalsState: (availableIntervals: Interval[]) => void;
-    setBookedTimeState: (bookedTime: Date) => void;
+    setAvailableIntervalsState: (availableIntervals: IntervalString[]) => void;
     setBookedFormDataState: (bookedService: BookedFormData) => void;
 };
 
@@ -33,10 +31,9 @@ export function useNewBookingContext() {
 
 export const NewBookingDataProvider = ({ children }: Props) => {
     const [view, setView] = useState(NewBookingView.Services);
-    const [bookService, setBookedService] = useState<null | Service>(null);
+    const [bookedService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
-    const [availableIntervals, setAvilableIntervals] = useState<null | Interval[]>(null);
-    const [bookedTime, setBookedTime] = useState<null | Date>(null);
+    const [availableIntervals, setAvilableIntervals] = useState<null | IntervalString[]>(null);
     const [bookedFormData, setBookedFormData] = useState<null | BookedFormData>(null);
 
     function getView() {
@@ -44,7 +41,7 @@ export const NewBookingDataProvider = ({ children }: Props) => {
     }
 
     function getBookedService() {
-        return bookService;
+        return bookedService;
     }
 
     function getBookedDate() {
@@ -53,10 +50,6 @@ export const NewBookingDataProvider = ({ children }: Props) => {
 
     function getAvailableIntervals() {
         return availableIntervals;
-    }
-
-    function getBookedTime() {
-        return bookedTime;
     }
 
     function getBookedFormData() {
@@ -75,12 +68,8 @@ export const NewBookingDataProvider = ({ children }: Props) => {
         setBookedDate(bookedDataState);
     }
 
-    function setAvailableIntervalsState(availableIntervals: Interval[]) {
+    function setAvailableIntervalsState(availableIntervals: IntervalString[]) {
         setAvilableIntervals(availableIntervals);
-    }
-
-    function setBookedTimeState(bookedTimeState: Date) {
-        setBookedTime(bookedTimeState);
     }
 
     function setBookedFormDataState(bookedFormData: BookedFormData) {
@@ -94,13 +83,11 @@ export const NewBookingDataProvider = ({ children }: Props) => {
                 getBookedService,
                 getBookedDate,
                 getAvailableIntervals,
-                getBookedTime,
                 getBookedFormData,
                 setBookingView,
                 setBookedServiceState,
                 setBookedDateState,
                 setAvailableIntervalsState,
-                setBookedTimeState,
                 setBookedFormDataState,
             }}
         >
