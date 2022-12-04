@@ -1,3 +1,4 @@
+import "dotenv";
 import { ReservationsService, RestrictionsService, ServicesService } from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
@@ -10,8 +11,8 @@ class ReservationsController {
 
     async getAvailableDays(req, res, next) {
         const serviceId = req.params.serviceId;
-        const month = req.query.month;
-        const year = req.query.year;
+        const year = req.params.year;
+        const month = req.params.month;
 
         try {
             const serviceRequired = await this.ServicesService.getServiceRequired(serviceId);
@@ -25,6 +26,41 @@ class ReservationsController {
                 okJsonResponse(
                     "Free slots with month and service info can be found below. Months numbered on scale 1-12.",
                     infoObject
+                )
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getAvailabilityInfo(req, res, next) {
+        const serviceId = req.params.serviceId;
+        const isoTimeString = req.params.isoTimeString;
+
+        try {
+            const service = await this.ServicesService.getServiceRequired(serviceId);
+            const result = await this.ReservationsService.getIsDateAvailable(isoTimeString, service);
+            return res.json(
+                okJsonResponse(result ? "The date is available." : "The the is NOT available.", { isAvailable: result })
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async createNewTemporalBooking(req, res, next) {
+        const serviceId = req.params.serviceId;
+        const isoTimeString = req.params.isoTimeString;
+
+        try {
+            const service = await this.ServicesService.getServiceRequired(serviceId);
+            const temporalBooking = this.ReservationsService.createNewTemporalBooking(isoTimeString, service);
+            return res.json(
+                okJsonResponse(
+                    `Temporal booking was created. Date is reserved from ${
+                        process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || 15
+                    } minutes.`,
+                    { temporalBooking }
                 )
             );
         } catch (error) {

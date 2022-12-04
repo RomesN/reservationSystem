@@ -5,17 +5,20 @@ import {
     differenceInMinutes,
     endOfDay,
     intervalToDuration,
-    isBefore,
-    isSameSecond,
-    roundToNearestMinutes,
     isAfter,
+    isBefore,
+    isEqual,
+    parseISO,
+    roundToNearestMinutes,
 } from "date-fns";
+import schedule from "node-schedule";
 import { CoveredError, getDaysInMonth, getUTCDate, getUTCFromDateAndLocalTimeString } from "../utils/index.mjs";
 import { ReservationsRepository } from "../repositories/index.mjs";
 
 class ReservationsService {
     constructor(ReservationsRepository) {
         this.ReservationsRepository = ReservationsRepository;
+        this.TemporalReservations = {};
     }
 
     async getMonthServiceInfoObject(serviceRequired, year, month, restrictionService) {
@@ -102,72 +105,35 @@ class ReservationsService {
         if (reservationsList.length === 0) {
             return [{ start: startOfBusiness, end: endOfBusiness }];
         }
+
         this.sortReservationList(reservationsList);
-
+        const incrementToRound = parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15") / 2;
         const result = [];
-        let reservationIndex = 0;
-        let testingSuitableInterval = {
-            start: startOfBusiness,
-            end: add(startOfBusiness, { minutes: minutesNeeded + parseInt(process.env.BREAK_BETWEEN_BOOKINGS) }),
-        };
 
-        let comparingInterval;
+        for (let i = 0; i <= reservationsList.length; i++) {
+            const start =
+                i === 0
+                    ? startOfBusiness
+                    : roundToNearestMinutes(
+                          add(reservationsList[i - 1].date, {
+                              minutes:
+                                  (await reservationsList[i - 1].getService()).minutesRequired +
+                                  parseInt(process.env.BREAK_BETWEEN_BOOKINGS || "10") +
+                                  incrementToRound,
+                          }),
+                          {
+                              nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
+                          }
+                      );
+            const end = i === reservationsList.length ? endOfBusiness : reservationsList[i].date;
+            const testingSuitableInterval = { start, end };
 
-        while (
-            !isSameSecond(testingSuitableInterval.end, endOfBusiness) &&
-            !isBefore(endOfBusiness, testingSuitableInterval.end)
-        ) {
-            if (reservationIndex < reservationsList.length) {
-                comparingInterval = {
-                    start: reservationsList[reservationIndex].date,
-                    end: add(reservationsList[reservationIndex].date, {
-                        minutes:
-                            (await reservationsList[reservationIndex].getService()).minutesRequired +
-                            parseInt(process.env.BREAK_BETWEEN_BOOKINGS),
-                    }),
-                };
-
-                if (!areIntervalsOverlapping(testingSuitableInterval, comparingInterval)) {
-                    result.push(testingSuitableInterval);
-                    testingSuitableInterval.start = roundToNearestMinutes(testingSuitableInterval.end, {
-                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
-                        roundingMethod: "ceil",
-                    });
-                    testingSuitableInterval.end = add(testingSuitableInterval.start, {
-                        minutes: minutesNeeded + parseInt(process.env.BREAK_BETWEEN_BOOKINGS),
-                    });
-                } else {
-                    testingSuitableInterval.start = roundToNearestMinutes(comparingInterval.end, {
-                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
-                        roundingMethod: "ceil",
-                    });
-                    testingSuitableInterval.end = add(testingSuitableInterval.start, {
-                        minutes: minutesNeeded + parseInt(process.env.BREAK_BETWEEN_BOOKINGS),
-                    });
-                    reservationIndex++;
-                }
-            } else {
-                testingSuitableInterval.start = roundToNearestMinutes(
-                    add(reservationsList[reservationIndex - 1].date, {
-                        minutes:
-                            (await reservationsList[reservationIndex - 1].getService()).minutesRequired +
-                            parseInt(process.env.BREAK_BETWEEN_BOOKINGS),
-                    }),
-                    {
-                        nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
-                        roundingMethod: "ceil",
-                    }
-                );
-                testingSuitableInterval.end = endOfBusiness;
-
-                if (
-                    Math.max(
-                        intervalToDuration(testingSuitableInterval).minutes,
-                        intervalToDuration(testingSuitableInterval).hours * 60
-                    ) > minutesNeeded
-                ) {
-                    result.push(testingSuitableInterval);
-                }
+            if (
+                intervalToDuration(testingSuitableInterval).minutes +
+                    intervalToDuration(testingSuitableInterval).hours * 60 >=
+                minutesNeeded + parseInt(process.env.BREAK_BETWEEN_BOOKINGS || "10")
+            ) {
+                result.push(testingSuitableInterval);
             }
         }
 
@@ -203,10 +169,10 @@ class ReservationsService {
 
                     notBookedIntervals.splice(
                         i,
-                        1,
+                        newIntervalsToTest.length,
                         ...newIntervalsToTest.filter(
                             (inter) =>
-                                Math.max(intervalToDuration(inter).minutes, intervalToDuration(inter).hours * 60) >
+                                intervalToDuration(inter).minutes + intervalToDuration(inter).hours * 60 >=
                                 minutesNeeded
                         )
                     );
@@ -220,8 +186,46 @@ class ReservationsService {
         return result;
     }
 
+    async getIsDateAvailable(isoTimeString, service) {
+        const date = parseISO(isoTimeString);
+        const collidingBookings = await this.getReservationsBetweenDates(
+            date,
+            add(date, { minutes: service.minutesRequired })
+        );
+        return collidingBookings.length === 0;
+    }
+
     async getReservationsBetweenDates(startDate, endDate) {
-        return await this.ReservationsRepository.getReservationsBetween(startDate, endDate);
+        const active = await this.ReservationsRepository.getReservationsBetween(startDate, endDate);
+        const temporal = Object.values(this.TemporalReservations).filter((temporal) => {
+            return (
+                (isAfter(temporal.date, startDate) || isEqual(temporal.date, endDate)) &&
+                (isEqual(temporal.date, endDate) || isBefore(temporal.date, endDate))
+            );
+        });
+        return [...active, ...temporal];
+    }
+
+    createNewTemporalBooking(isoTimeString, service) {
+        const currentDate = new Date();
+        const bookDate = parseISO(isoTimeString);
+        const id = `TEMP${currentDate.valueOf()}%%%%${bookDate.toISOString()}`;
+        const temporalBooking = {
+            id,
+            date: bookDate,
+            service: service,
+            getService() {
+                return this.service;
+            },
+        };
+
+        this.TemporalReservations[id] = temporalBooking;
+
+        schedule.scheduleJob(
+            add(currentDate, { minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15") }),
+            (() => delete this.TemporalReservations[id]).bind(this)
+        );
+        return temporalBooking;
     }
 
     sortReservationList(reservationsList) {

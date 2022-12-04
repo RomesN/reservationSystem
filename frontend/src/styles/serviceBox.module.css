@@ -45,14 +45,16 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .serviceBox {
+    .serviceBox,
+    .serviceBoxSelected {
         font-size: 18px;
     }
 }
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 991px) {
-    .serviceBox {
+    .serviceBox,
+    .serviceBoxSelected {
         font-size: 13px;
     }
 }

@@ -17,7 +17,9 @@ type IntervalString = {
     end: string;
 };
 
-type okServiceResponseTimeSlots = {
+type TemoporalBooking = { id: string; date: string; serviceId: number };
+
+type OkServiceResponseTimeSlots = {
     status: string;
     message: string;
     data: {
@@ -62,4 +64,42 @@ type okServiceResponseTimeSlots = {
     };
 };
 
-export type { IntervalString, okServiceResponseTimeSlots, Service, Props };
+type OkIsDateAvailableResponse = {
+    status: string;
+    message: string;
+    data: { isAvailable: boolean };
+};
+
+type OkMakeTemporalBookingResponse = {
+    status: string;
+    message: string;
+    data: { temporalBooking: TemoporalBooking };
+};
+
+type OkServiceResponse = {
+    status: string;
+    message: string;
+    data: Service[];
+};
+
+type ErrorResponse = {
+    status: number | string;
+    message: string;
+    error: [
+        {
+            name: string;
+            stack: string;
+        }
+    ];
+};
+
+export type {
+    ErrorResponse,
+    IntervalString,
+    OkIsDateAvailableResponse,
+    OkMakeTemporalBookingResponse,
+    OkServiceResponseTimeSlots,
+    OkServiceResponse,
+    Service,
+    Props,
+};

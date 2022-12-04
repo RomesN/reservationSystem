@@ -5,14 +5,8 @@ import ServiceBox from "./ServiceBox";
 import Loading from "./Loading";
 import stylesServices from "../styles/serviceSelection.module.css";
 
-type okServiceResponse = {
-    status: string;
-    message: string;
-    data: Service[];
-};
-
 const ServiceSelection = () => {
-    const services = useQuery<okServiceResponse>("services", getServices, {
+    const services = useQuery("services", getServices, {
         staleTime: 60000,
         useErrorBoundary: true,
     });

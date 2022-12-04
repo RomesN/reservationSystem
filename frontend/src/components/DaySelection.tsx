@@ -6,7 +6,7 @@ import { getTimeSlots } from "../api/reservationApi";
 import Loading from "./Loading";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import { numberMonthEnum } from "../utils/enums/numberMonthEnum";
-import { IntervalString, okServiceResponseTimeSlots } from "../shared/types";
+import { IntervalString } from "../shared/types";
 import styles from "../styles/daySelection.module.css";
 import { useQuery } from "react-query";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
@@ -19,13 +19,9 @@ const DaySelection = () => {
     const { getBookedDate, getBookedService, setBookedDateState, setBookingView, setAvailableIntervalsState } =
         useNewBookingContext();
 
-    const timeSlots = useQuery<okServiceResponseTimeSlots>(
-        ["timeSlotsObject", [getBookedService()?.id || null, year, month]],
-        getTimeSlots,
-        {
-            useErrorBoundary: true,
-        }
-    );
+    const timeSlots = useQuery(["timeSlotsObject", [getBookedService()?.id || null, year, month]], getTimeSlots, {
+        useErrorBoundary: true,
+    });
 
     const generateTableObject = (data: any) => {
         const tableObject = [[], [], [], [], [], []] as tableArray[][];
