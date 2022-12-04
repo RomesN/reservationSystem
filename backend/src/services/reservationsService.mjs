@@ -14,11 +14,11 @@ import {
 import schedule from "node-schedule";
 import { CoveredError, getDaysInMonth, getUTCDate, getUTCFromDateAndLocalTimeString } from "../utils/index.mjs";
 import { ReservationsRepository } from "../repositories/index.mjs";
+import enums from "../model/enums/index.mjs";
 
 class ReservationsService {
     constructor(ReservationsRepository) {
         this.ReservationsRepository = ReservationsRepository;
-        this.TemporalReservations = {};
     }
 
     async getMonthServiceInfoObject(serviceRequired, year, month, restrictionService) {
@@ -83,7 +83,7 @@ class ReservationsService {
             return [];
         }
 
-        const reservations = await this.getReservationsBetweenDates(startBusinessDate, endBusinessDate);
+        const reservations = await this.getValidReservationsBetweenDates(startBusinessDate, endBusinessDate);
         const otherGeneralResctrictions = await restrictionService.getGeneralPartialDayRestrictions(date);
         const otherOneOffRestrictions = await restrictionService.getOneoffPartialDayRestrictions(date);
         const businessClosedIntervals = await restrictionService.getBusinessClosedIntervals(
@@ -169,7 +169,7 @@ class ReservationsService {
 
                     notBookedIntervals.splice(
                         i,
-                        newIntervalsToTest.length,
+                        1,
                         ...newIntervalsToTest.filter(
                             (inter) =>
                                 intervalToDuration(inter).minutes + intervalToDuration(inter).hours * 60 >=
@@ -182,50 +182,75 @@ class ReservationsService {
             }
             result.push(notBookedIntervals[i]);
             i++;
+            j = 0;
         }
         return result;
     }
 
-    async getIsDateAvailable(isoTimeString, service) {
+    async getIsDateAvailable(isoTimeString, minutesNeeded, restrictionService) {
+        if (!isoTimeString || !minutesNeeded || !restrictionService) {
+            throw new CoveredError(400, "One or more parameters is missing.");
+        }
         const date = parseISO(isoTimeString);
-        const collidingBookings = await this.getReservationsBetweenDates(
-            date,
-            add(date, { minutes: service.minutesRequired })
-        );
-        return collidingBookings.length === 0;
-    }
-
-    async getReservationsBetweenDates(startDate, endDate) {
-        const active = await this.ReservationsRepository.getReservationsBetween(startDate, endDate);
-        const temporal = Object.values(this.TemporalReservations).filter((temporal) => {
-            return (
-                (isAfter(temporal.date, startDate) || isEqual(temporal.date, endDate)) &&
-                (isEqual(temporal.date, endDate) || isBefore(temporal.date, endDate))
-            );
+        const intervalRequired = { start: date, end: add(date, { minutes: minutesNeeded }) };
+        const freeBookings = await this.getFreeIntervalsOnGivenDay(date, minutesNeeded, restrictionService);
+        return freeBookings.some((interval) => {
+            if (areIntervalsOverlapping(interval, intervalRequired)) {
+                return (
+                    (isBefore(interval.start, intervalRequired.start) ||
+                        isEqual(interval.start, intervalRequired.start)) &&
+                    (isAfter(interval.end, intervalRequired.end) || isEqual(interval.end, intervalRequired.end))
+                );
+            } else {
+                return false;
+            }
         });
-        return [...active, ...temporal];
     }
 
-    createNewTemporalBooking(isoTimeString, service) {
+    async getValidReservationsBetweenDates(startDate, endDate) {
+        return await this.ReservationsRepository.getValidReservationsBetween(startDate, endDate);
+    }
+
+    async createNewTemporalBooking(isoTimeString, serviceIdString, ServicesService) {
+        if (!isoTimeString || !serviceIdString) {
+            throw new CoveredError(400, "One or more parameters is missing.");
+        }
+
+        const service = await ServicesService.getServiceRequired(serviceIdString);
+
+        if (!service) {
+            throw new CoveredError(400, "Service id does not exist.");
+        }
+
         const currentDate = new Date();
-        const bookDate = parseISO(isoTimeString);
-        const id = `TEMP${currentDate.valueOf()}%%%%${bookDate.toISOString()}`;
-        const temporalBooking = {
-            id,
-            date: bookDate,
-            service: service,
-            getService() {
-                return this.service;
-            },
+        const temporalReservation = {
+            date: parseISO(isoTimeString),
+            detail: `TEMP${currentDate.valueOf()}%%%%${isoTimeString}`,
+            serviceId: service.id,
+            reservationStatus: enums.status.TEMPORARY,
         };
 
-        this.TemporalReservations[id] = temporalBooking;
+        const found = await this.getValidReservationsBetweenDates(
+            temporalReservation.date,
+            add(temporalReservation.date, {
+                minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
+            })
+        );
+
+        if (found.length !== 0) {
+            throw new CoveredError(409, "There is already a reservation for needed time interval.");
+        }
 
         schedule.scheduleJob(
             add(currentDate, { minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15") }),
-            (() => delete this.TemporalReservations[id]).bind(this)
+            () =>
+                this.ReservationsRepository.deleteTemporalReservation(
+                    temporalReservation.date,
+                    temporalReservation.detail
+                )
         );
-        return temporalBooking;
+
+        return await this.ReservationsRepository.createReservation(temporalReservation);
     }
 
     sortReservationList(reservationsList) {

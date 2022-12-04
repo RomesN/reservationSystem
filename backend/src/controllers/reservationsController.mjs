@@ -39,9 +39,15 @@ class ReservationsController {
 
         try {
             const service = await this.ServicesService.getServiceRequired(serviceId);
-            const result = await this.ReservationsService.getIsDateAvailable(isoTimeString, service);
+            const result = await this.ReservationsService.getIsDateAvailable(
+                isoTimeString,
+                service.minutesRequired,
+                this.RestrictionsService
+            );
             return res.json(
-                okJsonResponse(result ? "The date is available." : "The the is NOT available.", { isAvailable: result })
+                okJsonResponse(result ? "The date is available." : "The date is NOT available.", {
+                    isAvailable: result,
+                })
             );
         } catch (error) {
             next(error);
@@ -53,14 +59,17 @@ class ReservationsController {
         const isoTimeString = req.params.isoTimeString;
 
         try {
-            const service = await this.ServicesService.getServiceRequired(serviceId);
-            const temporalBooking = this.ReservationsService.createNewTemporalBooking(isoTimeString, service);
+            const temporalBooking = await this.ReservationsService.createNewTemporalBooking(
+                isoTimeString,
+                serviceId,
+                this.ServicesService
+            );
             return res.json(
                 okJsonResponse(
-                    `Temporal booking was created. Date is reserved from ${
+                    `Temporal booking was created. Date is reserved for ${
                         process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || 15
                     } minutes.`,
-                    { temporalBooking }
+                    temporalBooking
                 )
             );
         } catch (error) {
