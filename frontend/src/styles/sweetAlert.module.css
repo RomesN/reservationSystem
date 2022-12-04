@@ -1,0 +1,40 @@
+.bookingCollision {
+    background-color: var(--mainColor);
+    color: var(--fontBright);
+}
+
+.bookingCollision {
+    background-color: var(--mainColor);
+    color: var(--fontBright);
+}
+
+.bookingCollisionLoader {
+    background-color: var(--secondaryColor) !important;
+}
+
+.bookingCollisionButton:hover {
+    background-color: var(--tertiaryColor) !important;
+    color: var(--fontDark);
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .bookingCollisionContainer {
+        font-size: 18px;
+    }
+
+    .bookingCollisionTitle {
+        font-size: 20px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 992px) {
+    .bookingCollisionContainer {
+        font-size: 13px;
+    }
+
+    .bookingCollisionTitle {
+        font-size: 15px;
+    }
+}

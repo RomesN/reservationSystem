@@ -11,8 +11,8 @@ type NewBookingContext = {
     getBookedFormData: () => BookedFormData | null;
     setBookingView: (view: NewBookingView) => void;
     setBookedServiceState: (bookedService: Service | null) => void;
-    setBookedDateState: (bookedData: Date) => void;
-    setAvailableIntervalsState: (availableIntervals: IntervalString[]) => void;
+    setBookedDateState: (bookedDate: Date | null) => void;
+    setAvailableIntervalsState: (availableIntervals: IntervalString[] | null) => void;
     setBookedFormDataState: (bookedService: BookedFormData) => void;
 };
 
@@ -64,11 +64,11 @@ export const NewBookingDataProvider = ({ children }: Props) => {
         setBookedService(bookedService);
     }
 
-    function setBookedDateState(bookedDataState: Date) {
+    function setBookedDateState(bookedDataState: Date | null) {
         setBookedDate(bookedDataState);
     }
 
-    function setAvailableIntervalsState(availableIntervals: IntervalString[]) {
+    function setAvailableIntervalsState(availableIntervals: IntervalString[] | null) {
         setAvilableIntervals(availableIntervals);
     }
 

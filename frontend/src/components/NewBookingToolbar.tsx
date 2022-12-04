@@ -56,7 +56,7 @@ const NewBookingToolbar = () => {
                 text = " Select time slot";
                 break;
             case NewBookingView.Form:
-                text = " Fill in details";
+                text = " Fill in details and confirm";
         }
 
         return (
