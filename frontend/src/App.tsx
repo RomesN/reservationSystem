@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LandingPage from "./pages/LandingPage";
 import { Route, Routes } from "react-router-dom";
 import "./styles/general/index.css";
-import NewBooking from "./pages/NewBooking";
+import NewBooking from "./pages/NewReservation";
 import { NewBookingDataProvider } from "./hooks/NewBookingContext";
 
 function App() {

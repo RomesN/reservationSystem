@@ -54,24 +54,35 @@ class ReservationsController {
         }
     }
 
-    async createNewTemporalBooking(req, res, next) {
+    async createNewTemporalReservation(req, res, next) {
         const serviceId = req.params.serviceId;
         const isoTimeString = req.params.isoTimeString;
 
         try {
-            const temporalBooking = await this.ReservationsService.createNewTemporalBooking(
+            const temporalBooking = await this.ReservationsService.createNewTemporalReservation(
                 isoTimeString,
                 serviceId,
                 this.ServicesService
             );
             return res.json(
                 okJsonResponse(
-                    `Temporal booking was created. Date is reserved for ${
+                    `Temporal reservation was created. Date is booked for ${
                         process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || 15
                     } minutes.`,
-                    temporalBooking
+                    { temporalBooking }
                 )
             );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteTemporalReservation(req, res, next) {
+        const { reservationToken } = req.params;
+
+        try {
+            await this.ReservationsService.deleteTemporalReservation(reservationToken);
+            return res.json(okJsonResponse(`Temporal reservation was deleted.`));
         } catch (error) {
             next(error);
         }

@@ -26,6 +26,8 @@ type Reservation = {
     updatedAt: string;
     createdAt: string;
     customerId: number | null;
+    validity: Date;
+    reservationToken: string;
 };
 
 type OkServiceResponseTimeSlots = {
@@ -79,10 +81,16 @@ type OkIsDateAvailableResponse = {
     data: { isAvailable: boolean };
 };
 
-type OkMakeTemporalBookingResponse = {
+type OkMakeTemporalReservationResponse = {
     status: string;
     message: string;
     data: { temporalBooking: Reservation };
+};
+
+type OkDeleteTemporalReservationResponse = {
+    status: string;
+    message: string;
+    data: null;
 };
 
 type OkServiceResponse = {
@@ -105,8 +113,9 @@ type ErrorResponse = {
 export type {
     ErrorResponse,
     IntervalString,
+    OkDeleteTemporalReservationResponse,
     OkIsDateAvailableResponse,
-    OkMakeTemporalBookingResponse,
+    OkMakeTemporalReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Reservation,

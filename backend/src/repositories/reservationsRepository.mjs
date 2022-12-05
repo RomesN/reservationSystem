@@ -3,10 +3,17 @@ import enums from "../model/enums/index.mjs";
 import models from "../model/index.mjs";
 
 class ReservationsRepository {
+    async createReservation(reservation) {
+        return await models.Reservation.create(reservation);
+    }
+
     async getValidReservationsBetween(startDate, endDate) {
         const where = {
             date: {
                 [Op.between]: [startDate, endDate],
+            },
+            validityEnd: {
+                [Op.gte]: new Date(),
             },
             reservationStatus: { [Op.or]: [enums.status.ACTIVE, enums.status.TEMPORARY] },
         };
@@ -14,13 +21,13 @@ class ReservationsRepository {
         return await models.Reservation.findAll({ where });
     }
 
-    async createReservation(reservation) {
-        return await models.Reservation.create(reservation);
+    async getReservationByToken(token) {
+        return await models.Reservation.findOne({ where: { reservationToken: token } });
     }
 
-    async deleteTemporalReservation(date, detail) {
+    async deleteReservationByToken(token) {
         await models.Reservation.destroy({
-            where: { date, detail },
+            where: { reservationToken: token },
             force: true,
         });
     }

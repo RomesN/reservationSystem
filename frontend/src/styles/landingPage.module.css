@@ -27,12 +27,16 @@
     border: var(--mainColor);
     background-color: var(--mainColor);
     margin-bottom: 10px;
+    color: var(--fontBright);
+    border-radius: 5px;
 }
 
 .buttonCancel {
     border: var(--secondaryColor);
     background-color: var(--secondaryColor);
     font-size: 20px;
+    color: var(--fontBright);
+    border-radius: 5px;
 }
 
 .buttonBook:hover,

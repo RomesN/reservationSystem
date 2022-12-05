@@ -9,6 +9,14 @@ const getModelReservation = (db, { DataTypes }) => {
             type: DataTypes.STRING(250),
             allowNull: true,
         },
+        reservationToken: {
+            type: DataTypes.STRING(250),
+            allowNull: true,
+        },
+        validityEnd: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
     });
 
     Reservation.associate = (models) => {

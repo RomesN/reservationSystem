@@ -1,4 +1,3 @@
-import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import styles from "../styles/landingPage.module.css";
 
@@ -13,16 +12,12 @@ const LandingPage = () => {
             </div>
             <div className={styles.contentItem}>
                 <Link to="/new-booking">
-                    <Button variant="primary" className={styles.buttonBook} size="lg">
-                        Make a booking
-                    </Button>
+                    <button className={styles.buttonBook}>Make a booking</button>
                 </Link>
             </div>
             <div className={styles.contentItem}>
                 <Link to="/cancel-booking">
-                    <Button variant="primary" className={styles.buttonCancel} size="lg">
-                        Cancel booking
-                    </Button>
+                    <button className={styles.buttonCancel}>Cancel booking</button>
                 </Link>
             </div>
         </div>

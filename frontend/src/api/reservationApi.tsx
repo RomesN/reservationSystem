@@ -2,10 +2,12 @@ import axios, { AxiosError } from "axios";
 import { QueryFunctionContext, QueryKey } from "react-query";
 import {
     ErrorResponse,
+    OkDeleteTemporalReservationResponse,
     OkIsDateAvailableResponse,
-    OkMakeTemporalBookingResponse,
+    OkMakeTemporalReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
+    Reservation,
 } from "../shared/types";
 
 export const api = axios.create({
@@ -35,9 +37,20 @@ export const isDateAvailable = async (dateISOString: string, serviceId: number) 
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
 
-export const createTemporalBooking = async (dateISOString: string, serviceId: number) => {
+export const createTemporalReservation = async (dateISOString: string, serviceId: number) => {
     return await api
-        .put<OkMakeTemporalBookingResponse>(`api/reservations/temporal-booking/${dateISOString}/${serviceId}`)
+        .put<OkMakeTemporalReservationResponse>(`api/reservations/temporal-reservation/${dateISOString}/${serviceId}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
+};
+
+export const deleteTemporalReservation = async (temporalReservation: Reservation) => {
+    return await api
+        .delete<OkDeleteTemporalReservationResponse>(
+            `api/reservations/temporal-reservation/${temporalReservation.reservationToken}`
+        )
         .then((response) => {
             return response.data;
         })

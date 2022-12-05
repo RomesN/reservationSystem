@@ -11,6 +11,17 @@
     background-color: var(--secondaryColor);
     font-weight: bolder;
     border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.buttonPreviousDisabled {
+    width: 14.3%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColorBrighter);
+    font-weight: bolder;
+    border-radius: 3px;
+    opacity: 0.7;
 }
 
 .selectionToolbar .buttonPrevious:hover {
@@ -27,6 +38,7 @@
     background-color: var(--secondaryColor);
     font-weight: bolder;
     border-radius: 3px;
+    padding: 0.4em 0;
 }
 
 .selectionToolbar .buttonNext:hover {

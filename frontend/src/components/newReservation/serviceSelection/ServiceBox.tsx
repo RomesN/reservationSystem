@@ -1,7 +1,7 @@
-import { Service } from "../../shared/types";
-import styles from "../../styles/serviceBox.module.css";
-import { useNewBookingContext } from "../../hooks/NewBookingContext";
-import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
+import { Service } from "../../../shared/types";
+import styles from "../../../styles/serviceBox.module.css";
+import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
 
 type ServiceBoxProps = {
     id: number;

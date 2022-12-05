@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { parseISO } from "date-fns";
 import CoveredError from "./coveredError.mjs";
 
@@ -48,4 +49,23 @@ const getUTCDate = (year, month, day) => {
     return new Date(Date.UTC(yearAsNumber, monthAsNumber - 1, dayAsNumber));
 };
 
-export { getDaysInMonth, getUTCDate, getWeekdayNumberMonIsOne, getUTCFromDateAndLocalTimeString, sortIntervalList };
+const generateCustomToken = (tokenLength) => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789";
+    let generatedToken = "";
+
+    while (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(generatedToken)) {
+        for (let i = 0; i < tokenLength; i++) {
+            generatedToken += characters.charAt(crypto.randomInt(characters.length));
+        }
+    }
+    return generatedToken;
+};
+
+export {
+    generateCustomToken,
+    getDaysInMonth,
+    getUTCDate,
+    getWeekdayNumberMonIsOne,
+    getUTCFromDateAndLocalTimeString,
+    sortIntervalList,
+};

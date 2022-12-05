@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
-import { getServices } from "../../api/reservationApi";
-import { Service } from "../../shared/types";
+import { getServices } from "../../../api/reservationApi";
+import { Service } from "../../../shared/types";
 import ServiceBox from "./ServiceBox";
-import Loading from "./../Loading";
-import stylesServices from "../../styles/serviceSelection.module.css";
+import Loading from "../../Loading";
+import stylesServices from "../../../styles/serviceSelection.module.css";
 
 const ServiceSelection = () => {
     const services = useQuery("services", getServices, {

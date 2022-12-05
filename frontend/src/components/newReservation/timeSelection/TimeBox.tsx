@@ -1,6 +1,6 @@
 import { format, Interval } from "date-fns";
-import { useNewBookingContext } from "../../hooks/NewBookingContext";
-import styles from "../../styles/timeBox.module.css";
+import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import styles from "../../../styles/timeBox.module.css";
 
 type TimeBoxProps = {
     interval: Interval;

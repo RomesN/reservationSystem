@@ -1,18 +1,25 @@
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNewBookingContext } from "../../hooks/NewBookingContext";
-import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
-import styles from "../../styles/newBookingToolbar.module.css";
+import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { deleteTemporalReservation } from "../../../api/reservationApi";
+import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import styles from "../../../styles/newBookingToolbar.module.css";
 
 const NewBookingToolbar = () => {
-    const { view, setView } = useNewBookingContext();
+    const { view, temporalReservation, setView, setTemporalReservation } = useNewBookingContext();
 
     const handleClickBack = () => {
         switch (view) {
             case NewBookingView.Form:
-                setView(() => NewBookingView.Calendar);
+                if (temporalReservation) {
+                    setTemporalReservation(() => null);
+                    deleteTemporalReservation(temporalReservation).finally(() =>
+                        setView(() => NewBookingView.Calendar)
+                    );
+                } else {
+                    setView(() => NewBookingView.Calendar);
+                }
                 break;
             case NewBookingView.Times:
                 setView(() => NewBookingView.Calendar);
@@ -27,18 +34,18 @@ const NewBookingToolbar = () => {
         if (view === NewBookingView.Services) {
             return (
                 <Link to="/">
-                    <Button variant="primary" className={styles.backButton}>
+                    <button className={styles.backButton}>
                         <FontAwesomeIcon size="sm" icon={faChevronLeft} />
                         Back
-                    </Button>
+                    </button>
                 </Link>
             );
         } else {
             return (
-                <Button variant="primary" className={styles.backButton} onClick={handleClickBack}>
+                <button className={styles.backButton} onClick={handleClickBack}>
                     <FontAwesomeIcon size="sm" icon={faChevronLeft} />
                     Back
-                </Button>
+                </button>
             );
         }
     };

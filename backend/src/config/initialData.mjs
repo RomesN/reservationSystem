@@ -228,6 +228,8 @@ export default async () => {
             serviceId: 1,
             reservationStatus: "Active",
             customer: 1,
+            reservationToken: "1234567",
+            validityEnd: new Date(Date.UTC(2022, 11, 5, 9, 0, 0)),
         },
         {
             date: new Date(Date.UTC(2022, 11, 6, 11, 0, 0)),
@@ -235,6 +237,8 @@ export default async () => {
             serviceId: 2,
             reservationStatus: "Active",
             customer: 2,
+            reservationToken: "12345678",
+            validityEnd: new Date(Date.UTC(2022, 11, 6, 11, 0, 0)),
         },
     ]);
     //#endregion ---RESERVATION---

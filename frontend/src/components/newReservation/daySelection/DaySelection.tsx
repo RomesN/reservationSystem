@@ -1,51 +1,50 @@
-import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getTimeSlots } from "../../api/reservationApi";
-import Loading from "../Loading";
-import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
-import { numberMonthEnum } from "../../utils/enums/numberMonthEnum";
-import { IntervalString } from "../../shared/types";
-import styles from "../../styles/daySelection.module.css";
+import { getTimeSlots } from "../../../api/reservationApi";
+import Loading from "../../Loading";
+import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
+import { IntervalString } from "../../../shared/types";
+import styles from "../../../styles/daySelection.module.css";
 import { useQuery } from "react-query";
-import { useNewBookingContext } from "../../hooks/NewBookingContext";
+import { useNewBookingContext } from "../../../hooks/NewBookingContext";
 
 type tableArray = { available: boolean; date: number; intervalsConnected: IntervalString[] };
 
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const { bookedDate, bookedService, setBookedDate, setView, setAvilableIntervals } = useNewBookingContext();
+    const { bookedDate, bookedService, setAvilableIntervals, setBookedDate, setView } = useNewBookingContext();
 
     const timeSlots = useQuery(["timeSlotsObject", [bookedService?.id || null, year, month]], getTimeSlots, {
         useErrorBoundary: true,
     });
 
-    const generateTableObject = (data: any) => {
-        const tableObject = [[], [], [], [], [], []] as tableArray[][];
+    const generateTableArray = (data: any) => {
+        const tableArray = [[], [], [], [], [], []] as tableArray[][];
         const monthStartDay = new Date(year, month - 1, 1).getDay();
         const startMonIsOne = monthStartDay === 0 ? 7 : monthStartDay;
 
         for (let i = 0; i < startMonIsOne - 1; i++) {
-            tableObject[0][i] = { available: false, date: 0, intervalsConnected: [] };
+            tableArray[0][i] = { available: false, date: 0, intervalsConnected: [] };
         }
         for (let i = startMonIsOne - 1; i < 42; i++) {
             if (data.data[`${i - startMonIsOne + 2}`]) {
-                tableObject[i / 7 - ((i / 7) % 1)][i % 7] = {
+                tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: data.data[`${i - startMonIsOne + 2}`].length !== 0,
                     date: i - startMonIsOne + 2,
                     intervalsConnected: data.data[`${i - startMonIsOne + 2}`],
                 };
             } else {
-                tableObject[i / 7 - ((i / 7) % 1)][i % 7] = {
+                tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: false,
                     date: 0,
                     intervalsConnected: [],
                 };
             }
         }
-        return tableObject;
+        return tableArray;
     };
 
     const handleClick = (day: number, availableIntervals: IntervalString[]) => {
@@ -115,19 +114,23 @@ const DaySelection = () => {
         return (
             <div>
                 <div className={styles.selectionToolbar}>
-                    <Button
-                        className={styles.buttonPrevious}
+                    <button
+                        className={
+                            new Date().getMonth() + 1 >= month && new Date().getFullYear() == year
+                                ? styles.buttonPreviousDisabled
+                                : styles.buttonPrevious
+                        }
                         disabled={new Date().getMonth() + 1 >= month && new Date().getFullYear() == year}
                         onClick={previousMonth}
                     >
                         <FontAwesomeIcon size="sm" icon={faChevronLeft} />
-                    </Button>
+                    </button>
                     <div className={styles.heading}>
                         <p>{`${numberMonthEnum[month]} ${year}`}</p>
                     </div>
-                    <Button onClick={nextMonth} className={styles.buttonNext}>
+                    <button onClick={nextMonth} className={styles.buttonNext}>
                         <FontAwesomeIcon size="sm" icon={faChevronRight} />
-                    </Button>
+                    </button>
                 </div>
                 <table className={styles.daySelectionTable}>
                     <thead>
@@ -141,7 +144,7 @@ const DaySelection = () => {
                             <th>Sun</th>
                         </tr>
                     </thead>
-                    <tbody>{generateTableBody(generateTableObject(timeSlots.data))}</tbody>
+                    <tbody>{generateTableBody(generateTableArray(timeSlots.data))}</tbody>
                 </table>
             </div>
         );

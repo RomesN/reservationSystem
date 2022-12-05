@@ -1,11 +1,12 @@
-import NewBookingToolbar from "../components/newBooking/NewBookingToolbar";
-import ErrorBoundary from "../components/ErrorBoundary";
-import ServiceSelection from "../components/newBooking/ServiceSelection";
-import styles from "../styles/newBooking.module.css";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 import { useNewBookingContext } from "../hooks/NewBookingContext";
-import DaySelection from "../components/newBooking/DaySelection";
-import TimeSelection from "../components/newBooking/TimeSelection";
+import DaySelection from "../components/newReservation/daySelection/DaySelection";
+import ErrorBoundary from "../components/ErrorBoundary";
+import NewBookingToolbar from "../components/newReservation/toolbar/NewReservationToolbar";
+import { NewBookingView } from "../utils/enums/newBookingViewEnum";
+import ReservationSubmission from "../components/newReservation/submission/ReservationSubmission";
+import ServiceSelection from "../components/newReservation/serviceSelection/ServiceSelection";
+import styles from "../styles/newBooking.module.css";
+import TimeSelection from "../components/newReservation/timeSelection/TimeSelection";
 
 const NewBooking = () => {
     const { view } = useNewBookingContext();
@@ -19,7 +20,7 @@ const NewBooking = () => {
             case NewBookingView.Times:
                 return <TimeSelection />;
             case NewBookingView.Form:
-                return;
+                return <ReservationSubmission />;
         }
     };
 

@@ -12,7 +12,13 @@ import {
     roundToNearestMinutes,
 } from "date-fns";
 import schedule from "node-schedule";
-import { CoveredError, getDaysInMonth, getUTCDate, getUTCFromDateAndLocalTimeString } from "../utils/index.mjs";
+import {
+    CoveredError,
+    generateCustomToken,
+    getDaysInMonth,
+    getUTCDate,
+    getUTCFromDateAndLocalTimeString,
+} from "../utils/index.mjs";
 import { ReservationsRepository } from "../repositories/index.mjs";
 import enums from "../model/enums/index.mjs";
 
@@ -211,7 +217,7 @@ class ReservationsService {
         return await this.ReservationsRepository.getValidReservationsBetween(startDate, endDate);
     }
 
-    async createNewTemporalBooking(isoTimeString, serviceIdString, ServicesService) {
+    async createNewTemporalReservation(isoTimeString, serviceIdString, ServicesService) {
         if (!isoTimeString || !serviceIdString) {
             throw new CoveredError(400, "One or more parameters is missing.");
         }
@@ -223,11 +229,22 @@ class ReservationsService {
         }
 
         const currentDate = new Date();
+        const validityEnd = add(currentDate, {
+            minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
+        });
+
+        let reservationToken;
+        do {
+            reservationToken = generateCustomToken(25);
+        } while (await this.ReservationsRepository.getReservationByToken(reservationToken));
+
         const temporalReservation = {
             date: parseISO(isoTimeString),
-            detail: `TEMP${currentDate.valueOf()}%%%%${isoTimeString}`,
+            detail: null,
             serviceId: service.id,
             reservationStatus: enums.status.TEMPORARY,
+            reservationToken,
+            validityEnd,
         };
 
         const found = await this.getValidReservationsBetweenDates(
@@ -241,16 +258,20 @@ class ReservationsService {
             throw new CoveredError(409, "There is already a reservation for needed time interval.");
         }
 
-        schedule.scheduleJob(
-            add(currentDate, { minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15") }),
-            () =>
-                this.ReservationsRepository.deleteTemporalReservation(
-                    temporalReservation.date,
-                    temporalReservation.detail
-                )
+        schedule.scheduleJob(validityEnd, () =>
+            this.ReservationsRepository.deleteReservationByToken(temporalReservation.reservationToken)
         );
 
         return await this.ReservationsRepository.createReservation(temporalReservation);
+    }
+
+    async deleteTemporalReservation(reservationToken) {
+        const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
+        if (!reservationToDelete) {
+            throw new CoveredError(400, "No temporal reservation exists with provided token.");
+        }
+
+        await this.ReservationsRepository.deleteReservationByToken(reservationToken);
     }
 
     sortReservationList(reservationsList) {
