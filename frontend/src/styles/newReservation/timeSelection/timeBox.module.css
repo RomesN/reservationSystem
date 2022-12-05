@@ -1,22 +1,26 @@
-.timeBox {
+.timeBoxMorning,
+.timeBoxAfternoon {
     width: calc(25% - 4px);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 2px;
     font-weight: 500;
-    border: 1px solid var(--mainColor);
     animation: fadeIn 0.5s;
+    color: var(--mainColor);
+    border: 1px solid var(--mainColor);
 }
 
-.timeBox:hover {
+.timeBoxMorning:hover,
+.timeBoxAfternoon:hover {
     color: var(--fontDark);
     background-color: var(--tertiaryColor);
     border: 1px solid var(--mainColor);
     cursor: pointer;
 }
 
-.timeBox > p {
+.timeBoxMorning > p,
+.timeBoxAfternoon > p {
     margin: 2px 2px;
 }
 

@@ -26,7 +26,7 @@ type Reservation = {
     updatedAt: string;
     createdAt: string;
     customerId: number | null;
-    validity: Date;
+    validityEnd: string;
     reservationToken: string;
 };
 

@@ -12,6 +12,15 @@
     background-color: var(--secondaryColor) !important;
 }
 
+.bookingCollisionButton {
+    background-color: var(--secondaryColor) !important;
+    color: var(--fontBright);
+}
+
+.bookingCollisionButton:focus {
+    box-shadow: 0 0 5px 3px var(--tertiaryColor) !important;
+}
+
 .bookingCollisionButton:hover {
     background-color: var(--tertiaryColor) !important;
     color: var(--fontDark);

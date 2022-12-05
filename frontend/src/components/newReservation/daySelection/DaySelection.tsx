@@ -2,11 +2,11 @@ import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getTimeSlots } from "../../../api/reservationApi";
+import { IntervalString } from "../../../shared/types";
 import Loading from "../../Loading";
 import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
-import { IntervalString } from "../../../shared/types";
-import styles from "../../../styles/daySelection.module.css";
+import styles from "../../../styles/newReservation/daySelection/daySelection.module.css";
 import { useQuery } from "react-query";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
 

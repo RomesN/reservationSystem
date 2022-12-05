@@ -1,0 +1,7 @@
+.timeElapsing {
+    color: var(--errorColor);
+}
+
+.normal {
+    color: var(--fontDark);
+}

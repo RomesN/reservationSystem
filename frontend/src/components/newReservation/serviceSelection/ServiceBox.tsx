@@ -1,5 +1,5 @@
 import { Service } from "../../../shared/types";
-import styles from "../../../styles/serviceBox.module.css";
+import styles from "../../../styles/newReservation/serviceSelection/serviceBox.module.css";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
 import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
 

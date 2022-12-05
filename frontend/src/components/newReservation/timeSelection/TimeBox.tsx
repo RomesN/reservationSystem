@@ -1,6 +1,6 @@
 import { format, Interval } from "date-fns";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
-import styles from "../../../styles/timeBox.module.css";
+import styles from "../../../styles/newReservation/timeSelection/timeBox.module.css";
 
 type TimeBoxProps = {
     interval: Interval;
@@ -16,7 +16,14 @@ const TimeBox = ({ interval }: TimeBoxProps) => {
     };
 
     return (
-        <div onClick={handleClick} className={styles.timeBox}>
+        <div
+            onClick={handleClick}
+            className={
+                interval.start instanceof Date && interval.start.getHours() < 12
+                    ? styles.timeBoxMorning
+                    : styles.timeBoxAfternoon
+            }
+        >
             <p>{`${format(interval.start, "k:mm")} - ${format(interval.end, "k:mm")}`}</p>
         </div>
     );

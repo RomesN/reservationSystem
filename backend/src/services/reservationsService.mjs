@@ -232,6 +232,14 @@ class ReservationsService {
         const validityEnd = add(currentDate, {
             minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
         });
+        const reservationStart = parseISO(isoTimeString);
+
+        if (reservationStart.getMinutes() % parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15") !== 0) {
+            throw new CoveredError(
+                400,
+                "Reservation start must be nearest " + process.env.BOOKING_EVERY_NEAREST_MINUES + " minutes."
+            );
+        }
 
         let reservationToken;
         do {

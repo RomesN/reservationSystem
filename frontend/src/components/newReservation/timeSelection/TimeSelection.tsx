@@ -8,7 +8,7 @@ import Loading from "../../Loading";
 import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
 import TimeBox from "./TimeBox";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
-import styles from "../../../styles/timeSelection.module.css";
+import styles from "../../../styles/newReservation/timeSelection/timeSelection.module.css";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 
 const TimeSelection = () => {
@@ -59,7 +59,7 @@ const TimeSelection = () => {
         Swal.fire({
             icon: "error",
             title: "Unlucky day",
-            text: "Improbable as it is, but somebody booked the same time slot just few moments ago. Please pick another date/time or come back later to check whether it wasn't canceled by any chance.",
+            text: "Improbable as it is, but somebody booked the same time slot just few moments ago. Please pick another date/time or try your luck later.",
             iconColor: "#6d9886",
             customClass: {
                 popup: stylesSweetAlert.bookingCollision,

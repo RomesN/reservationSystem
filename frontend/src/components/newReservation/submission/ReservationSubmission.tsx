@@ -1,7 +1,11 @@
+import ReservationOverview from "./ReservationOverview";
+
 const ReservationSubmission = () => {
     return (
         <div>
-            <div></div>
+            <div>
+                <ReservationOverview />
+            </div>
             <div></div>
         </div>
     );
