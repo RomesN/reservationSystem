@@ -2,24 +2,23 @@ import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getTimeSlots } from "../api/reservationApi";
-import Loading from "./Loading";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
-import { numberMonthEnum } from "../utils/enums/numberMonthEnum";
-import { IntervalString } from "../shared/types";
-import styles from "../styles/daySelection.module.css";
+import { getTimeSlots } from "../../api/reservationApi";
+import Loading from "../Loading";
+import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
+import { numberMonthEnum } from "../../utils/enums/numberMonthEnum";
+import { IntervalString } from "../../shared/types";
+import styles from "../../styles/daySelection.module.css";
 import { useQuery } from "react-query";
-import { useNewBookingContext } from "../hooks/NewBookingContext";
+import { useNewBookingContext } from "../../hooks/NewBookingContext";
 
 type tableArray = { available: boolean; date: number; intervalsConnected: IntervalString[] };
 
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const { getBookedDate, getBookedService, setBookedDateState, setBookingView, setAvailableIntervalsState } =
-        useNewBookingContext();
+    const { bookedDate, bookedService, setBookedDate, setView, setAvilableIntervals } = useNewBookingContext();
 
-    const timeSlots = useQuery(["timeSlotsObject", [getBookedService()?.id || null, year, month]], getTimeSlots, {
+    const timeSlots = useQuery(["timeSlotsObject", [bookedService?.id || null, year, month]], getTimeSlots, {
         useErrorBoundary: true,
     });
 
@@ -50,9 +49,9 @@ const DaySelection = () => {
     };
 
     const handleClick = (day: number, availableIntervals: IntervalString[]) => {
-        setBookedDateState(new Date(year, month - 1, day));
-        setBookingView(NewBookingView.Times);
-        setAvailableIntervalsState(availableIntervals);
+        setBookedDate(() => new Date(year, month - 1, day));
+        setAvilableIntervals(() => availableIntervals);
+        setView(() => NewBookingView.Times);
     };
 
     const generateTableBody = (tableArray: tableArray[][]) => {
@@ -76,9 +75,9 @@ const DaySelection = () => {
                                 }
                                 key={keyCell++}
                                 className={
-                                    getBookedDate()?.getDate() === cell.date &&
-                                    (getBookedDate()?.getMonth() || -2) + 1 === month &&
-                                    getBookedDate()?.getFullYear() === year
+                                    bookedDate?.getDate() === cell.date &&
+                                    (bookedDate?.getMonth() || -2) + 1 === month &&
+                                    bookedDate?.getFullYear() === year
                                         ? styles.selected
                                         : cell.available
                                         ? styles.available
@@ -96,31 +95,19 @@ const DaySelection = () => {
 
     const nextMonth = () => {
         if (month === 12) {
-            setMonth(() => {
-                return 1;
-            });
-            setYear((year) => {
-                return year + 1;
-            });
+            setMonth(() => 1);
+            setYear((year) => year + 1);
         } else {
-            setMonth((month) => {
-                return month + 1;
-            });
+            setMonth((month) => month + 1);
         }
     };
 
     const previousMonth = () => {
         if (month === 1) {
-            setMonth(() => {
-                return 12;
-            });
-            setYear((year) => {
-                return year - 1;
-            });
+            setMonth(() => 12);
+            setYear((year) => year - 1);
         } else {
-            setMonth((month) => {
-                return month - 1;
-            });
+            setMonth((month) => month - 1);
         }
     };
 

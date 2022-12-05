@@ -2,29 +2,29 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNewBookingContext } from "../hooks/NewBookingContext";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
-import styles from "../styles/newBookingToolbar.module.css";
+import { useNewBookingContext } from "../../hooks/NewBookingContext";
+import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
+import styles from "../../styles/newBookingToolbar.module.css";
 
 const NewBookingToolbar = () => {
-    const { getView, setBookingView } = useNewBookingContext();
+    const { view, setView } = useNewBookingContext();
 
     const handleClickBack = () => {
-        switch (getView()) {
+        switch (view) {
             case NewBookingView.Form:
-                setBookingView(NewBookingView.Times);
+                setView(() => NewBookingView.Calendar);
                 break;
             case NewBookingView.Times:
-                setBookingView(NewBookingView.Calendar);
+                setView(() => NewBookingView.Calendar);
                 break;
             case NewBookingView.Calendar:
-                setBookingView(NewBookingView.Services);
+                setView(() => NewBookingView.Services);
                 break;
         }
     };
 
     const backButton = () => {
-        if (getView() === NewBookingView.Services) {
+        if (view === NewBookingView.Services) {
             return (
                 <Link to="/">
                     <Button variant="primary" className={styles.backButton}>
@@ -45,7 +45,7 @@ const NewBookingToolbar = () => {
 
     const heading = () => {
         let text;
-        switch (getView()) {
+        switch (view) {
             case NewBookingView.Services:
                 text = " Select service";
                 break;

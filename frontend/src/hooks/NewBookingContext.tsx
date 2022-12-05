@@ -1,19 +1,21 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import { Props, Service, IntervalString } from "../shared/types";
+import { Props, Reservation, Service, IntervalString } from "../shared/types";
 import { NewBookingView } from "../utils/enums/newBookingViewEnum";
 
 type NewBookingContext = {
-    getView: () => NewBookingView;
-    getBookedService: () => Service | null;
-    getBookedDate: () => Date | null;
-    getAvailableIntervals: () => IntervalString[] | null;
-    getBookedFormData: () => BookedFormData | null;
-    setBookingView: (view: NewBookingView) => void;
-    setBookedServiceState: (bookedService: Service | null) => void;
-    setBookedDateState: (bookedDate: Date | null) => void;
-    setAvailableIntervalsState: (availableIntervals: IntervalString[] | null) => void;
-    setBookedFormDataState: (bookedService: BookedFormData) => void;
+    view: NewBookingView;
+    bookedService: Service | null;
+    bookedDate: Date | null;
+    availableIntervals: IntervalString[] | null;
+    temporalReservation: Reservation | null;
+    bookedFormData: BookedFormData | null;
+    setView: React.Dispatch<React.SetStateAction<NewBookingView>>;
+    setBookedService: React.Dispatch<React.SetStateAction<Service | null>>;
+    setBookedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+    setAvilableIntervals: React.Dispatch<React.SetStateAction<IntervalString[] | null>>;
+    setTemporalReservation: React.Dispatch<React.SetStateAction<Reservation | null>>;
+    setBookedFormData: React.Dispatch<React.SetStateAction<BookedFormData | null>>;
 };
 
 type BookedFormData = {
@@ -34,61 +36,24 @@ export const NewBookingDataProvider = ({ children }: Props) => {
     const [bookedService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [availableIntervals, setAvilableIntervals] = useState<null | IntervalString[]>(null);
+    const [temporalReservation, setTemporalReservation] = useState<null | Reservation>(null);
     const [bookedFormData, setBookedFormData] = useState<null | BookedFormData>(null);
-
-    function getView() {
-        return view;
-    }
-
-    function getBookedService() {
-        return bookedService;
-    }
-
-    function getBookedDate() {
-        return bookedDate;
-    }
-
-    function getAvailableIntervals() {
-        return availableIntervals;
-    }
-
-    function getBookedFormData() {
-        return bookedFormData;
-    }
-
-    function setBookingView(view: NewBookingView) {
-        setView(view);
-    }
-
-    function setBookedServiceState(bookedService: Service | null) {
-        setBookedService(bookedService);
-    }
-
-    function setBookedDateState(bookedDataState: Date | null) {
-        setBookedDate(bookedDataState);
-    }
-
-    function setAvailableIntervalsState(availableIntervals: IntervalString[] | null) {
-        setAvilableIntervals(availableIntervals);
-    }
-
-    function setBookedFormDataState(bookedFormData: BookedFormData) {
-        setBookedFormData(bookedFormData);
-    }
 
     return (
         <NewBookingDataContext.Provider
             value={{
-                getView,
-                getBookedService,
-                getBookedDate,
-                getAvailableIntervals,
-                getBookedFormData,
-                setBookingView,
-                setBookedServiceState,
-                setBookedDateState,
-                setAvailableIntervalsState,
-                setBookedFormDataState,
+                view,
+                bookedService,
+                bookedDate,
+                availableIntervals,
+                temporalReservation,
+                bookedFormData,
+                setView,
+                setBookedService,
+                setBookedDate,
+                setAvilableIntervals,
+                setTemporalReservation,
+                setBookedFormData,
             }}
         >
             {children}

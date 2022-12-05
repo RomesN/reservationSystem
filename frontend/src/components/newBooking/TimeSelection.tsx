@@ -2,25 +2,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { addMinutes, Interval, isBefore, parseISO, isEqual } from "date-fns";
 import { useEffect, useState } from "react";
-import { createTemporalBooking, isDateAvailable } from "../api/reservationApi";
-import { IntervalString } from "../shared/types";
-import Loading from "./Loading";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
+import { createTemporalBooking, isDateAvailable } from "../../api/reservationApi";
+import { IntervalString } from "../../shared/types";
+import Loading from "../Loading";
+import { NewBookingView } from "../../utils/enums/newBookingViewEnum";
 import TimeBox from "./TimeBox";
-import { useNewBookingContext } from "../hooks/NewBookingContext";
-import styles from "../styles/timeSelection.module.css";
-import stylesSweetAlert from "../styles/sweetAlert.module.css";
+import { useNewBookingContext } from "../../hooks/NewBookingContext";
+import styles from "../../styles/timeSelection.module.css";
+import stylesSweetAlert from "../../styles/sweetAlert.module.css";
 
 const TimeSelection = () => {
     const [timeSlots, setTimeSlots] = useState<Interval[] | null>(null);
-    const {
-        getAvailableIntervals,
-        getBookedDate,
-        setBookedDateState,
-        getBookedService,
-        setBookingView,
-        setAvailableIntervalsState,
-    } = useNewBookingContext();
+    const { availableIntervals, bookedDate, bookedService, setBookedDate, setView, setAvilableIntervals } =
+        useNewBookingContext();
 
     const calculateTimeSlots = (availableTimeSlots: IntervalString[] | null, minutesNeeded: number | undefined) => {
         const slotsToShow = [] as Interval[];
@@ -36,12 +30,12 @@ const TimeSelection = () => {
                     end = addMinutes(end, parseInt(process.env.REACT_APP_BOOKING_EVERY_NEAREST_MINUTES || "15"));
                 }
             });
-            setTimeSlots(slotsToShow);
+            setTimeSlots(() => slotsToShow);
         }
     };
 
     useEffect(() => {
-        calculateTimeSlots(getAvailableIntervals(), getBookedService()?.minutesRequired);
+        calculateTimeSlots(availableIntervals, bookedService?.minutesRequired);
     }, []);
 
     const checkAndMakeTemporalBooking = async (date: Date, serviceId: number) => {
@@ -49,7 +43,7 @@ const TimeSelection = () => {
         if (isFree && !axios.isAxiosError(isFree) && isFree.data.isAvailable) {
             const response = await createTemporalBooking(date.toISOString(), serviceId);
             if (!axios.isAxiosError(response)) {
-                setBookingView(NewBookingView.Form);
+                setView(() => NewBookingView.Form);
                 return;
             }
         }
@@ -67,19 +61,17 @@ const TimeSelection = () => {
                 htmlContainer: stylesSweetAlert.bookingCollisionContainer,
             },
         }).then(() => {
-            setBookingView(NewBookingView.Calendar);
-            setBookedDateState(null);
-            setAvailableIntervalsState(null);
+            setBookedDate(() => null);
+            setAvilableIntervals(() => null);
+            setView(() => NewBookingView.Calendar);
         });
     };
 
     useEffect(() => {
-        const date = getBookedDate();
-        const service = getBookedService();
-        if (date?.getHours() !== 0 && service && date) {
-            checkAndMakeTemporalBooking(date, service.id);
+        if (bookedDate?.getHours() !== 0 && bookedService && bookedDate) {
+            checkAndMakeTemporalBooking(bookedDate, bookedService.id);
         }
-    }, [getBookedDate()]);
+    }, [bookedDate]);
 
     if (timeSlots) {
         return (
