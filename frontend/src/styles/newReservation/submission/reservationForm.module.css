@@ -1,29 +1,32 @@
-.rowOne {
-    margin: 0 2px 20px 0;
+.rowOne,
+.rowTwo,
+.rowThree,
+.rowFour {
     padding: 0;
     animation: fadeIn 0.5s;
 }
 
+.rowOne div,
+.rowTwo div {
+    color: var(--errorColor) !important;
+}
+
+.rowOne,
 .rowTwo {
-    margin: 0 2px;
-    padding: 0;
-    animation: fadeIn 0.5s;
+    min-height: 90px;
+    margin: 0 4px;
 }
 
 .rowThree {
     align-items: center;
     justify-content: center;
     margin: 0 2px 30px;
-    padding: 0;
-    animation: fadeIn 0.5s;
 }
 
 .rowFour {
     align-items: center;
     justify-content: center;
     margin: 0 2px;
-    padding: 0;
-    animation: fadeIn 0.5s;
 }
 
 .colLeft {
@@ -38,9 +41,8 @@
 
 .label {
     color: var(--fontDark);
-    font-weight: 500;
     padding: 0;
-    margin: 0 0 2px 0;
+    margin: 0 0 5px 0;
 }
 
 .input {

@@ -1,11 +1,15 @@
 import ReservationForm from "./ReservationForm";
 import ReservationOverview from "./ReservationOverview";
+import styles from "../../../styles/newReservation/submission/reservationSubmission.module.css";
 
 const ReservationSubmission = () => {
     return (
-        <div>
+        <div className={styles.submission}>
             <div>
                 <ReservationOverview />
+            </div>
+            <div className={styles.lineContainer}>
+                <hr className={styles.line} />
             </div>
             <div>
                 <ReservationForm />

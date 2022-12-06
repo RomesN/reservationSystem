@@ -62,7 +62,7 @@ const ReservationSubmission = () => {
 
     return (
         <p className={timer && timer <= 1000 * 30 ? styles.timeElapsing : styles.normal}>
-            <FontAwesomeIcon size="xl" icon={faHourglass2} />
+            <FontAwesomeIcon size="lg" icon={faHourglass2} />
             {" " + (timer && formatTime(timer))}
         </p>
     );
