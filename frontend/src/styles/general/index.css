@@ -1,6 +1,7 @@
 :root {
     --mainColor: #212121;
-    --mainColorTint: #353535;
+    --mainColorBrighter: #353535;
+    --secondaryDarker: #4b685c;
     --secondaryColor: #6d9886;
     --secondaryColorBrighter: #a7c1b6;
     --tertiaryColor: #d9cab3;

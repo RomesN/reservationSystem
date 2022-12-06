@@ -147,7 +147,7 @@ td {
 .daySelectionTable .available::after {
     --scale: 0;
     --arrow-size: 20px;
-    --tooltip-color: var(--mainColorTint);
+    --tooltip-color: var(--mainColorBrighter);
 
     position: absolute;
     top: -0.25em;

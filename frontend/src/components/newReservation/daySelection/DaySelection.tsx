@@ -97,7 +97,6 @@ const DaySelection = () => {
     };
 
     const generateTableBody = (tableArray: tableArray[][]) => {
-        console.log(tableArray);
         let keyRow = 0;
         let keyCell = 0;
         return tableArray.map((row) => {

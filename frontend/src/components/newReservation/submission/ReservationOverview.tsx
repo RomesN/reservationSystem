@@ -10,19 +10,19 @@ const ReservationOverview = () => {
 
     return (
         <div className={styles.overviewContainer}>
-            <div className={styles.item}>
+            <div className={styles.itemOne}>
                 <p>
                     <FontAwesomeIcon size="xl" icon={faClockFour} className={styles.icon} />
                     {" " + (bookedDate && format(bookedDate, "dd.MM.yyyy HH:mm"))}
                 </p>
             </div>
-            <div className={styles.item}>
+            <div className={styles.itemTwo}>
                 <p>
                     <FontAwesomeIcon size="xl" icon={faFlag} className={styles.icon} />
                     {" " + bookedService?.name}
                 </p>
             </div>
-            <div className={styles.item}>
+            <div className={styles.itemThree}>
                 <Timer />
             </div>
             <div className={styles.lineContainer}>

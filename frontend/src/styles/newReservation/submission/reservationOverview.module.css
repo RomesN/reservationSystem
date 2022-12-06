@@ -4,19 +4,26 @@
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    text-align: center;
+    justify-content: space-between;
     vertical-align: middle;
     animation: fadeIn 0.5s;
 }
 
-.item {
-    width: 100%;
+.itemOne,
+.itemTwo,
+.itemThree {
     padding: 0;
     margin: 10px;
     padding: 0;
 }
 
-.item > p {
+.itemThree {
+    min-width: 65px;
+}
+
+.itemOne > p,
+.itemTwo > p,
+.itemThree > p {
     margin: 0;
     padding: 0;
 }
@@ -35,7 +42,7 @@
 }
 
 .icon {
-    color: var(--mainColorTint);
+    color: var(--mainColorBrighter);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

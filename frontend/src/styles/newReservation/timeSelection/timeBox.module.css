@@ -25,7 +25,7 @@
 }
 
 .icon {
-    color: var(--mainColorTint);
+    color: var(--mainColorBrighter);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

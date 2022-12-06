@@ -1,3 +1,4 @@
+import ReservationForm from "./ReservationForm";
 import ReservationOverview from "./ReservationOverview";
 
 const ReservationSubmission = () => {
@@ -6,7 +7,9 @@ const ReservationSubmission = () => {
             <div>
                 <ReservationOverview />
             </div>
-            <div></div>
+            <div>
+                <ReservationForm />
+            </div>
         </div>
     );
 };
