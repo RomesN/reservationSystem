@@ -20,7 +20,13 @@ Frontend part
 
 -   React.js
 
-## 3. How to Install and Run the Project
+## 3. EXAMPLE - WORK IN PROGRESS
+
+
+https://user-images.githubusercontent.com/81518313/205883402-dfab0f0f-df69-4649-bd5a-dab67ebd0909.mp4
+
+
+## 4. How to Install and Run the Project
 
 Copy .env.example as .env then replace the settings in the .env file.
 Use the following commands:
