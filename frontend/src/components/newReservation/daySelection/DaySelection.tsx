@@ -1,3 +1,4 @@
+import { addMinutes, Interval, isBefore, parseISO, isEqual } from "date-fns";
 import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +11,13 @@ import styles from "../../../styles/newReservation/daySelection/daySelection.mod
 import { useQuery } from "react-query";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
 
-type tableArray = { available: boolean; date: number; intervalsConnected: IntervalString[] };
+type tableArray = {
+    available: boolean;
+    date: number;
+    intervalsConnected: Interval[];
+    morningCount?: number;
+    afternoonCount?: number;
+};
 
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());
@@ -21,21 +28,57 @@ const DaySelection = () => {
         useErrorBoundary: true,
     });
 
+    const calculateTimeSlots = (availableTimeSlots: IntervalString[] | null, minutesNeeded: number | undefined) => {
+        const slotsToShow = [] as Interval[];
+        let morningCount = 0;
+        let afternoonCount = 0;
+        if (availableTimeSlots && minutesNeeded) {
+            availableTimeSlots.forEach((timeSlot) => {
+                const maxEnd = parseISO(timeSlot.end);
+                let start = parseISO(timeSlot.start);
+                let end = addMinutes(start, minutesNeeded);
+
+                while (isBefore(end, maxEnd) || isEqual(end, maxEnd)) {
+                    slotsToShow.push({ start, end });
+                    if (start.getHours() < 12) {
+                        morningCount++;
+                    } else {
+                        afternoonCount++;
+                    }
+                    start = addMinutes(start, parseInt(process.env.REACT_APP_BOOKING_EVERY_NEAREST_MINUTES || "15"));
+                    end = addMinutes(end, parseInt(process.env.REACT_APP_BOOKING_EVERY_NEAREST_MINUTES || "15"));
+                }
+            });
+        }
+        return { slotsToShow, morningCount, afternoonCount };
+    };
+
     const generateTableArray = (data: any) => {
         const tableArray = [[], [], [], [], [], []] as tableArray[][];
         const monthStartDay = new Date(year, month - 1, 1).getDay();
         const startMonIsOne = monthStartDay === 0 ? 7 : monthStartDay;
 
+        // empty cells falling into not current month
         for (let i = 0; i < startMonIsOne - 1; i++) {
             tableArray[0][i] = { available: false, date: 0, intervalsConnected: [] };
         }
+
+        // the rest of the table
         for (let i = startMonIsOne - 1; i < 42; i++) {
             if (data.data[`${i - startMonIsOne + 2}`]) {
+                const { slotsToShow, morningCount, afternoonCount } = calculateTimeSlots(
+                    data.data[`${i - startMonIsOne + 2}`],
+                    data.data.serviceRequiredTime
+                );
+
                 tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: data.data[`${i - startMonIsOne + 2}`].length !== 0,
                     date: i - startMonIsOne + 2,
-                    intervalsConnected: data.data[`${i - startMonIsOne + 2}`],
+                    intervalsConnected: slotsToShow,
+                    morningCount,
+                    afternoonCount,
                 };
+                // cells for not days in current month
             } else {
                 tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: false,
@@ -47,13 +90,14 @@ const DaySelection = () => {
         return tableArray;
     };
 
-    const handleClick = (day: number, availableIntervals: IntervalString[]) => {
+    const handleClick = (day: number, availableIntervals: Interval[]) => {
         setBookedDate(() => new Date(year, month - 1, day));
         setAvilableIntervals(() => availableIntervals);
         setView(() => NewBookingView.Times);
     };
 
     const generateTableBody = (tableArray: tableArray[][]) => {
+        console.log(tableArray);
         let keyRow = 0;
         let keyCell = 0;
         return tableArray.map((row) => {
@@ -61,10 +105,12 @@ const DaySelection = () => {
                 <tr key={keyRow++}>
                     {row.map((cell) => {
                         if (keyRow === 5 && !tableArray[5][0].available) {
-                            return;
+                            return <></>;
                         }
                         return (
                             <td
+                                data-tooltip={`Morning: ${cell.morningCount} slots
+                                Afternoon: ${cell.afternoonCount} slots`}
                                 onClick={
                                     cell.available
                                         ? () => {
@@ -116,11 +162,11 @@ const DaySelection = () => {
                 <div className={styles.selectionToolbar}>
                     <button
                         className={
-                            new Date().getMonth() + 1 >= month && new Date().getFullYear() == year
+                            new Date().getMonth() + 1 >= month && new Date().getFullYear() === year
                                 ? styles.buttonPreviousDisabled
                                 : styles.buttonPrevious
                         }
-                        disabled={new Date().getMonth() + 1 >= month && new Date().getFullYear() == year}
+                        disabled={new Date().getMonth() + 1 >= month && new Date().getFullYear() === year}
                         onClick={previousMonth}
                     >
                         <FontAwesomeIcon size="sm" icon={faChevronLeft} />

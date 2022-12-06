@@ -129,6 +129,59 @@ td {
     background-color: var(--secondaryColor);
 }
 
+/* tooltip */
+.daySelectionTable td {
+    position: relative;
+}
+
+.daySelectionTable .selected:hover::before,
+.daySelectionTable .selected:hover::after,
+.daySelectionTable .available:hover:before,
+.daySelectionTable .available:hover::after {
+    --scale: 1;
+}
+
+.daySelectionTable .selected::before,
+.daySelectionTable .selected::after,
+.daySelectionTable .available::before,
+.daySelectionTable .available::after {
+    --scale: 0;
+    --arrow-size: 20px;
+    --tooltip-color: var(--mainColorTint);
+
+    position: absolute;
+    top: -0.25em;
+    left: 50%;
+    transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+    transition: 150ms transform;
+    transform-origin: bottom center;
+    font-size: 0.7em;
+}
+
+.daySelectionTable .selected:hover::before,
+.daySelectionTable .available::before {
+    --translate-y: calc(-100% - var(--arrow-size));
+
+    content: attr(data-tooltip);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    text-align: center;
+    width: max-content;
+    max-width: 100%;
+    background: var(--tooltip-color);
+}
+
+.daySelectionTable .selected:hover::after,
+.daySelectionTable .available:hover::after {
+    --translate-y: calc(-1 * var(--arrow-size));
+
+    content: "";
+    border: var(--arrow-size) solid transparent;
+    border-top-color: var(--tooltip-color);
+    transform-origin: top center;
+}
+
 .daySelectionTable .available:hover,
 .selected:hover {
     background-color: var(--tertiaryColor);
