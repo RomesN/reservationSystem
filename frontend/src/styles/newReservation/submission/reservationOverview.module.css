@@ -35,7 +35,7 @@
 }
 
 .icon {
-    color: var(--mainColor);
+    color: var(--mainColorTint);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

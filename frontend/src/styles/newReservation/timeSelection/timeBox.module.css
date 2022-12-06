@@ -24,17 +24,23 @@
     margin: 2px 2px;
 }
 
+.icon {
+    color: var(--mainColorTint);
+}
+
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .timeBox {
+    .timeBoxMorning,
+    .timeBoxAfternoon {
         font-size: 18px;
     }
 }
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 991px) {
-    .timeBox {
-        font-size: 12.5px;
+    .timeBoxMorning,
+    .timeBoxAfternoon {
+        font-size: 12px;
     }
 }
 

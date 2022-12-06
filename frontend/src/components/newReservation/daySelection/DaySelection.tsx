@@ -105,12 +105,12 @@ const DaySelection = () => {
                 <tr key={keyRow++}>
                     {row.map((cell) => {
                         if (keyRow === 5 && !tableArray[5][0].available) {
-                            return <></>;
+                            return undefined;
                         }
                         return (
                             <td
-                                data-tooltip={`Morning: ${cell.morningCount} slots
-                                Afternoon: ${cell.afternoonCount} slots`}
+                                data-tooltip={`morning: ${cell.morningCount} slots
+                                afternoon: ${cell.afternoonCount} slots`}
                                 onClick={
                                     cell.available
                                         ? () => {

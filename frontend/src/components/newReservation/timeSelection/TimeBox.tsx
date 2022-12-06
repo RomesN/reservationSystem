@@ -1,3 +1,5 @@
+import { faCalendar, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format, Interval } from "date-fns";
 import { useNewBookingContext } from "../../../hooks/NewBookingContext";
 import styles from "../../../styles/newReservation/timeSelection/timeBox.module.css";
@@ -24,7 +26,14 @@ const TimeBox = ({ interval }: TimeBoxProps) => {
                     : styles.timeBoxAfternoon
             }
         >
-            <p>{`${format(interval.start, "k:mm")} - ${format(interval.end, "k:mm")}`}</p>
+            <p>
+                {interval.start instanceof Date && interval.start.getHours() < 12 ? (
+                    <FontAwesomeIcon size="sm" icon={faCalendar} className={styles.icon} />
+                ) : (
+                    <FontAwesomeIcon size="sm" icon={faCalendarAlt} className={styles.icon} />
+                )}
+                {` ${format(interval.start, "k:mm")} - ${format(interval.end, "k:mm")}`}
+            </p>
         </div>
     );
 };
