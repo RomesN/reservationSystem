@@ -23,7 +23,10 @@ Frontend part
 ## 3. EXAMPLE - WORK IN PROGRESS
 
 
-https://user-images.githubusercontent.com/81518313/205883402-dfab0f0f-df69-4649-bd5a-dab67ebd0909.mp4
+https://user-images.githubusercontent.com/81518313/206234773-283b891d-7d04-4891-9731-fbbdf68d83b1.mp4
+
+
+https://user-images.githubusercontent.com/81518313/206233975-d9596754-a759-4de3-a79e-8f3f8d201820.mp4
 
 
 ## 4. How to Install and Run the Project
