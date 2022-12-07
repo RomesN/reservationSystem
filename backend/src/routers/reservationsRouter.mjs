@@ -18,6 +18,11 @@ router.put(
     ReservationsController.createNewTemporalReservation.bind(ReservationsController)
 );
 
+router.put(
+    "/final-reservation/:temporalToken",
+    ReservationsController.createFinalReservation.bind(ReservationsController)
+);
+
 router.delete(
     "/temporal-reservation/:reservationToken",
     ReservationsController.deleteTemporalReservation.bind(ReservationsController)

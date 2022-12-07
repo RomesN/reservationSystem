@@ -25,6 +25,21 @@ class ReservationsRepository {
         return await models.Reservation.findOne({ where: { reservationToken: token } });
     }
 
+    async getTemporaryReservationByToken(token) {
+        return await models.Reservation.findOne({
+            where: {
+                reservationToken: token,
+                reservationStatus: enums.status.TEMPORARY,
+            },
+        });
+    }
+
+    async updateReservation(id, updateData) {
+        return await models.Reservation.update(updateData, {
+            where: { id },
+        });
+    }
+
     async deleteReservationByToken(token) {
         await models.Reservation.destroy({
             where: { reservationToken: token },

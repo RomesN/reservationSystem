@@ -24,7 +24,7 @@ const ReservationForm = () => {
     const navigate = useNavigate();
 
     const validateName = (firstName: string) => {
-        return !/[A-Za-z]{3}/g.test(firstName) ? "Name must contain at least 3 characters." : "";
+        return !/[A-Za-z]{2}/g.test(firstName) ? "Name must contain at least 2 characters." : "";
     };
 
     const validateEmail = (email: string) => {

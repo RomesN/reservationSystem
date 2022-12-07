@@ -61,7 +61,24 @@ const generateCustomToken = (tokenLength) => {
     return generatedToken;
 };
 
+const formatName = (name) => {
+    const nameLower = name.toLowerCase();
+    return name[0].toUpperCase() + nameLower.substring(2);
+};
+
+const formatEmail = (email) => {
+    return email.toLowerCase()
+};
+
+const formatPhone = (phone) => {
+    return phone.replaceAll(" ", "");
+};
+
+
 export {
+    formatEmail,
+    formatName,
+    formatPhone,
     generateCustomToken,
     getDaysInMonth,
     getUTCDate,

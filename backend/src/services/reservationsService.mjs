@@ -8,6 +8,7 @@ import {
     isAfter,
     isBefore,
     isEqual,
+    isSameSecond,
     parseISO,
     roundToNearestMinutes,
 } from "date-fns";
@@ -197,8 +198,14 @@ class ReservationsService {
         if (!isoTimeString || !minutesNeeded || !restrictionService) {
             throw new CoveredError(400, "One or more parameters is missing.");
         }
+
         const date = parseISO(isoTimeString);
         const intervalRequired = { start: date, end: add(date, { minutes: minutesNeeded }) };
+
+        if (isBefore(intervalRequired.start, endOfDay(new Date()))) {
+            throw new CoveredError(400, "The closest reservation can be for tomorrow.");
+        }
+
         const freeBookings = await this.getFreeIntervalsOnGivenDay(date, minutesNeeded, restrictionService);
         return freeBookings.some((interval) => {
             if (areIntervalsOverlapping(interval, intervalRequired)) {
@@ -217,22 +224,29 @@ class ReservationsService {
         return await this.ReservationsRepository.getValidReservationsBetween(startDate, endDate);
     }
 
-    async createNewTemporalReservation(isoTimeString, serviceIdString, ServicesService) {
-        if (!isoTimeString || !serviceIdString) {
-            throw new CoveredError(400, "One or more parameters is missing.");
-        }
-
+    async createNewTemporalReservation(isoTimeString, serviceIdString, ServicesService, RestrictionsService) {
+        // #region ---VARIABLES CALCULATION---
         const service = await ServicesService.getServiceRequired(serviceIdString);
-
-        if (!service) {
-            throw new CoveredError(400, "Service id does not exist.");
-        }
-
         const currentDate = new Date();
         const validityEnd = add(currentDate, {
             minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
         });
         const reservationStart = parseISO(isoTimeString);
+        const reservationEnd = add(reservationStart, { minutes: service.minutesRequired });
+        // #endregion ---VARIABLES CALCULATION---
+
+        // #region ---CONSTRAINS CHECKING---
+        if (isBefore(reservationStart, endOfDay(new Date()))) {
+            throw new CoveredError(400, "The closest reservation can be for tomorrow.");
+        }
+
+        if (!isoTimeString || !serviceIdString) {
+            throw new CoveredError(400, "One or more parameters is missing.");
+        }
+
+        if (!service) {
+            throw new CoveredError(400, "Service id does not exist.");
+        }
 
         if (reservationStart.getMinutes() % parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15") !== 0) {
             throw new CoveredError(
@@ -240,35 +254,34 @@ class ReservationsService {
                 "Reservation start must be nearest " + process.env.BOOKING_EVERY_NEAREST_MINUES + " minutes."
             );
         }
+        // #endregion ---CONSTRAINS CHECKING---
 
+        // #region ---TEMPLATE RESERVATION CREATION---
         let reservationToken;
         do {
             reservationToken = generateCustomToken(25);
         } while (await this.ReservationsRepository.getReservationByToken(reservationToken));
 
         const temporalReservation = {
-            date: parseISO(isoTimeString),
+            date: reservationStart,
             detail: null,
             serviceId: service.id,
             reservationStatus: enums.status.TEMPORARY,
             reservationToken,
             validityEnd,
         };
+        // #endregion ---TEMPLATE RESERVATION CREATION---
 
-        const found = await this.getValidReservationsBetweenDates(
-            temporalReservation.date,
-            add(temporalReservation.date, {
-                minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
-            })
-        );
-
-        if (found.length !== 0) {
-            throw new CoveredError(409, "There is already a reservation for needed time interval.");
+        // #region ---CHECK IF STILL FREE---
+        if (!(await this.getIsDateAvailable(isoTimeString, service.minutesRequired, RestrictionsService))) {
+            throw new CoveredError(409, "There is already reservation for required time interval.");
         }
+        // #endregion ---CHECK IF STILL FREE---
 
-        schedule.scheduleJob(validityEnd, () =>
-            this.ReservationsRepository.deleteReservationByToken(temporalReservation.reservationToken)
-        );
+        // creation and scheduling removal in case not confirmed
+        schedule.scheduleJob(validityEnd, () => {
+            this.deleteReservationIfInvalid(temporalReservation.reservationToken);
+        });
 
         return await this.ReservationsRepository.createReservation(temporalReservation);
     }
@@ -280,6 +293,46 @@ class ReservationsService {
         }
 
         await this.ReservationsRepository.deleteReservationByToken(reservationToken);
+    }
+
+    async deleteReservationIfInvalid(reservationToken) {
+        const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
+        const now = new Date();
+
+        if (
+            reservationToDelete &&
+            (isAfter(now, reservationToDelete.validityEnd) || isSameSecond(reservationToDelete.validityEnd, now))
+        ) {
+            this.ReservationsRepository.deleteReservationByToken(reservationToken);
+        }
+    }
+
+    async getTemporaryReservationByToken(reservationToken) {
+        const reservation = await this.ReservationsRepository.getTemporaryReservationByToken(reservationToken);
+        if (!reservation) {
+            throw new CoveredError("No temporary reservation token provided.");
+        }
+
+        if (isBefore(reservation.validityEnd, new Date())) {
+            throw new CoveredError("No temporary reservation for provided token.");
+        }
+        return reservation;
+    }
+
+    async makeReservationFinal(reservation, customer) {
+        const update = {
+            validityEnd: reservation.date,
+            reservationStatus: enums.status.ACTIVE,
+            customerId: customer.id,
+        };
+
+        const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);
+
+        if (affectedRows[0] !== 1) {
+            throw new Error("The operation of making reservation to be final failed.");
+        }
+
+        return { reservationId: reservation.id, reservationDate: reservation.date };
     }
 
     sortReservationList(reservationsList) {

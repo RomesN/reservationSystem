@@ -1,9 +1,10 @@
 import "dotenv";
-import { ReservationsService, RestrictionsService, ServicesService } from "../services/index.mjs";
+import { CustomerService, ReservationsService, RestrictionsService, ServicesService } from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
 class ReservationsController {
-    constructor(ReservationsService, RestrictionsService, ServicesService) {
+    constructor(CustomerService, ReservationsService, RestrictionsService, ServicesService) {
+        this.CustomerService = CustomerService;
         this.ReservationsService = ReservationsService;
         this.RestrictionsService = RestrictionsService;
         this.ServicesService = ServicesService;
@@ -62,7 +63,8 @@ class ReservationsController {
             const temporalBooking = await this.ReservationsService.createNewTemporalReservation(
                 isoTimeString,
                 serviceId,
-                this.ServicesService
+                this.ServicesService,
+                this.RestrictionsService
             );
             return res.json(
                 okJsonResponse(
@@ -72,6 +74,26 @@ class ReservationsController {
                     { temporalBooking }
                 )
             );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async createFinalReservation(req, res, next) {
+        const { temporalToken } = req.params;
+        const { firstName, lastName, email, phone } = req.body;
+
+        try {
+            const temporalReservation = await this.ReservationsService.getTemporaryReservationByToken(temporalToken);
+            const customer = await this.CustomerService.createCustomerIfNotExists(
+                firstName,
+                lastName,
+                phone,
+                email,
+                temporalReservation
+            );
+            const finalBooking = await this.ReservationsService.makeReservationFinal(temporalReservation, customer);
+            return res.json(okJsonResponse(`The reservation was finalized.`, finalBooking));
         } catch (error) {
             next(error);
         }
@@ -89,4 +111,4 @@ class ReservationsController {
     }
 }
 
-export default new ReservationsController(ReservationsService, RestrictionsService, ServicesService);
+export default new ReservationsController(CustomerService, ReservationsService, RestrictionsService, ServicesService);
