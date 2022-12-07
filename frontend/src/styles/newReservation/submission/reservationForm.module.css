@@ -90,6 +90,11 @@
     height: 3.5em;
 }
 
+.button:active {
+    background-color: var(--secondaryColor) !important;
+    border: 1px solid var(--secondaryColor) !important;
+}
+
 .button:hover {
     background-color: var(--tertiaryColor);
     border: 1px solid var(--tertiaryColor);

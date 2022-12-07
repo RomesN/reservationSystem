@@ -81,7 +81,7 @@ class ReservationsController {
 
     async createFinalReservation(req, res, next) {
         const { temporalToken } = req.params;
-        const { firstName, lastName, email, phone } = req.body;
+        const { firstName, lastName, phone, email } = req.body;
 
         try {
             const temporalReservation = await this.ReservationsService.getTemporaryReservationByToken(temporalToken);

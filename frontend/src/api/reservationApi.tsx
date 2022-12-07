@@ -1,9 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { QueryFunctionContext, QueryKey } from "react-query";
+import { parseISO, isBefore } from "date-fns";
 import {
     ErrorResponse,
     OkDeleteTemporalReservationResponse,
     OkIsDateAvailableResponse,
+    OkMakeFinalReservationResponse,
     OkMakeTemporalReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
@@ -46,13 +48,36 @@ export const createTemporalReservation = async (dateISOString: string, serviceId
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
 
-export const deleteTemporalReservation = async (temporalReservation: Reservation) => {
+export const createFinalReservation = async (
+    temporalToken: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string
+) => {
     return await api
-        .delete<OkDeleteTemporalReservationResponse>(
-            `api/reservations/temporal-reservation/${temporalReservation.reservationToken}`
-        )
+        .put<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${temporalToken}`, {
+            firstName,
+            lastName,
+            email,
+            phone,
+        })
         .then((response) => {
             return response.data;
         })
         .catch((error: AxiosError<ErrorResponse>) => error);
+};
+
+export const deleteTemporalReservation = async (temporalReservation: Reservation) => {
+    if (isBefore(new Date(), parseISO(temporalReservation.validityEnd))) {
+        return await api
+            .delete<OkDeleteTemporalReservationResponse>(
+                `api/reservations/temporal-reservation/${temporalReservation.reservationToken}`
+            )
+            .then((response) => {
+                return response.data;
+            })
+            .catch((error: AxiosError<ErrorResponse>) => error);
+    }
+    return "After validity";
 };

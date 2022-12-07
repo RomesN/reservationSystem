@@ -13,19 +13,19 @@ const NewBookingToolbar = () => {
         switch (view) {
             case NewReservationViewEnum.Form:
                 if (temporalReservation) {
-                    setTemporalReservation(() => null);
+                    setTemporalReservation(null);
                     deleteTemporalReservation(temporalReservation).finally(() =>
-                        setView(() => NewReservationViewEnum.Calendar)
+                        setView(NewReservationViewEnum.Calendar)
                     );
                 } else {
-                    setView(() => NewReservationViewEnum.Calendar);
+                    setView(NewReservationViewEnum.Calendar);
                 }
                 break;
             case NewReservationViewEnum.Times:
-                setView(() => NewReservationViewEnum.Calendar);
+                setView(NewReservationViewEnum.Calendar);
                 break;
             case NewReservationViewEnum.Calendar:
-                setView(() => NewReservationViewEnum.Services);
+                setView(NewReservationViewEnum.Services);
                 break;
         }
     };

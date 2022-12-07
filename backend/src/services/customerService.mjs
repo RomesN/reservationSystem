@@ -1,5 +1,6 @@
 import { add, isAfter } from "date-fns";
 import schedule from "node-schedule";
+import enums from "../model/enums/index.mjs";
 import { CustomerRepository } from "../repositories/index.mjs";
 import { CoveredError, formatEmail, formatName, formatPhone } from "../utils/index.mjs";
 
@@ -25,7 +26,7 @@ class CustomerService {
         let customer = await this.CustomerRepository.getCustomerByData(firstName, lastName, phone, email);
 
         if (!customer) {
-            customer = this.CustomerRepository.createCustomer(firstName, lastName, phone, email);
+            customer = this.CustomerRepository.createCustomer(firstName, lastName, phone, email, enums.status.ACTIVE);
         }
 
         schedule.scheduleJob(add(reservation.date, { minutes: reservation.getService().minutesRequired }), () => {
@@ -43,7 +44,7 @@ class CustomerService {
         return { firstFormatted, lastFormatted, phoneFormatted, emailFormatted };
     }
 
-    checkPersonalDataConstrains(firstName, lastName, email, phone) {
+    checkPersonalDataConstrains(firstName, lastName, phone, email) {
         if (!/[A-Za-z]{2}/g.test(firstName) || !/[A-Za-z]{2}/g.test(lastName)) {
             throw new CoveredError(400, "First and last name has to contain at leat 2 characters.");
         }

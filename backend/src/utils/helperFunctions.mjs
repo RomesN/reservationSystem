@@ -63,17 +63,16 @@ const generateCustomToken = (tokenLength) => {
 
 const formatName = (name) => {
     const nameLower = name.toLowerCase();
-    return name[0].toUpperCase() + nameLower.substring(2);
+    return (name[0].toUpperCase() + nameLower.substring(2)).trim();
 };
 
 const formatEmail = (email) => {
-    return email.toLowerCase()
+    return email.toLowerCase();
 };
 
 const formatPhone = (phone) => {
     return phone.replaceAll(" ", "");
 };
-
 
 export {
     formatEmail,

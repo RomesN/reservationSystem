@@ -26,8 +26,8 @@ const TimeSelection = () => {
             if (isFree && !axios.isAxiosError(isFree) && isFree.data.isAvailable) {
                 const response = await createTemporalReservation(date.toISOString(), serviceId);
                 if (!axios.isAxiosError(response)) {
-                    setTemporalReservation(() => response.data.temporalBooking);
-                    setView(() => NewReservationViewEnum.Form);
+                    setTemporalReservation(response.data.temporalBooking);
+                    setView(NewReservationViewEnum.Form);
                     return;
                 }
             }
@@ -45,9 +45,9 @@ const TimeSelection = () => {
                     htmlContainer: stylesSweetAlert.bookingCollisionContainer,
                 },
             }).then(() => {
-                setBookedDate(() => null);
-                setAvilableIntervals(() => null);
-                setView(() => NewReservationViewEnum.Calendar);
+                setBookedDate(null);
+                setAvilableIntervals(null);
+                setView(NewReservationViewEnum.Calendar);
             });
         },
         [setAvilableIntervals, setBookedDate, setView, setTemporalReservation]

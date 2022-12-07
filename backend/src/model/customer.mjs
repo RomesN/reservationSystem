@@ -15,7 +15,6 @@ const getModelCustomer = (db, { DataTypes }) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
         },
     });
 

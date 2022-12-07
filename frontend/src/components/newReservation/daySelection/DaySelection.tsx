@@ -91,9 +91,9 @@ const DaySelection = () => {
     };
 
     const handleClick = (day: number, availableIntervals: Interval[]) => {
-        setBookedDate(() => new Date(year, month - 1, day));
-        setAvilableIntervals(() => availableIntervals);
-        setView(() => NewReservationViewEnum.Times);
+        setBookedDate(new Date(year, month - 1, day));
+        setAvilableIntervals(availableIntervals);
+        setView(NewReservationViewEnum.Times);
     };
 
     const generateTableBody = (tableArray: tableArray[][]) => {
@@ -139,7 +139,7 @@ const DaySelection = () => {
 
     const nextMonth = () => {
         if (month === 12) {
-            setMonth(() => 1);
+            setMonth(1);
             setYear((year) => year + 1);
         } else {
             setMonth((month) => month + 1);
@@ -148,7 +148,7 @@ const DaySelection = () => {
 
     const previousMonth = () => {
         if (month === 1) {
-            setMonth(() => 12);
+            setMonth(12);
             setYear((year) => year - 1);
         } else {
             setMonth((month) => month - 1);

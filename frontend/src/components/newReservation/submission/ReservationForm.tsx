@@ -1,11 +1,13 @@
 import { format } from "date-fns";
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { createFinalReservation } from "../../../api/reservationApi";
 import styles from "../../../styles/newReservation/submission/reservationForm.module.css";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ReservationForm = () => {
     const [firstName, setFirstName] = useState<string | null>(null);
@@ -20,8 +22,12 @@ const ReservationForm = () => {
     const [phoneError, setPhoneError] = useState("");
     const [agreeError, setAgreeError] = useState(false);
 
-    const { bookedDate } = useNewReservationContext();
+    const { bookedDate, temporalReservation, setTimerOn } = useNewReservationContext();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setTimerOn(true);
+    }, [setTimerOn]);
 
     const validateName = (firstName: string) => {
         return !/[A-Za-z]{2}/g.test(firstName) ? "Name must contain at least 2 characters." : "";
@@ -45,56 +51,74 @@ const ReservationForm = () => {
 
         switch (name) {
             case "firstName":
-                setFirstName(() => value);
-                setFirstNameError(() => validateName(value));
+                setFirstName(value);
+                setFirstNameError(validateName(value));
                 break;
             case "lastName":
-                setLastName(() => value);
-                setLastNameError(() => validateName(value));
+                setLastName(value);
+                setLastNameError(validateName(value));
                 break;
             case "email":
-                setEmail(() => value);
-                setEmailError(() => validateEmail(value));
+                setEmail(value);
+                setEmailError(validateEmail(value));
                 break;
             case "phone":
-                setPhone(() => value);
-                setPhoneError(() => validatePhone(value));
+                setPhone(value);
+                setPhoneError(validatePhone(value));
                 break;
         }
     };
 
     const handleSwitch = () => {
+        setAgreeError(agree);
         setAgree(!agree);
-        setAgreeError(!!agree);
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         event.stopPropagation();
 
-        setFirstNameError(() => validateName(firstName || ""));
-        setLastNameError(() => validateName(lastName || ""));
-        setEmailError(() => validateEmail(email || ""));
-        setPhoneError(() => validatePhone(phone || ""));
-        setAgreeError(() => !agree);
+        const firstNameValidated = validateName(firstName || "");
+        const secondNameValidated = validateName(lastName || "");
+        const emailValidated = validateEmail(email || "");
+        const phoneValidated = validatePhone(phone || "");
 
-        if (!firstNameError && !lastNameError && !emailError && !phoneError && !agreeError) {
+        setFirstNameError(firstNameValidated);
+        setLastNameError(secondNameValidated);
+        setEmailError(emailValidated);
+        setPhoneError(phoneValidated);
+        setAgreeError(!agree);
+
+        if (!firstNameValidated && !secondNameValidated && !emailValidated && !phoneValidated && agree) {
+            if (!temporalReservation || !firstName || !lastName || !phone || !email) {
+                throw new Error("Unexpected scenario");
+            }
+            setTimerOn(false);
             const bookDateToShow = bookedDate ? format(bookedDate, "dd.MM.yyyy HH:mm") : "ERROR";
-            Swal.fire({
-                icon: "success",
-                title: "Done",
-                text: `We will be happy to see you on ${bookDateToShow}.`,
-                iconColor: "#6d9886",
-                customClass: {
-                    popup: stylesSweetAlert.bookingCollision,
-                    confirmButton: stylesSweetAlert.bookingCollisionButton,
-                    title: stylesSweetAlert.bookingCollisionTitle,
-                    icon: stylesSweetAlert.bookingCollisionIcon,
-                    htmlContainer: stylesSweetAlert.bookingCollisionContainer,
-                },
-            }).then(() => {
-                navigate("/");
-            });
+            const response = await createFinalReservation(
+                temporalReservation.reservationToken,
+                firstName,
+                lastName,
+                phone,
+                email
+            );
+            if (!axios.isAxiosError(response) && response.data.reservationId) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: `We will be happy to see you on ${bookDateToShow}.`,
+                    iconColor: "#6d9886",
+                    customClass: {
+                        popup: stylesSweetAlert.bookingCollision,
+                        confirmButton: stylesSweetAlert.bookingCollisionButton,
+                        title: stylesSweetAlert.bookingCollisionTitle,
+                        icon: stylesSweetAlert.bookingCollisionIcon,
+                        htmlContainer: stylesSweetAlert.bookingCollisionContainer,
+                    },
+                }).then(() => {
+                    navigate("/");
+                });
+            }
         }
     };
 

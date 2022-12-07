@@ -9,19 +9,25 @@ import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import styles from "../../../styles/newReservation/submission/timer.module.css";
 
 const ReservationSubmission = () => {
-    const { temporalReservation, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
-    const [timer, setTimer] = useState<number | null>(() => {
-        return temporalReservation
-            ? differenceInMilliseconds(parseISO(temporalReservation.validityEnd), new Date())
-            : null;
-    });
+    const { temporalReservation, timerOn, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
+    const [timer, setTimer] = useState<number | null>(null);
 
     useEffect(() => {
-        if (timer && timer > 0) {
+        if (timerOn) {
+            setTimer(
+                temporalReservation
+                    ? differenceInMilliseconds(parseISO(temporalReservation.validityEnd), new Date())
+                    : null
+            );
+        }
+    }, [timerOn, temporalReservation]);
+
+    useEffect(() => {
+        if (timerOn && timer && timer > 0) {
             setTimeout(() => {
                 setTimer((timer) => (timer ? timer - 1000 : timer));
             }, 1000);
-        } else if (timer && timer <= 0) {
+        } else if (timerOn && timer && timer <= 0) {
             Swal.fire({
                 icon: "error",
                 title: "Time's up",
@@ -40,7 +46,7 @@ const ReservationSubmission = () => {
                 setView(() => NewReservationViewEnum.Calendar);
             });
         }
-    }, [timer]);
+    }, [timer, timerOn, setBookedDate, setAvilableIntervals, setView]);
 
     const formatTime = (milliseconds: number) => {
         const seconds = Math.floor(milliseconds / 1000) % 60;

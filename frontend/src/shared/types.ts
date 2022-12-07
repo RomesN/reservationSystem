@@ -87,6 +87,12 @@ type OkMakeTemporalReservationResponse = {
     data: { temporalBooking: Reservation };
 };
 
+type OkMakeFinalReservationResponse = {
+    status: string;
+    message: string;
+    data: { reservationId: number; reservationDate: string };
+};
+
 type OkDeleteTemporalReservationResponse = {
     status: string;
     message: string;
@@ -115,6 +121,7 @@ export type {
     IntervalString,
     OkDeleteTemporalReservationResponse,
     OkIsDateAvailableResponse,
+    OkMakeFinalReservationResponse,
     OkMakeTemporalReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,

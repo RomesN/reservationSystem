@@ -15,8 +15,8 @@ const ServiceBox = ({ id, name, minutesRequired, services }: ServiceBoxProps) =>
 
     const handleClick = (id: number) => {
         const serviceObject = services.find((service) => service.id === id) || null;
-        setBookedService(() => serviceObject);
-        setView(() => NewReservationViewEnum.Calendar);
+        setBookedService(serviceObject);
+        setView(NewReservationViewEnum.Calendar);
     };
 
     return (

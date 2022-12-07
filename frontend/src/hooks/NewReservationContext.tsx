@@ -9,11 +9,13 @@ type NewReservationContextType = {
     bookedDate: Date | null;
     availableIntervals: Interval[] | null;
     temporalReservation: Reservation | null;
+    timerOn: boolean;
     setView: React.Dispatch<React.SetStateAction<NewReservationViewEnum>>;
     setBookedService: React.Dispatch<React.SetStateAction<Service | null>>;
     setBookedDate: React.Dispatch<React.SetStateAction<Date | null>>;
     setAvilableIntervals: React.Dispatch<React.SetStateAction<Interval[] | null>>;
     setTemporalReservation: React.Dispatch<React.SetStateAction<Reservation | null>>;
+    setTimerOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const NewReservationContext = React.createContext({} as NewReservationContextType);
@@ -28,6 +30,7 @@ export const NewReservationDataProvider = ({ children }: Props) => {
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [availableIntervals, setAvilableIntervals] = useState<null | Interval[]>(null);
     const [temporalReservation, setTemporalReservation] = useState<null | Reservation>(null);
+    const [timerOn, setTimerOn] = useState(true);
 
     return (
         <NewReservationContext.Provider
@@ -37,11 +40,13 @@ export const NewReservationDataProvider = ({ children }: Props) => {
                 bookedDate,
                 availableIntervals,
                 temporalReservation,
+                timerOn,
                 setView,
                 setBookedService,
                 setBookedDate,
                 setAvilableIntervals,
                 setTemporalReservation,
+                setTimerOn,
             }}
         >
             {children}
