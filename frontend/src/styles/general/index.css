@@ -10,6 +10,17 @@
     --errorColor: #b63838;
 }
 
+/* overriding boostrap invalid form color */
+.form-check-input.is-invalid ~ .form-check-label,
+.was-validated .form-check-input:invalid ~ .form-check-label {
+    color: var(--errorColor);
+}
+
+.form-check-input.is-invalid ~ .form-check-label,
+.was-validated .form-check-input:invalid ~ .form-check-label {
+    color: var(--errorColor);
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

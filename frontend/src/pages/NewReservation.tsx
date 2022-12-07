@@ -1,25 +1,25 @@
-import { useNewBookingContext } from "../hooks/NewBookingContext";
+import { useNewReservationContext } from "../hooks/NewReservationContext";
 import DaySelection from "../components/newReservation/daySelection/DaySelection";
 import ErrorBoundary from "../components/ErrorBoundary";
 import NewBookingToolbar from "../components/newReservation/toolbar/NewReservationToolbar";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
+import { NewReservationViewEnum } from "../utils/enums/newReservationViewEnum";
 import ReservationSubmission from "../components/newReservation/submission/ReservationSubmission";
 import ServiceSelection from "../components/newReservation/serviceSelection/ServiceSelection";
 import styles from "../styles/newReservation/newReservation.module.css";
 import TimeSelection from "../components/newReservation/timeSelection/TimeSelection";
 
 const NewBooking = () => {
-    const { view } = useNewBookingContext();
+    const { view } = useNewReservationContext();
 
     const content = () => {
         switch (view) {
-            case NewBookingView.Services:
+            case NewReservationViewEnum.Services:
                 return <ServiceSelection />;
-            case NewBookingView.Calendar:
+            case NewReservationViewEnum.Calendar:
                 return <DaySelection />;
-            case NewBookingView.Times:
+            case NewReservationViewEnum.Times:
                 return <TimeSelection />;
-            case NewBookingView.Form:
+            case NewReservationViewEnum.Form:
                 return <ReservationSubmission />;
         }
     };

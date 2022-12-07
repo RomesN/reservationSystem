@@ -1,36 +1,36 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Props, Reservation, Service } from "../shared/types";
-import { NewBookingView } from "../utils/enums/newBookingViewEnum";
+import { NewReservationViewEnum } from "../utils/enums/newReservationViewEnum";
 
-type NewBookingContext = {
-    view: NewBookingView;
+type NewReservationContextType = {
+    view: NewReservationViewEnum;
     bookedService: Service | null;
     bookedDate: Date | null;
     availableIntervals: Interval[] | null;
     temporalReservation: Reservation | null;
-    setView: React.Dispatch<React.SetStateAction<NewBookingView>>;
+    setView: React.Dispatch<React.SetStateAction<NewReservationViewEnum>>;
     setBookedService: React.Dispatch<React.SetStateAction<Service | null>>;
     setBookedDate: React.Dispatch<React.SetStateAction<Date | null>>;
     setAvilableIntervals: React.Dispatch<React.SetStateAction<Interval[] | null>>;
     setTemporalReservation: React.Dispatch<React.SetStateAction<Reservation | null>>;
 };
 
-export const NewBookingDataContext = React.createContext({} as NewBookingContext);
+export const NewReservationContext = React.createContext({} as NewReservationContextType);
 
-export function useNewBookingContext() {
-    return useContext(NewBookingDataContext);
+export function useNewReservationContext() {
+    return useContext(NewReservationContext);
 }
 
-export const NewBookingDataProvider = ({ children }: Props) => {
-    const [view, setView] = useState(NewBookingView.Services);
+export const NewReservationDataProvider = ({ children }: Props) => {
+    const [view, setView] = useState(NewReservationViewEnum.Services);
     const [bookedService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [availableIntervals, setAvilableIntervals] = useState<null | Interval[]>(null);
     const [temporalReservation, setTemporalReservation] = useState<null | Reservation>(null);
 
     return (
-        <NewBookingDataContext.Provider
+        <NewReservationContext.Provider
             value={{
                 view,
                 bookedService,
@@ -45,6 +45,6 @@ export const NewBookingDataProvider = ({ children }: Props) => {
             }}
         >
             {children}
-        </NewBookingDataContext.Provider>
+        </NewReservationContext.Provider>
     );
 };

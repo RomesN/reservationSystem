@@ -3,13 +3,13 @@ import { differenceInMilliseconds, parseISO } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
-import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import styles from "../../../styles/newReservation/submission/timer.module.css";
 
 const ReservationSubmission = () => {
-    const { temporalReservation, setAvilableIntervals, setBookedDate, setView } = useNewBookingContext();
+    const { temporalReservation, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
     const [timer, setTimer] = useState<number | null>(() => {
         return temporalReservation
             ? differenceInMilliseconds(parseISO(temporalReservation.validityEnd), new Date())
@@ -37,7 +37,7 @@ const ReservationSubmission = () => {
             }).then(() => {
                 setBookedDate(() => null);
                 setAvilableIntervals(() => null);
-                setView(() => NewBookingView.Calendar);
+                setView(() => NewReservationViewEnum.Calendar);
             });
         }
     }, [timer]);

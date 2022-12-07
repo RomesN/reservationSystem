@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import "./styles/general/index.css";
 import LandingPage from "./pages/LandingPage";
 import NewBooking from "./pages/NewReservation";
-import { NewBookingDataProvider } from "./hooks/NewBookingContext";
+import { NewReservationDataProvider } from "./hooks/NewReservationContext";
 
 function App() {
     return (
@@ -12,9 +12,9 @@ function App() {
             <Route
                 path="/new-booking"
                 element={
-                    <NewBookingDataProvider>
+                    <NewReservationDataProvider>
                         <NewBooking />
-                    </NewBookingDataProvider>
+                    </NewReservationDataProvider>
                 }
             />
             <Route path="/" element={<LandingPage />} />

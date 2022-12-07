@@ -1,7 +1,7 @@
 import { faCalendar, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format, Interval } from "date-fns";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import styles from "../../../styles/newReservation/timeSelection/timeBox.module.css";
 
 type TimeBoxProps = {
@@ -9,7 +9,7 @@ type TimeBoxProps = {
 };
 
 const TimeBox = ({ interval }: TimeBoxProps) => {
-    const { bookedDate, setBookedDate } = useNewBookingContext();
+    const { bookedDate, setBookedDate } = useNewReservationContext();
 
     const handleClick = async () => {
         if (bookedDate && interval.start instanceof Date) {

@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getTimeSlots } from "../../../api/reservationApi";
 import { IntervalString } from "../../../shared/types";
 import Loading from "../../Loading";
-import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
 import styles from "../../../styles/newReservation/daySelection/daySelection.module.css";
 import { useQuery } from "react-query";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 
 type tableArray = {
     available: boolean;
@@ -22,7 +22,7 @@ type tableArray = {
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const { bookedDate, bookedService, setAvilableIntervals, setBookedDate, setView } = useNewBookingContext();
+    const { bookedDate, bookedService, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
 
     const timeSlots = useQuery(["timeSlotsObject", [bookedService?.id || null, year, month]], getTimeSlots, {
         useErrorBoundary: true,
@@ -93,7 +93,7 @@ const DaySelection = () => {
     const handleClick = (day: number, availableIntervals: Interval[]) => {
         setBookedDate(() => new Date(year, month - 1, day));
         setAvilableIntervals(() => availableIntervals);
-        setView(() => NewBookingView.Times);
+        setView(() => NewReservationViewEnum.Times);
     };
 
     const generateTableBody = (tableArray: tableArray[][]) => {

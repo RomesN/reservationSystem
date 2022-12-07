@@ -1,4 +1,4 @@
-export enum NewBookingView {
+export enum NewReservationViewEnum {
     Services = "Services",
     Calendar = "Calendar",
     Times = "Times",

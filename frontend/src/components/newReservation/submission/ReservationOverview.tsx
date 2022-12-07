@@ -2,11 +2,11 @@ import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBusinessTime, faClockFour } from "@fortawesome/free-solid-svg-icons";
 import Timer from "./Timer";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import styles from "../../../styles/newReservation/submission/reservationOverview.module.css";
 
 const ReservationOverview = () => {
-    const { bookedService, bookedDate } = useNewBookingContext();
+    const { bookedService, bookedDate } = useNewReservationContext();
 
     return (
         <div className={styles.overviewContainer}>

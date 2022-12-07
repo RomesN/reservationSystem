@@ -15,14 +15,14 @@
     font-weight: 500;
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
+/* Larger displays (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     .submission {
         font-size: 18px;
     }
 }
 
-/* SMALLER DISPLAYS */
+/* smaller displays */
 @media screen and (max-width: 991px) {
     .submission {
         font-size: 13px;

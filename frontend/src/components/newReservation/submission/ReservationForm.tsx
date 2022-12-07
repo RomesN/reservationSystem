@@ -1,6 +1,11 @@
+import { format } from "date-fns";
+import Swal from "sweetalert2";
 import { useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import styles from "../../../styles/newReservation/submission/reservationForm.module.css";
+import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNavigate } from "react-router-dom";
 
 const ReservationForm = () => {
     const [firstName, setFirstName] = useState<string | null>(null);
@@ -8,18 +13,22 @@ const ReservationForm = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [phone, setPhone] = useState<string | null>(null);
     const [agree, setAgree] = useState(false);
+
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [phoneError, setPhoneError] = useState("");
     const [agreeError, setAgreeError] = useState(false);
 
+    const { bookedDate } = useNewReservationContext();
+    const navigate = useNavigate();
+
     const validateName = (firstName: string) => {
         return !/[A-Za-z]{3}/g.test(firstName) ? "Name must contain at least 3 characters." : "";
     };
 
     const validateEmail = (email: string) => {
-        return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g.test(email) ? "Must be valid email address." : "";
+        return !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/g.test(email) ? "Must be valid email address." : "";
     };
 
     const validatePhone = (phone: string) => {
@@ -54,8 +63,9 @@ const ReservationForm = () => {
         }
     };
 
-    const handleSwitch = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    const handleSwitch = () => {
         setAgree(!agree);
+        setAgreeError(!!agree);
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +78,23 @@ const ReservationForm = () => {
         setPhoneError(() => validatePhone(phone || ""));
         setAgreeError(() => !agree);
 
-        if (!!firstNameError && !!lastNameError && !!emailError && !!phoneError && !!agreeError) {
+        if (!firstNameError && !lastNameError && !emailError && !phoneError && !agreeError) {
+            const bookDateToShow = bookedDate ? format(bookedDate, "dd.MM.yyyy HH:mm") : "ERROR";
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `We will be happy to see you on ${bookDateToShow}.`,
+                iconColor: "#6d9886",
+                customClass: {
+                    popup: stylesSweetAlert.bookingCollision,
+                    confirmButton: stylesSweetAlert.bookingCollisionButton,
+                    title: stylesSweetAlert.bookingCollisionTitle,
+                    icon: stylesSweetAlert.bookingCollisionIcon,
+                    htmlContainer: stylesSweetAlert.bookingCollisionContainer,
+                },
+            }).then(() => {
+                navigate("/");
+            });
         }
     };
 

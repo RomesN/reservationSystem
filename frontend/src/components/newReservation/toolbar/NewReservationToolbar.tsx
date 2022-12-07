@@ -1,37 +1,37 @@
 import { Link } from "react-router-dom";
 import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import { deleteTemporalReservation } from "../../../api/reservationApi";
-import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import styles from "../../../styles/newReservation/toolbar/newReservationToolbar.module.css";
 
 const NewBookingToolbar = () => {
-    const { view, temporalReservation, setView, setTemporalReservation } = useNewBookingContext();
+    const { view, temporalReservation, setView, setTemporalReservation } = useNewReservationContext();
 
     const handleClickBack = () => {
         switch (view) {
-            case NewBookingView.Form:
+            case NewReservationViewEnum.Form:
                 if (temporalReservation) {
                     setTemporalReservation(() => null);
                     deleteTemporalReservation(temporalReservation).finally(() =>
-                        setView(() => NewBookingView.Calendar)
+                        setView(() => NewReservationViewEnum.Calendar)
                     );
                 } else {
-                    setView(() => NewBookingView.Calendar);
+                    setView(() => NewReservationViewEnum.Calendar);
                 }
                 break;
-            case NewBookingView.Times:
-                setView(() => NewBookingView.Calendar);
+            case NewReservationViewEnum.Times:
+                setView(() => NewReservationViewEnum.Calendar);
                 break;
-            case NewBookingView.Calendar:
-                setView(() => NewBookingView.Services);
+            case NewReservationViewEnum.Calendar:
+                setView(() => NewReservationViewEnum.Services);
                 break;
         }
     };
 
     const backButton = () => {
-        if (view === NewBookingView.Services) {
+        if (view === NewReservationViewEnum.Services) {
             return (
                 <Link to="/">
                     <button className={styles.backButton}>
@@ -53,16 +53,16 @@ const NewBookingToolbar = () => {
     const heading = () => {
         let text;
         switch (view) {
-            case NewBookingView.Services:
+            case NewReservationViewEnum.Services:
                 text = " Select service";
                 break;
-            case NewBookingView.Calendar:
+            case NewReservationViewEnum.Calendar:
                 text = " Select day";
                 break;
-            case NewBookingView.Times:
+            case NewReservationViewEnum.Times:
                 text = " Select time slot";
                 break;
-            case NewBookingView.Form:
+            case NewReservationViewEnum.Form:
                 text = " Fill in details and confirm";
         }
 

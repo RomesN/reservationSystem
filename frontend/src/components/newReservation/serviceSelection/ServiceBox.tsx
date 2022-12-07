@@ -1,7 +1,7 @@
 import { Service } from "../../../shared/types";
 import styles from "../../../styles/newReservation/serviceSelection/serviceBox.module.css";
-import { useNewBookingContext } from "../../../hooks/NewBookingContext";
-import { NewBookingView } from "../../../utils/enums/newBookingViewEnum";
+import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 
 type ServiceBoxProps = {
     id: number;
@@ -11,12 +11,12 @@ type ServiceBoxProps = {
 };
 
 const ServiceBox = ({ id, name, minutesRequired, services }: ServiceBoxProps) => {
-    const { bookedService, setBookedService, setView } = useNewBookingContext();
+    const { bookedService, setBookedService, setView } = useNewReservationContext();
 
     const handleClick = (id: number) => {
         const serviceObject = services.find((service) => service.id === id) || null;
         setBookedService(() => serviceObject);
-        setView(() => NewBookingView.Calendar);
+        setView(() => NewReservationViewEnum.Calendar);
     };
 
     return (
