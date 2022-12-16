@@ -28,7 +28,9 @@ const NewBooking = () => {
         <>
             <div className={styles.newBookingContainer}>
                 <div>
-                    <NewBookingToolbar />
+                    <ErrorBoundary>
+                        <NewBookingToolbar />
+                    </ErrorBoundary>
                 </div>
                 <div>
                     <hr className={styles.contentLine} />

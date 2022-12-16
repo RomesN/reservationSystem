@@ -232,7 +232,6 @@ class ReservationsService {
             minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
         });
         const reservationStart = parseISO(isoTimeString);
-        const reservationEnd = add(reservationStart, { minutes: service.minutesRequired });
         // #endregion ---VARIABLES CALCULATION---
 
         // #region ---CONSTRAINS CHECKING---
@@ -259,7 +258,7 @@ class ReservationsService {
         // #region ---TEMPLATE RESERVATION CREATION---
         let reservationToken;
         do {
-            reservationToken = generateCustomToken(25);
+            reservationToken = generateCustomToken(10);
         } while (await this.ReservationsRepository.getReservationByToken(reservationToken));
 
         const temporalReservation = {
@@ -269,7 +268,6 @@ class ReservationsService {
             reservationStatus: enums.status.TEMPORARY,
             reservationToken,
             validityEnd,
-            scheduledJobId: null,
         };
 
         // #endregion ---TEMPLATE RESERVATION CREATION---
@@ -281,7 +279,7 @@ class ReservationsService {
         // #endregion ---CHECK IF STILL FREE---
 
         // creation and scheduling removal in case not confirmed
-        temporalReservation.scheduledJobId = schedule.scheduleJob(validityEnd, () => {
+        temporalReservation.scheduledDeletionJobId = schedule.scheduleJob(validityEnd, () => {
             this.deleteReservationIfInvalid(temporalReservation.reservationToken);
         }).name;
 
@@ -309,7 +307,7 @@ class ReservationsService {
         }
     }
 
-    async getTemporaryReservationByToken(reservationToken) {
+    async getTemporalReservationByToken(reservationToken) {
         const reservation = await this.ReservationsRepository.getTemporaryReservationByToken(reservationToken);
         if (!reservation) {
             throw new CoveredError("No temporary reservation token provided.");
@@ -322,23 +320,32 @@ class ReservationsService {
     }
 
     async makeReservationFinal(reservation, customer) {
+        const scheduleCancel = schedule.cancelJob(reservation.scheduledDeletionJobId);
+
         const update = {
             validityEnd: reservation.date,
             reservationStatus: enums.status.ACTIVE,
             customerId: customer.id,
+            scheduledDeletionJobId: null,
         };
 
         const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);
 
-        if (affectedRows[0] !== 1 || !reservation.scheduledJobId || !schedule.cancelJob(reservation.scheduledJobId)) {
+        if (affectedRows[0] !== 1 || !reservation.scheduledDeletionJobId || !scheduleCancel) {
             throw new Error(
                 "The operation of making reservation to be final failed. Please make sure that temporal reservation was made first."
             );
         }
 
-        await this.ReservationsRepository.updateReservation(reservation.id, { scheduledJobId: null });
+        return affectedRows[0];
+    }
 
-        return { reservationId: reservation.id, reservationDate: reservation.date };
+    async updateReservation(id, update) {
+        return await this.ReservationsRepository.updateReservation(id, update);
+    }
+
+    async getActiveReservationByToken(token) {
+        return await this.ReservationsRepository.getActiveReservationByToken(token);
     }
 
     sortReservationList(reservationsList) {

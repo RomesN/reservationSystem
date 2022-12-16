@@ -17,7 +17,11 @@ const getModelReservation = (db, { DataTypes }) => {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        scheduledJobId: {
+        scheduledDeletionJobId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        scheduledReminderJobId: {
             type: DataTypes.STRING,
             allowNull: true,
         },

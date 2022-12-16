@@ -47,7 +47,7 @@
     --bs-btn-active-bg: var(--tertiaryColor);
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
+/* Large displays */
 @media only screen and (min-width: 992px) {
     .contentHeader {
         font-size: 70px;
@@ -67,7 +67,7 @@
     }
 }
 
-/* SMALLER DISPLAYS */
+/* smaller displays*/
 @media screen and (max-width: 992px) {
     .contentHeader {
         font-size: 55px;

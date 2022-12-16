@@ -25,6 +25,14 @@ class ReservationsRepository {
         return await models.Reservation.findOne({ where: { reservationToken: token } });
     }
 
+    async getActiveReservationByToken(token) {
+        const where = {
+            reservationToken: token,
+            reservationStatus: enums.status.ACTIVE,
+        };
+        return await models.Reservation.findOne({ where });
+    }
+
     async getTemporaryReservationByToken(token) {
         return await models.Reservation.findOne({
             where: {

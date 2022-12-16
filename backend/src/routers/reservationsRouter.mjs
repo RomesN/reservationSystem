@@ -19,7 +19,7 @@ router.put(
 );
 
 router.put(
-    "/final-reservation/:temporalToken",
+    "/final-reservation/:reservationToken",
     ReservationsController.createFinalReservation.bind(ReservationsController)
 );
 

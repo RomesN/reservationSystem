@@ -99,10 +99,11 @@ const ReservationForm = () => {
                 temporalReservation.reservationToken,
                 firstName,
                 lastName,
-                phone,
-                email
+                email,
+                phone
             );
-            if (!axios.isAxiosError(response) && response.data.reservationId) {
+            console.log(response);
+            if (!axios.isAxiosError(response) && response.data.id) {
                 Swal.fire({
                     icon: "success",
                     title: "Done",

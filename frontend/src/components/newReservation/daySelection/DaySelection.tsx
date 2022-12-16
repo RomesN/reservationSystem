@@ -1,4 +1,5 @@
 import { addMinutes, Interval, isBefore, parseISO, isEqual } from "date-fns";
+import { useQuery } from "react-query";
 import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +9,6 @@ import Loading from "../../Loading";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
 import styles from "../../../styles/newReservation/daySelection/daySelection.module.css";
-import { useQuery } from "react-query";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 
 type tableArray = {

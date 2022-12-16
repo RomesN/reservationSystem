@@ -1,10 +1,17 @@
 import "dotenv";
-import { CustomerService, ReservationsService, RestrictionsService, ServicesService } from "../services/index.mjs";
+import {
+    CustomerService,
+    NotificationService,
+    ReservationsService,
+    RestrictionsService,
+    ServicesService,
+} from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
 class ReservationsController {
-    constructor(CustomerService, ReservationsService, RestrictionsService, ServicesService) {
+    constructor(CustomerService, NotificationService, ReservationsService, RestrictionsService, ServicesService) {
         this.CustomerService = CustomerService;
+        this.NotificationService = NotificationService;
         this.ReservationsService = ReservationsService;
         this.RestrictionsService = RestrictionsService;
         this.ServicesService = ServicesService;
@@ -80,11 +87,11 @@ class ReservationsController {
     }
 
     async createFinalReservation(req, res, next) {
-        const { temporalToken } = req.params;
+        const { reservationToken } = req.params;
         const { firstName, lastName, email, phone } = req.body;
 
         try {
-            const temporalReservation = await this.ReservationsService.getTemporaryReservationByToken(temporalToken);
+            const temporalReservation = await this.ReservationsService.getTemporalReservationByToken(reservationToken);
             const customer = await this.CustomerService.createIfNotExists(
                 firstName,
                 lastName,
@@ -92,8 +99,18 @@ class ReservationsController {
                 phone,
                 temporalReservation
             );
-            const finalBooking = await this.ReservationsService.makeReservationFinal(temporalReservation, customer);
+            await this.ReservationsService.makeReservationFinal(temporalReservation, customer);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
+
+            const finalBooking = await this.ReservationsService.getActiveReservationByToken(reservationToken);
+            const scheduledReminderJobId = await this.NotificationService.scheduleReminder(finalBooking, 60 * 24);
+            if (scheduledReminderJobId) {
+                await this.ReservationsService.updateReservation(finalBooking.id, { scheduledReminderJobId });
+            }
+
+            const iCalObject = await this.NotificationService.getIcalObjectInstance(finalBooking);
+            await this.NotificationService.sendNewReservationEmail(finalBooking, iCalObject);
+
             return res.json(okJsonResponse(`The reservation was finalized.`, finalBooking));
         } catch (error) {
             next(error);
@@ -112,4 +129,10 @@ class ReservationsController {
     }
 }
 
-export default new ReservationsController(CustomerService, ReservationsService, RestrictionsService, ServicesService);
+export default new ReservationsController(
+    CustomerService,
+    NotificationService,
+    ReservationsService,
+    RestrictionsService,
+    ServicesService
+);

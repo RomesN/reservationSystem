@@ -90,7 +90,7 @@ type OkMakeTemporalReservationResponse = {
 type OkMakeFinalReservationResponse = {
     status: string;
     message: string;
-    data: { reservationId: number; reservationDate: string };
+    data: Reservation;
 };
 
 type OkDeleteTemporalReservationResponse = {

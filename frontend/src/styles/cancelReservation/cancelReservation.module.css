@@ -1,0 +1,75 @@
+.cancelReservationContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+
+/* Large displays */
+@media only screen and (min-width: 992px) {
+    .cancelButton,
+    .cancelInput,
+    .cancelText {
+        width: 15em;
+        height: 3em;
+        font-size: 25px;
+    }
+}
+
+/* smaller displays*/
+@media screen and (max-width: 992px) {
+    .cancelButton,
+    .cancelInput,
+    .cancelText {
+        font-size: 20px;
+        width: 15em;
+        height: 3em;
+    }
+}
+
+.cancelTextContainer {
+    color: var(--secondaryDarker);
+    text-align: center;
+    font-weight: 500;
+}
+
+.cancelItemContainer {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+}
+
+.cancelButton {
+    margin-top: 0.5em;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    color: var(--fontBright);
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.cancelButton:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+}
+
+.cancelInput {
+    box-shadow: inset 0 0 5px var(--secondaryColor);
+    border-radius: 5px;
+    border: 0;
+    padding: 0.5em;
+}
+
+.cancelInput:focus {
+    outline: 1px solid var(--secondaryDarker);
+}
+
+.errorMessageContainer {
+    color: var(--errorColor);
+    text-align: center;
+}
