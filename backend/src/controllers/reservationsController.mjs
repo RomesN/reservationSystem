@@ -81,18 +81,19 @@ class ReservationsController {
 
     async createFinalReservation(req, res, next) {
         const { temporalToken } = req.params;
-        const { firstName, lastName, phone, email } = req.body;
+        const { firstName, lastName, email, phone } = req.body;
 
         try {
             const temporalReservation = await this.ReservationsService.getTemporaryReservationByToken(temporalToken);
-            const customer = await this.CustomerService.createCustomerIfNotExists(
+            const customer = await this.CustomerService.createIfNotExists(
                 firstName,
                 lastName,
-                phone,
                 email,
+                phone,
                 temporalReservation
             );
             const finalBooking = await this.ReservationsService.makeReservationFinal(temporalReservation, customer);
+            await this.CustomerService.rescheduleCustomerDeletition(customer);
             return res.json(okJsonResponse(`The reservation was finalized.`, finalBooking));
         } catch (error) {
             next(error);

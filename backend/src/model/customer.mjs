@@ -16,6 +16,10 @@ const getModelCustomer = (db, { DataTypes }) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        scheduledJobId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     });
 
     Customer.associate = (models) => {

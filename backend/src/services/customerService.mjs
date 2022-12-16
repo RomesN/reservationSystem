@@ -9,42 +9,60 @@ class CustomerService {
         this.CustomerRepository = CustomerRepository;
     }
 
-    async createCustomerIfNotExists(firstName, lastName, phone, email, reservation) {
+    async createIfNotExists(firstName, lastName, email, phone) {
         if (!firstName || !lastName || !phone || !email) {
             throw new CoveredError(400, "One or more parameters is missing.");
         }
 
-        const { firstFormatted, lastFormatted, phoneFormatted, emailFormatted } = this.formatPersonalData(
+        const { firstFormatted, lastFormatted, emailFormatted, phoneFormatted } = this.formatPersonalData(
             firstName,
             lastName,
             email,
             phone
         );
 
-        this.checkPersonalDataConstrains(firstFormatted, lastFormatted, phoneFormatted, emailFormatted);
+        this.checkPersonalDataConstrains(firstFormatted, lastFormatted, emailFormatted, phoneFormatted);
 
-        let customer = await this.CustomerRepository.getCustomerByData(firstName, lastName, phone, email);
+        let customer = await this.CustomerRepository.getCustomerByData(
+            firstFormatted,
+            lastFormatted,
+            emailFormatted,
+            phoneFormatted
+        );
 
         if (!customer) {
-            customer = this.CustomerRepository.createCustomer(firstName, lastName, phone, email, enums.status.ACTIVE);
-        }
+            const newCustomer = {
+                firstName: firstFormatted,
+                lastName: lastFormatted,
+                email: emailFormatted,
+                telephoneNumber: phoneFormatted,
+                customerStatus: enums.status.ACTIVE,
+            };
 
-        schedule.scheduleJob(add(reservation.date, { minutes: reservation.getService().minutesRequired }), () => {
-            this.deleteCustomerWithInvalidReservations(customer);
-        });
+            customer = await this.CustomerRepository.createCustomer(newCustomer);
+        }
 
         return customer;
     }
 
-    formatPersonalData(firstName, lastName, phone, email) {
-        const firstFormatted = formatName(firstName);
-        const lastFormatted = formatName(lastName);
-        const phoneFormatted = formatPhone(phone);
-        const emailFormatted = formatEmail(email);
-        return { firstFormatted, lastFormatted, phoneFormatted, emailFormatted };
+    async rescheduleCustomerDeletition(customer) {
+        const latestReservation = await this.getLatestReservation(customer);
+        schedule.cancelJob(customer.scheduledJobId);
+        customer.scheduledJobId = this.scheduleCustomerDeletion(customer, latestReservation);
+        return await this.CustomerRepository.updateCustomer(customer.id, {
+            scheduledJobId: customer.scheduledJobId,
+        });
     }
 
-    checkPersonalDataConstrains(firstName, lastName, phone, email) {
+    formatPersonalData(firstName, lastName, email, phone) {
+        const firstFormatted = formatName(firstName);
+        const lastFormatted = formatName(lastName);
+        const emailFormatted = formatEmail(email);
+        const phoneFormatted = formatPhone(phone);
+        return { firstFormatted, lastFormatted, emailFormatted, phoneFormatted };
+    }
+
+    checkPersonalDataConstrains(firstName, lastName, email, phone) {
         if (!/[A-Za-z]{2}/g.test(firstName) || !/[A-Za-z]{2}/g.test(lastName)) {
             throw new CoveredError(400, "First and last name has to contain at leat 2 characters.");
         }
@@ -58,6 +76,18 @@ class CustomerService {
         }
     }
 
+    async getLatestReservation(customer) {
+        const reservations = await customer.getReservations();
+
+        let reservationLatest;
+        for (let i = 0; i < reservations.length; i++) {
+            if (!reservationLatest || isAfter(reservations[i].validityEnd, reservationLatest.validityEnd)) {
+                reservationLatest = reservations[i];
+            }
+        }
+        return reservationLatest;
+    }
+
     async deleteCustomerWithInvalidReservations(customerInspected) {
         const customer = await this.CustomerRepository.getCustomerByData(
             customerInspected.firstName,
@@ -66,18 +96,29 @@ class CustomerService {
             customerInspected.phone
         );
         const now = new Date();
-        const reservations = customer.getServices();
+        const reservations = customer.getReservations();
 
         let validFound = false;
-        for (let i = 0; i < reservations.length(); i++) {
-            if (isAfter(reservations[i].validitEnd, now)) {
+        for (let i = 0; i < reservations.length; i++) {
+            if (isAfter(reservations[i].validityEnd, now)) {
                 validFound = true;
             }
         }
+
         if (!validFound) {
             this.CustomerRepository.deleteCustomerById(customer.id);
         }
+
         return !validFound;
+    }
+
+    scheduleCustomerDeletion(customer, reservation) {
+        return schedule.scheduleJob(
+            add(reservation.validityEnd, { minutes: reservation.getService().minutesRequired }),
+            () => {
+                this.deleteCustomerWithInvalidReservations(customer);
+            }
+        ).name;
     }
 }
 

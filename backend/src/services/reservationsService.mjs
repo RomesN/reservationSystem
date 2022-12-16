@@ -269,7 +269,9 @@ class ReservationsService {
             reservationStatus: enums.status.TEMPORARY,
             reservationToken,
             validityEnd,
+            scheduledJobId: null,
         };
+
         // #endregion ---TEMPLATE RESERVATION CREATION---
 
         // #region ---CHECK IF STILL FREE---
@@ -279,9 +281,9 @@ class ReservationsService {
         // #endregion ---CHECK IF STILL FREE---
 
         // creation and scheduling removal in case not confirmed
-        schedule.scheduleJob(validityEnd, () => {
+        temporalReservation.scheduledJobId = schedule.scheduleJob(validityEnd, () => {
             this.deleteReservationIfInvalid(temporalReservation.reservationToken);
-        });
+        }).name;
 
         return await this.ReservationsRepository.createReservation(temporalReservation);
     }
@@ -328,9 +330,13 @@ class ReservationsService {
 
         const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);
 
-        if (affectedRows[0] !== 1) {
-            throw new Error("The operation of making reservation to be final failed.");
+        if (affectedRows[0] !== 1 || !reservation.scheduledJobId || !schedule.cancelJob(reservation.scheduledJobId)) {
+            throw new Error(
+                "The operation of making reservation to be final failed. Please make sure that temporal reservation was made first."
+            );
         }
+
+        await this.ReservationsRepository.updateReservation(reservation.id, { scheduledJobId: null });
 
         return { reservationId: reservation.id, reservationDate: reservation.date };
     }

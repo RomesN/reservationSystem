@@ -63,7 +63,7 @@ const generateCustomToken = (tokenLength) => {
 
 const formatName = (name) => {
     const nameLower = name.toLowerCase();
-    return (name[0].toUpperCase() + nameLower.substring(2)).trim();
+    return (name[0].toUpperCase() + nameLower.substring(1)).trim();
 };
 
 const formatEmail = (email) => {

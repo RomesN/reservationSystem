@@ -17,6 +17,10 @@ const getModelReservation = (db, { DataTypes }) => {
             type: DataTypes.DATE,
             allowNull: false,
         },
+        scheduledJobId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     });
 
     Reservation.associate = (models) => {

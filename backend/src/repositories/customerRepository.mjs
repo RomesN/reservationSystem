@@ -1,12 +1,18 @@
 import models from "../model/index.mjs";
 
 class CustomerRepository {
-    async getCustomerByData(firstName, lastName, telephoneNumber, email) {
-        return await models.Customer.findOne({ where: { firstName, lastName, telephoneNumber, email } });
+    async getCustomerByData(firstName, lastName, email, telephoneNumber) {
+        return await models.Customer.findOne({ where: { firstName, lastName, email, telephoneNumber } });
     }
 
-    async createCustomer(firstName, lastName, telephoneNumber, email, customerStatus) {
-        return await models.Customer.create({ firstName, lastName, telephoneNumber, email, customerStatus });
+    async createCustomer(newCustomer) {
+        return await models.Customer.create(newCustomer);
+    }
+
+    async updateCustomer(id, updateData) {
+        return await models.Customer.update(updateData, {
+            where: { id },
+        });
     }
 
     async deleteCustomerById(customerId) {
