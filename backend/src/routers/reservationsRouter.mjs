@@ -14,8 +14,8 @@ router.get(
 );
 
 router.put(
-    "/temporal-reservation/:isoTimeString/:serviceId",
-    ReservationsController.createNewTemporalReservation.bind(ReservationsController)
+    "/temporary-reservation/:isoTimeString/:serviceId",
+    ReservationsController.createNewTemporaryReservation.bind(ReservationsController)
 );
 
 router.put(
@@ -24,8 +24,13 @@ router.put(
 );
 
 router.delete(
-    "/temporal-reservation/:reservationToken",
-    ReservationsController.deleteTemporalReservation.bind(ReservationsController)
+    "/temporary-reservation/:reservationToken",
+    ReservationsController.deleteTemporaryReservation.bind(ReservationsController)
+);
+
+router.delete(
+    "/final-reservation/:reservationToken",
+    ReservationsController.deleteFinalReservation.bind(ReservationsController)
 );
 
 export default router;

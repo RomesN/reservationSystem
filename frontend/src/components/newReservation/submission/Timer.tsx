@@ -9,18 +9,18 @@ import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import styles from "../../../styles/newReservation/submission/timer.module.css";
 
 const ReservationSubmission = () => {
-    const { temporalReservation, timerOn, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
+    const { temporaryReservation, timerOn, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
     const [timer, setTimer] = useState<number | null>(null);
 
     useEffect(() => {
         if (timerOn) {
             setTimer(
-                temporalReservation
-                    ? differenceInMilliseconds(parseISO(temporalReservation.validityEnd), new Date())
+                temporaryReservation
+                    ? differenceInMilliseconds(parseISO(temporaryReservation.validityEnd), new Date())
                     : null
             );
         }
-    }, [timerOn, temporalReservation]);
+    }, [timerOn, temporaryReservation]);
 
     useEffect(() => {
         if (timerOn && timer && timer > 0) {

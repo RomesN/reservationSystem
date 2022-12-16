@@ -224,12 +224,12 @@ class ReservationsService {
         return await this.ReservationsRepository.getValidReservationsBetween(startDate, endDate);
     }
 
-    async createNewTemporalReservation(isoTimeString, serviceIdString, ServicesService, RestrictionsService) {
+    async createNewTemporaryReservation(isoTimeString, serviceIdString, ServicesService, RestrictionsService) {
         // #region ---VARIABLES CALCULATION---
         const service = await ServicesService.getServiceRequired(serviceIdString);
         const currentDate = new Date();
         const validityEnd = add(currentDate, {
-            minutes: parseInt(process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || "15"),
+            minutes: parseInt(process.env.BOOKING_TEMPORARY_RESERVATION_VALIDITY || "15"),
         });
         const reservationStart = parseISO(isoTimeString);
         // #endregion ---VARIABLES CALCULATION---
@@ -261,7 +261,7 @@ class ReservationsService {
             reservationToken = generateCustomToken(10);
         } while (await this.ReservationsRepository.getReservationByToken(reservationToken));
 
-        const temporalReservation = {
+        const temporaryReservation = {
             date: reservationStart,
             detail: null,
             serviceId: service.id,
@@ -279,17 +279,26 @@ class ReservationsService {
         // #endregion ---CHECK IF STILL FREE---
 
         // creation and scheduling removal in case not confirmed
-        temporalReservation.scheduledDeletionJobId = schedule.scheduleJob(validityEnd, () => {
-            this.deleteReservationIfInvalid(temporalReservation.reservationToken);
+        temporaryReservation.scheduledDeletionJobId = schedule.scheduleJob(validityEnd, () => {
+            this.deleteReservationIfInvalid(temporaryReservation.reservationToken);
         }).name;
 
-        return await this.ReservationsRepository.createReservation(temporalReservation);
+        return await this.ReservationsRepository.createReservation(temporaryReservation);
     }
 
-    async deleteTemporalReservation(reservationToken) {
+    async deleteTemporaryReservation(reservationToken) {
         const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
         if (!reservationToDelete) {
-            throw new CoveredError(400, "No temporal reservation exists with provided token.");
+            throw new CoveredError(400, "No temporary reservation exists with provided token.");
+        }
+
+        await this.ReservationsRepository.deleteReservationByToken(reservationToken);
+    }
+
+    async deleteFinalReservation(reservationToken) {
+        const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
+        if (!reservationToDelete) {
+            throw new CoveredError(400, "No temporary reservation exists with provided token.");
         }
 
         await this.ReservationsRepository.deleteReservationByToken(reservationToken);
@@ -307,7 +316,7 @@ class ReservationsService {
         }
     }
 
-    async getTemporalReservationByToken(reservationToken) {
+    async getTemporaryReservationByToken(reservationToken) {
         const reservation = await this.ReservationsRepository.getTemporaryReservationByToken(reservationToken);
         if (!reservation) {
             throw new CoveredError("No temporary reservation token provided.");
@@ -333,7 +342,7 @@ class ReservationsService {
 
         if (affectedRows[0] !== 1 || !reservation.scheduledDeletionJobId || !scheduleCancel) {
             throw new Error(
-                "The operation of making reservation to be final failed. Please make sure that temporal reservation was made first."
+                "The operation of making reservation to be final failed. Please make sure that temporary reservation was made first."
             );
         }
 

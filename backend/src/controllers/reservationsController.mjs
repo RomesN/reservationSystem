@@ -62,12 +62,12 @@ class ReservationsController {
         }
     }
 
-    async createNewTemporalReservation(req, res, next) {
+    async createNewTemporaryReservation(req, res, next) {
         const serviceId = req.params.serviceId;
         const isoTimeString = req.params.isoTimeString;
 
         try {
-            const temporalBooking = await this.ReservationsService.createNewTemporalReservation(
+            const temporaryBooking = await this.ReservationsService.createNewTemporaryReservation(
                 isoTimeString,
                 serviceId,
                 this.ServicesService,
@@ -75,10 +75,10 @@ class ReservationsController {
             );
             return res.json(
                 okJsonResponse(
-                    `Temporal reservation was created. Date is booked for ${
-                        process.env.BOOKING_TEMPORAL_RESERVATION_VALIDITY || 15
+                    `Temporary reservation was created. Date is booked for ${
+                        process.env.BOOKING_TEMPORARY_RESERVATION_VALIDITY || 15
                     } minutes.`,
-                    { temporalBooking }
+                    { temporaryBooking }
                 )
             );
         } catch (error) {
@@ -91,15 +91,17 @@ class ReservationsController {
         const { firstName, lastName, email, phone } = req.body;
 
         try {
-            const temporalReservation = await this.ReservationsService.getTemporalReservationByToken(reservationToken);
+            const temporaryReservation = await this.ReservationsService.getTemporaryReservationByToken(
+                reservationToken
+            );
             const customer = await this.CustomerService.createIfNotExists(
                 firstName,
                 lastName,
                 email,
                 phone,
-                temporalReservation
+                temporaryReservation
             );
-            await this.ReservationsService.makeReservationFinal(temporalReservation, customer);
+            await this.ReservationsService.makeReservationFinal(temporaryReservation, customer);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
 
             const finalBooking = await this.ReservationsService.getActiveReservationByToken(reservationToken);
@@ -117,12 +119,12 @@ class ReservationsController {
         }
     }
 
-    async deleteTemporalReservation(req, res, next) {
+    async deleteTemporaryReservation(req, res, next) {
         const { reservationToken } = req.params;
 
         try {
-            await this.ReservationsService.deleteTemporalReservation(reservationToken);
-            return res.json(okJsonResponse(`Temporal reservation was deleted.`));
+            await this.ReservationsService.deleteTemporaryReservation(reservationToken);
+            return res.json(okJsonResponse(`Temporary reservation was deleted.`));
         } catch (error) {
             next(error);
         }

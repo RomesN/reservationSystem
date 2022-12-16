@@ -3,10 +3,10 @@ import { QueryFunctionContext, QueryKey } from "react-query";
 import { parseISO, isBefore } from "date-fns";
 import {
     ErrorResponse,
-    OkDeleteTemporalReservationResponse,
+    OkDeleteTemporaryReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,
-    OkMakeTemporalReservationResponse,
+    OkMakeTemporaryReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Reservation,
@@ -39,9 +39,9 @@ export const isDateAvailable = async (dateISOString: string, serviceId: number) 
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
 
-export const createTemporalReservation = async (dateISOString: string, serviceId: number) => {
+export const createTemporaryReservation = async (dateISOString: string, serviceId: number) => {
     return await api
-        .put<OkMakeTemporalReservationResponse>(`api/reservations/temporal-reservation/${dateISOString}/${serviceId}`)
+        .put<OkMakeTemporaryReservationResponse>(`api/reservations/temporary-reservation/${dateISOString}/${serviceId}`)
         .then((response) => {
             return response.data;
         })
@@ -49,14 +49,14 @@ export const createTemporalReservation = async (dateISOString: string, serviceId
 };
 
 export const createFinalReservation = async (
-    temporalToken: string,
+    temporaryToken: string,
     firstName: string,
     lastName: string,
     email: string,
     phone: string
 ) => {
     return await api
-        .put<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${temporalToken}`, {
+        .put<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${temporaryToken}`, {
             firstName,
             lastName,
             email,
@@ -68,11 +68,11 @@ export const createFinalReservation = async (
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
 
-export const deleteTemporalReservation = async (temporalReservation: Reservation) => {
-    if (isBefore(new Date(), parseISO(temporalReservation.validityEnd))) {
+export const deleteTemporaryReservation = async (temporaryReservation: Reservation) => {
+    if (isBefore(new Date(), parseISO(temporaryReservation.validityEnd))) {
         return await api
-            .delete<OkDeleteTemporalReservationResponse>(
-                `api/reservations/temporal-reservation/${temporalReservation.reservationToken}`
+            .delete<OkDeleteTemporaryReservationResponse>(
+                `api/reservations/temporary-reservation/${temporaryReservation.reservationToken}`
             )
             .then((response) => {
                 return response.data;

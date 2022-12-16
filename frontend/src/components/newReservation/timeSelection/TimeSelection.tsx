@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useEffect, useCallback } from "react";
-import { createTemporalReservation, isDateAvailable } from "../../../api/reservationApi";
+import { createTemporaryReservation, isDateAvailable } from "../../../api/reservationApi";
 import Loading from "../../Loading";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import TimeBox from "./TimeBox";
@@ -16,17 +16,17 @@ const TimeSelection = () => {
         bookedService,
         setAvilableIntervals,
         setBookedDate,
-        setTemporalReservation,
+        setTemporaryReservation,
         setView,
     } = useNewReservationContext();
 
-    const checkAndMakeTemporalBooking = useCallback(
+    const checkAndMakeTemporaryBooking = useCallback(
         async (date: Date, serviceId: number) => {
             const isFree = await isDateAvailable(date.toISOString(), serviceId);
             if (isFree && !axios.isAxiosError(isFree) && isFree.data.isAvailable) {
-                const response = await createTemporalReservation(date.toISOString(), serviceId);
+                const response = await createTemporaryReservation(date.toISOString(), serviceId);
                 if (!axios.isAxiosError(response)) {
-                    setTemporalReservation(response.data.temporalBooking);
+                    setTemporaryReservation(response.data.temporaryBooking);
                     setView(NewReservationViewEnum.Form);
                     return;
                 }
@@ -50,14 +50,14 @@ const TimeSelection = () => {
                 setView(NewReservationViewEnum.Calendar);
             });
         },
-        [setAvilableIntervals, setBookedDate, setView, setTemporalReservation]
+        [setAvilableIntervals, setBookedDate, setView, setTemporaryReservation]
     );
 
     useEffect(() => {
         if (bookedDate?.getHours() !== 0 && bookedService && bookedDate) {
-            checkAndMakeTemporalBooking(bookedDate, bookedService.id);
+            checkAndMakeTemporaryBooking(bookedDate, bookedService.id);
         }
-    }, [bookedDate, bookedService, checkAndMakeTemporalBooking]);
+    }, [bookedDate, bookedService, checkAndMakeTemporaryBooking]);
 
     if (availableIntervals) {
         return (

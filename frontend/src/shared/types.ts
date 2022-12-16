@@ -81,10 +81,10 @@ type OkIsDateAvailableResponse = {
     data: { isAvailable: boolean };
 };
 
-type OkMakeTemporalReservationResponse = {
+type OkMakeTemporaryReservationResponse = {
     status: string;
     message: string;
-    data: { temporalBooking: Reservation };
+    data: { temporaryBooking: Reservation };
 };
 
 type OkMakeFinalReservationResponse = {
@@ -93,7 +93,7 @@ type OkMakeFinalReservationResponse = {
     data: Reservation;
 };
 
-type OkDeleteTemporalReservationResponse = {
+type OkDeleteTemporaryReservationResponse = {
     status: string;
     message: string;
     data: null;
@@ -119,10 +119,10 @@ type ErrorResponse = {
 export type {
     ErrorResponse,
     IntervalString,
-    OkDeleteTemporalReservationResponse,
+    OkDeleteTemporaryReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,
-    OkMakeTemporalReservationResponse,
+    OkMakeTemporaryReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Reservation,

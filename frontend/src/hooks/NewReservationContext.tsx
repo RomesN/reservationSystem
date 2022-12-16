@@ -8,13 +8,13 @@ type NewReservationContextType = {
     bookedService: Service | null;
     bookedDate: Date | null;
     availableIntervals: Interval[] | null;
-    temporalReservation: Reservation | null;
+    temporaryReservation: Reservation | null;
     timerOn: boolean;
     setView: React.Dispatch<React.SetStateAction<NewReservationViewEnum>>;
     setBookedService: React.Dispatch<React.SetStateAction<Service | null>>;
     setBookedDate: React.Dispatch<React.SetStateAction<Date | null>>;
     setAvilableIntervals: React.Dispatch<React.SetStateAction<Interval[] | null>>;
-    setTemporalReservation: React.Dispatch<React.SetStateAction<Reservation | null>>;
+    setTemporaryReservation: React.Dispatch<React.SetStateAction<Reservation | null>>;
     setTimerOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -29,7 +29,7 @@ export const NewReservationDataProvider = ({ children }: Props) => {
     const [bookedService, setBookedService] = useState<null | Service>(null);
     const [bookedDate, setBookedDate] = useState<null | Date>(null);
     const [availableIntervals, setAvilableIntervals] = useState<null | Interval[]>(null);
-    const [temporalReservation, setTemporalReservation] = useState<null | Reservation>(null);
+    const [temporaryReservation, setTemporaryReservation] = useState<null | Reservation>(null);
     const [timerOn, setTimerOn] = useState(true);
 
     return (
@@ -39,13 +39,13 @@ export const NewReservationDataProvider = ({ children }: Props) => {
                 bookedService,
                 bookedDate,
                 availableIntervals,
-                temporalReservation,
+                temporaryReservation,
                 timerOn,
                 setView,
                 setBookedService,
                 setBookedDate,
                 setAvilableIntervals,
-                setTemporalReservation,
+                setTemporaryReservation,
                 setTimerOn,
             }}
         >

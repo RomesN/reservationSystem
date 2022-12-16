@@ -22,7 +22,7 @@ const ReservationForm = () => {
     const [phoneError, setPhoneError] = useState("");
     const [agreeError, setAgreeError] = useState(false);
 
-    const { bookedDate, temporalReservation, setTimerOn } = useNewReservationContext();
+    const { bookedDate, temporaryReservation, setTimerOn } = useNewReservationContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -90,13 +90,13 @@ const ReservationForm = () => {
         setAgreeError(!agree);
 
         if (!firstNameValidated && !secondNameValidated && !emailValidated && !phoneValidated && agree) {
-            if (!temporalReservation || !firstName || !lastName || !phone || !email) {
+            if (!temporaryReservation || !firstName || !lastName || !phone || !email) {
                 throw new Error("Unexpected scenario");
             }
             setTimerOn(false);
             const bookDateToShow = bookedDate ? format(bookedDate, "dd.MM.yyyy HH:mm") : "ERROR";
             const response = await createFinalReservation(
-                temporalReservation.reservationToken,
+                temporaryReservation.reservationToken,
                 firstName,
                 lastName,
                 email,

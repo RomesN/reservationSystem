@@ -2,19 +2,19 @@ import { Link } from "react-router-dom";
 import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
-import { deleteTemporalReservation } from "../../../api/reservationApi";
+import { deleteTemporaryReservation } from "../../../api/reservationApi";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import styles from "../../../styles/newReservation/toolbar/newReservationToolbar.module.css";
 
 const NewBookingToolbar = () => {
-    const { view, temporalReservation, setView, setTemporalReservation } = useNewReservationContext();
+    const { view, temporaryReservation, setView, setTemporaryReservation } = useNewReservationContext();
 
     const handleClickBack = () => {
         switch (view) {
             case NewReservationViewEnum.Form:
-                if (temporalReservation) {
-                    setTemporalReservation(null);
-                    deleteTemporalReservation(temporalReservation).finally(() =>
+                if (temporaryReservation) {
+                    setTemporaryReservation(null);
+                    deleteTemporaryReservation(temporaryReservation).finally(() =>
                         setView(NewReservationViewEnum.Calendar)
                     );
                 } else {
