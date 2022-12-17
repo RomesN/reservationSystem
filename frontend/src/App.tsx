@@ -1,10 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
 import "./styles/general/index.css";
-import LandingPage from "./pages/LandingPage";
-import NewBooking from "./pages/NewReservation";
+import LandingPage from "./pages/user/LandingPage";
+import NewBooking from "./pages/user/NewReservation";
 import { NewReservationDataProvider } from "./hooks/NewReservationContext";
-import CancelReservation from "./pages/CancelReservation";
+import CancelReservation from "./pages/user/CancelReservation";
 
 function App() {
     return (

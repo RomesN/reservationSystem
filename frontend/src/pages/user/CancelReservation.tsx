@@ -2,10 +2,10 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { deleteFinalReservation } from "../api/reservationApi";
-import ErrorBoundary from "../components/ErrorBoundary";
-import styles from "../styles/cancelReservation/cancelReservation.module.css";
-import stylesSweetAlert from "../styles/sweetAlert.module.css";
+import { deleteFinalReservation } from "../../api/reservationApi";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import styles from "../../styles/cancelReservation/cancelReservation.module.css";
+import stylesSweetAlert from "../../styles/sweetAlert.module.css";
 
 const CancelReservation = () => {
     const [token, setToken] = useState("");

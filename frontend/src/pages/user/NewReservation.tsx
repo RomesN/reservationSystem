@@ -1,12 +1,12 @@
-import { useNewReservationContext } from "../hooks/NewReservationContext";
-import DaySelection from "../components/newReservation/daySelection/DaySelection";
-import ErrorBoundary from "../components/ErrorBoundary";
-import NewBookingToolbar from "../components/newReservation/toolbar/NewReservationToolbar";
-import { NewReservationViewEnum } from "../utils/enums/newReservationViewEnum";
-import ReservationSubmission from "../components/newReservation/submission/ReservationSubmission";
-import ServiceSelection from "../components/newReservation/serviceSelection/ServiceSelection";
-import styles from "../styles/newReservation/newReservation.module.css";
-import TimeSelection from "../components/newReservation/timeSelection/TimeSelection";
+import { useNewReservationContext } from "../../hooks/NewReservationContext";
+import DaySelection from "../../components/newReservation/daySelection/DaySelection";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import NewBookingToolbar from "../../components/newReservation/toolbar/NewReservationToolbar";
+import { NewReservationViewEnum } from "../../utils/enums/newReservationViewEnum";
+import ReservationSubmission from "../../components/newReservation/submission/ReservationSubmission";
+import ServiceSelection from "../../components/newReservation/serviceSelection/ServiceSelection";
+import styles from "../../styles/newReservation/newReservation.module.css";
+import TimeSelection from "../../components/newReservation/timeSelection/TimeSelection";
 
 const NewBooking = () => {
     const { view } = useNewReservationContext();
