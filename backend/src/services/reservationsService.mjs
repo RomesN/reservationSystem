@@ -339,7 +339,7 @@ class ReservationsService {
             throw new CoveredError(400, "No final reservation exists with provided token.");
         }
 
-        if (isBefore(add(reservationToDelete.date, { minutes: -1 * 60 * 24 }), reservationToDelete.date)) {
+        if (isBefore(add(reservationToDelete.date, { minutes: -1 * 60 * 24 }), new Date())) {
             throw new CoveredError(403, "Reservation cannot be canceled less than 24 hours before.");
         }
 

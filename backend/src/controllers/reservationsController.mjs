@@ -101,17 +101,23 @@ class ReservationsController {
                 phone,
                 temporaryReservation
             );
+
             await this.ReservationsService.makeReservationFinal(temporaryReservation, customer, note);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
 
             const finalBooking = await this.ReservationsService.getActiveReservationByToken(reservationToken);
             const scheduledReminderJobId = await this.NotificationService.scheduleReminder(finalBooking, 60 * 24);
+
             if (scheduledReminderJobId) {
                 await this.ReservationsService.updateReservation(finalBooking.id, { scheduledReminderJobId });
             }
 
             const iCalObject = await this.NotificationService.getIcalObjectInstance(finalBooking);
-            await this.NotificationService.sendNewReservationEmail(finalBooking, iCalObject);
+            const newReservationEmail = await this.NotificationService.createNewReservationEmail(
+                finalBooking,
+                iCalObject
+            );
+            await this.NotificationService.sendEmail(newReservationEmail);
 
             return res.json(okJsonResponse(`The reservation was finalized.`, finalBooking));
         } catch (error) {
@@ -135,8 +141,12 @@ class ReservationsController {
 
         try {
             const customer = await this.CustomerService.getCustomerByReservationToken(reservationToken);
+            const reservationToCancel = await this.ReservationsService.getActiveReservationByToken(reservationToken);
+            const cancelEmail = await this.NotificationService.createCancelReservationEmail(reservationToCancel);
+
             await this.ReservationsService.deleteFinalReservation(reservationToken);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
+            await this.NotificationService.sendEmail(cancelEmail);
 
             return res.json(okJsonResponse(`Temporary reservation was deleted.`));
         } catch (error) {

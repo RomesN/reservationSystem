@@ -125,6 +125,7 @@ type ErrorResponse = {
 export type {
     ErrorResponse,
     IntervalString,
+    OkDeleteFinalReservationResponse,
     OkDeleteTemporaryReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,

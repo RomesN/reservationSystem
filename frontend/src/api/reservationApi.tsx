@@ -10,6 +10,7 @@ import {
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Reservation,
+    OkDeleteFinalReservationResponse,
 } from "../shared/types";
 
 export const api = axios.create({
@@ -86,7 +87,7 @@ export const deleteTemporaryReservation = async (temporaryReservation: Reservati
 
 export const deleteFinalReservation = async (reservationToken: string) => {
     return await api
-        .delete<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${reservationToken}`)
+        .delete<OkDeleteFinalReservationResponse>(`api/reservations/final-reservation/${reservationToken}`)
         .then((response) => {
             return response.data;
         })
