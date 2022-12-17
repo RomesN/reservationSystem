@@ -1,6 +1,6 @@
 import ReservationForm from "./ReservationForm";
 import ReservationOverview from "./ReservationOverview";
-import styles from "../../../styles/newReservation/submission/reservationSubmission.module.css";
+import styles from "../../../styles/user/newReservation/submission/reservationSubmission.module.css";
 
 const ReservationSubmission = () => {
     return (

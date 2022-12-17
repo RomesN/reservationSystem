@@ -21,15 +21,6 @@
     color: var(--errorColor);
 }
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
 body::before {
     position: absolute;
     content: "";

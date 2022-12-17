@@ -3,12 +3,15 @@ import models from "../model/index.mjs";
 import enums from "../model/enums/index.mjs";
 
 class RestrictionsRepository {
+    constructor(models) {
+        this.models = models;
+    }
     async getServicesList() {
-        return await models.Service.findAll();
+        return await this.models.Service.findAll();
     }
 
     async getBusinessHours(weekday) {
-        return await models.Restriction.findOne({
+        return await this.models.Restriction.findOne({
             where: { restrictionType: enums.restrictionType.BUSINESS_HOURS, weekday: weekday },
         });
     }
@@ -19,11 +22,11 @@ class RestrictionsRepository {
             restrictionType: enums.restrictionType.WHOLE_DAY_BUSINESS_CLOSED,
         };
 
-        return await models.Restriction.findOne({ where });
+        return await this.models.Restriction.findOne({ where });
     }
 
     async getGeneralPartialDayRestrictions(weekday) {
-        return await models.Restriction.findAll({
+        return await this.models.Restriction.findAll({
             where: { restrictionType: enums.restrictionType.GENERAL_PARTIAL_BUSINESS_CLOSED, weekday: weekday },
         });
     }
@@ -34,8 +37,8 @@ class RestrictionsRepository {
             restrictionType: enums.restrictionType.ONEOFF_PARTIAL_BUSINESS_CLOSED,
         };
 
-        return await models.Restriction.findAll({ where });
+        return await this.models.Restriction.findAll({ where });
     }
 }
 
-export default new RestrictionsRepository();
+export default new RestrictionsRepository(models);

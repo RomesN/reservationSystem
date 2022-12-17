@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBusinessTime, faClockFour } from "@fortawesome/free-solid-svg-icons";
 import Timer from "./Timer";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
-import styles from "../../../styles/newReservation/submission/reservationOverview.module.css";
+import styles from "../../../styles/user/newReservation/submission/reservationOverview.module.css";
 
 const ReservationOverview = () => {
     const { bookedService, bookedDate } = useNewReservationContext();

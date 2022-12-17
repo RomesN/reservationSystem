@@ -3,14 +3,13 @@ import { QueryFunctionContext, QueryKey } from "react-query";
 import { parseISO, isBefore } from "date-fns";
 import {
     ErrorResponse,
-    OkDeleteTemporaryReservationResponse,
     OkIsDateAvailableResponse,
+    OkNullDataReservationResponse,
     OkMakeFinalReservationResponse,
     OkMakeTemporaryReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Reservation,
-    OkDeleteFinalReservationResponse,
 } from "../shared/types";
 
 export const api = axios.create({
@@ -74,7 +73,7 @@ export const createFinalReservation = async (
 export const deleteTemporaryReservation = async (temporaryReservation: Reservation) => {
     if (isBefore(new Date(), parseISO(temporaryReservation.validityEnd))) {
         return await api
-            .delete<OkDeleteTemporaryReservationResponse>(
+            .delete<OkNullDataReservationResponse>(
                 `api/reservations/temporary-reservation/${temporaryReservation.reservationToken}`
             )
             .then((response) => {
@@ -87,7 +86,7 @@ export const deleteTemporaryReservation = async (temporaryReservation: Reservati
 
 export const deleteFinalReservation = async (reservationToken: string) => {
     return await api
-        .delete<OkDeleteFinalReservationResponse>(`api/reservations/final-reservation/${reservationToken}`)
+        .delete<OkNullDataReservationResponse>(`api/reservations/final-reservation/${reservationToken}`)
         .then((response) => {
             return response.data;
         })

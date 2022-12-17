@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import "dotenv/config";
 import models from "../model/index.mjs";
 import enums from "../model/enums/index.mjs";
@@ -100,7 +101,7 @@ export default async () => {
     await models.Admin.bulkCreate([
         {
             username: "admin",
-            password: "testTest1",
+            password: await bcrypt.hash("testTest1", 10),
             email: "example@example.com",
             emailConfirmed: true,
             registrationToken: "regtoken12345!",

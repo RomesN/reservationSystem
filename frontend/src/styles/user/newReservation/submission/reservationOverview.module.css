@@ -5,7 +5,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     vertical-align: middle;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 1s;
 }
 
 .itemOne,

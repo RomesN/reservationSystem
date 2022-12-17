@@ -6,6 +6,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
+    animation: fadeIn 1s;
 }
 
 /* Large displays */
@@ -74,4 +75,13 @@
     color: var(--errorColor);
     text-align: center;
     top: 530px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

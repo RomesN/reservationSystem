@@ -1,0 +1,258 @@
+.centered {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: -1;
+}
+
+.formContainer {
+    background: linear-gradient(var(--mainColorBrighter), var(--mainColor));
+    border-radius: 1em;
+
+    padding: 3em;
+
+    box-sizing: border-box;
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.6);
+    z-index: 0;
+
+    animation: fadeIn 1s;
+}
+
+/* Large devices */
+@media only screen and (min-width: 992px) {
+    .formContainer {
+        height: fit-content;
+        min-width: 35vw;
+    }
+
+    .inputContainer input,
+    .inputContainer label,
+    .errorMessage {
+        font-size: 16px;
+    }
+    .inputContainer .usedLabel,
+    .inputContainer input:focus ~ label,
+    .inputContainer input:active ~ label,
+    .error {
+        font-size: 13px;
+    }
+
+    .formContainer form button[type="submit"],
+    .nonMainButtonLink > button {
+        font-size: 16px;
+    }
+}
+
+/* Smaller devices */
+@media screen and (max-width: 992px) {
+    .formContainer {
+        height: fit-content;
+        min-width: 85vw;
+    }
+
+    .inputContainer input,
+    .inputContainer label {
+        font-size: 17px;
+    }
+    .inputContainer .usedLabel,
+    .inputContainer input:focus ~ label,
+    .inputContainer input:active ~ label,
+    .error {
+        font-size: 14px;
+    }
+
+    .formContainer form button[type="submit"],
+    .nonMainButtonLink > button {
+        font-size: 17px;
+    }
+}
+
+.header {
+    margin: 0 0 1.5em;
+    padding: 0;
+    color: var(--secondaryColor);
+    text-align: center;
+}
+
+.inputContainer {
+    position: relative;
+}
+
+.error {
+    position: absolute;
+    color: var(--errorColor);
+    top: 3.5em;
+    left: 0;
+    animation: fadeIn 0.5s;
+}
+
+.inputContainer input {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5em;
+    color: var(--tertiaryColor);
+    margin-bottom: 4em;
+    border: none;
+    border-bottom: 1px solid var(--secondaryColor);
+    outline: none;
+    background-color: transparent;
+    z-index: 2;
+}
+
+.inputContainer label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5em;
+    color: var(--secondaryColor);
+    transition: 0.5s;
+    z-index: 1;
+}
+
+.inputContainer .usedLabel {
+    top: -20px;
+    left: 0;
+    color: var(--secondaryColor);
+}
+
+.inputContainer input:focus ~ label,
+.inputContainer input:active ~ label {
+    top: -20px;
+    left: 0;
+    color: var(--secondaryColor);
+}
+
+.errorMessage {
+    position: absolute;
+    color: var(--errorColor);
+    top: 3em;
+    left: 0.5em;
+    animation: fadeIn 0.5s;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.formContainer form button[type="submit"] {
+    position: relative;
+    padding: 0.7em 0.7em;
+    color: var(--tertiaryColor);
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+
+    transition: 0.5;
+    letter-spacing: 0.1em;
+}
+
+.formContainer form button[type="submit"]:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    border-radius: 5px;
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 2em var(--tertiaryColor);
+}
+
+.formContainer form button[type="submit"] span {
+    position: absolute;
+    display: block;
+}
+
+.formContainer form button[type="submit"] span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--tertiaryColor));
+    animation: btn-anim1 1s linear infinite;
+}
+
+@keyframes btn-anim1 {
+    0% {
+        left: -100%;
+    }
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+.formContainer form button[type="submit"] span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--tertiaryColor));
+    animation: btn-anim2 1s linear infinite;
+    animation-delay: 0.25s;
+}
+
+@keyframes btn-anim2 {
+    0% {
+        top: -100%;
+    }
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+.formContainer form button[type="submit"] span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, var(--tertiaryColor));
+    animation: btn-anim3 1s linear infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes btn-anim3 {
+    0% {
+        right: -100%;
+    }
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+.formContainer form button[type="submit"] span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, var(--tertiaryColor));
+    animation: btn-anim4 1s linear infinite;
+    animation-delay: 0.75s;
+}
+
+@keyframes btn-anim4 {
+    0% {
+        bottom: -100%;
+    }
+    50%,
+    100% {
+        bottom: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

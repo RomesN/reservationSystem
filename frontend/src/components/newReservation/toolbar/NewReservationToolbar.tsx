@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import { deleteTemporaryReservation } from "../../../api/reservationApi";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
-import styles from "../../../styles/newReservation/toolbar/newReservationToolbar.module.css";
+import styles from "../../../styles/user/newReservation/toolbar/newReservationToolbar.module.css";
 
 const NewBookingToolbar = () => {
     const { view, temporaryReservation, setView, setTemporaryReservation } = useNewReservationContext();

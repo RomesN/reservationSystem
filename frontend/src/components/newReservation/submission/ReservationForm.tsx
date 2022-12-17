@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { createFinalReservation } from "../../../api/reservationApi";
-import styles from "../../../styles/newReservation/submission/reservationForm.module.css";
+import styles from "../../../styles/user/newReservation/submission/reservationForm.module.css";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import { useNavigate } from "react-router-dom";

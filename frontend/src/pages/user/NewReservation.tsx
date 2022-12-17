@@ -5,7 +5,7 @@ import NewBookingToolbar from "../../components/newReservation/toolbar/NewReserv
 import { NewReservationViewEnum } from "../../utils/enums/newReservationViewEnum";
 import ReservationSubmission from "../../components/newReservation/submission/ReservationSubmission";
 import ServiceSelection from "../../components/newReservation/serviceSelection/ServiceSelection";
-import styles from "../../styles/newReservation/newReservation.module.css";
+import styles from "../../styles/user/newReservation/newReservation.module.css";
 import TimeSelection from "../../components/newReservation/timeSelection/TimeSelection";
 
 const NewBooking = () => {

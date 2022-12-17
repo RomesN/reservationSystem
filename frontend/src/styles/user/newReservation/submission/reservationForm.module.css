@@ -4,7 +4,7 @@
 .rowFour,
 .rowFive {
     padding: 0;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 1s;
 }
 
 .rowOne div,

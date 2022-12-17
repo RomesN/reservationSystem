@@ -17,6 +17,11 @@ type IntervalString = {
     end: string;
 };
 
+type LoginInputs = {
+    login: string;
+    password: string;
+};
+
 type Reservation = {
     id: string;
     date: string;
@@ -93,13 +98,7 @@ type OkMakeFinalReservationResponse = {
     data: Reservation;
 };
 
-type OkDeleteTemporaryReservationResponse = {
-    status: string;
-    message: string;
-    data: null;
-};
-
-type OkDeleteFinalReservationResponse = {
+type OkNullDataReservationResponse = {
     status: string;
     message: string;
     data: null;
@@ -125,8 +124,8 @@ type ErrorResponse = {
 export type {
     ErrorResponse,
     IntervalString,
-    OkDeleteFinalReservationResponse,
-    OkDeleteTemporaryReservationResponse,
+    LoginInputs,
+    OkNullDataReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,
     OkMakeTemporaryReservationResponse,

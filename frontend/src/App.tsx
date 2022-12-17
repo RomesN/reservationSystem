@@ -1,10 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
-import "./styles/general/index.css";
+import CancelReservation from "./pages/user/CancelReservation";
 import LandingPage from "./pages/user/LandingPage";
+import Login from "./pages/admin/Login";
 import NewBooking from "./pages/user/NewReservation";
 import { NewReservationDataProvider } from "./hooks/NewReservationContext";
-import CancelReservation from "./pages/user/CancelReservation";
+import "./styles/general/index.css";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 }
             />
             <Route path="/" element={<LandingPage />} />
+            <Route path="/admin/login" element={<Login />}></Route>
         </Routes>
     );
 }

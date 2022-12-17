@@ -3,7 +3,7 @@ import { getServices } from "../../../api/reservationApi";
 import { Service } from "../../../shared/types";
 import ServiceBox from "./ServiceBox";
 import Loading from "../../Loading";
-import stylesServices from "../../../styles/newReservation/serviceSelection/serviceSelection.module.css";
+import stylesServices from "../../../styles/user/newReservation/serviceSelection/serviceSelection.module.css";
 
 const ServiceSelection = () => {
     const services = useQuery("services", getServices, {

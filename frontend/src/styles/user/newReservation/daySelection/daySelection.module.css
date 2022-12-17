@@ -1,7 +1,7 @@
 .selectionToolbar {
     width: 100%;
     display: flex;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 1s;
 }
 
 .selectionToolbar .buttonPrevious {
@@ -100,7 +100,7 @@
     vertical-align: center;
     border-collapse: separate;
     border-spacing: 1px;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 1s;
 }
 
 .daySelectionTable th {

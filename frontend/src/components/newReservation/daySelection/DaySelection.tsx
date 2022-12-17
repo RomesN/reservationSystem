@@ -8,7 +8,7 @@ import { IntervalString } from "../../../shared/types";
 import Loading from "../../Loading";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
-import styles from "../../../styles/newReservation/daySelection/daySelection.module.css";
+import styles from "../../../styles/user/newReservation/daySelection/daySelection.module.css";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 
 type tableArray = {

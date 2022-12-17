@@ -2,7 +2,7 @@ import { faCalendar, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format, Interval } from "date-fns";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
-import styles from "../../../styles/newReservation/timeSelection/timeBox.module.css";
+import styles from "../../../styles/user/newReservation/timeSelection/timeBox.module.css";
 
 type TimeBoxProps = {
     interval: Interval;

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useNewReservationContext } from "../../../hooks/NewReservationContext";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
-import styles from "../../../styles/newReservation/submission/timer.module.css";
+import styles from "../../../styles/user/newReservation/submission/timer.module.css";
 
 const ReservationSubmission = () => {
     const { temporaryReservation, timerOn, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
