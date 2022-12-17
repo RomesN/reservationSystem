@@ -26,6 +26,20 @@ class ReservationsRepository {
         return await this.models.Reservation.findAll({ where });
     }
 
+    async getActiveReservationsBetween(startDate, endDate) {
+        const where = {
+            date: {
+                [this.Op.between]: [startDate, endDate],
+            },
+            validityEnd: {
+                [this.Op.gte]: new Date(),
+            },
+            reservationStatus: { [this.Op.or]: [enums.status.ACTIVE] },
+        };
+
+        return await this.models.Reservation.findAll({ where });
+    }
+
     async getReservationByToken(token) {
         return await this.models.Reservation.findOne({ where: { reservationToken: token } });
     }

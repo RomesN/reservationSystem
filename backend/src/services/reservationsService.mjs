@@ -68,6 +68,41 @@ class ReservationsService {
         return infoObject;
     }
 
+    async getMonthReservationOverviewObject(year, month) {
+        if (!year || !month) {
+            throw new CoveredError(400, "One or more missing arguments.");
+        }
+
+        const yearAsNumber = parseInt(year);
+        const monthAsNumber = parseInt(month);
+
+        if (!Number.isInteger(yearAsNumber) || !Number.isInteger(monthAsNumber) || monthAsNumber > 12) {
+            throw new CoveredError(400, "Input in wrong format.");
+        }
+
+        if (yearAsNumber < new Date().getFullYear() && monthAsNumber < new Date().getMonth() + 1) {
+            throw new CoveredError(400, "The month/year combination in the past.");
+        }
+
+        const numberOfDays = getDaysInMonth(year, monthAsNumber);
+
+        const infoObject = {
+            year: yearAsNumber,
+            month: monthAsNumber,
+            numberOfDays,
+            timesOffsetedByMinutes: new Date().getTimezoneOffset(),
+        };
+
+        for (let i = 1; i <= numberOfDays; i++) {
+            infoObject[i] = await this.ReservationsRepository.getActiveReservationsBetween(
+                new Date(yearAsNumber, monthAsNumber - 1, i, 0, 0, 0),
+                new Date(yearAsNumber, monthAsNumber - 1, i, 23, 59, 59)
+            );
+        }
+
+        return infoObject;
+    }
+
     async getFreeIntervalsOnGivenDay(date, minutesNeeded, restrictionService) {
         // is before today
         if (isBefore(date, endOfDay(new Date()))) {

@@ -1,11 +1,12 @@
 import "dotenv";
 import { hoursToMilliseconds } from "date-fns";
-import { AdminService } from "../services/index.mjs";
+import { AdminService, ReservationsService } from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
 class AdminController {
-    constructor(AdminService) {
+    constructor(AdminService, ReservationsService) {
         this.AdminService = AdminService;
+        this.ReservationsService = ReservationsService;
     }
 
     async login(req, res, next) {
@@ -24,6 +25,24 @@ class AdminController {
         }
     }
 
+    async getMonthReservations(req, res, next) {
+        const year = req.params.year;
+        const month = req.params.month;
+
+        try {
+            const info = await this.ReservationsService.getMonthReservationOverviewObject(year, month);
+
+            return res.json(
+                okJsonResponse(
+                    "Requested month contains reservations below for upcoming days. Months numbered on scale 1-12.",
+                    info
+                )
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async logout(req, res, next) {
         try {
             res.clearCookie("accessToken");
@@ -34,4 +53,4 @@ class AdminController {
     }
 }
 
-export default new AdminController(AdminService);
+export default new AdminController(AdminService, ReservationsService);

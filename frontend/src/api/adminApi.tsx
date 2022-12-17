@@ -1,5 +1,6 @@
 import axios from "axios";
-import { OkNullDataReservationResponse } from "../shared/types";
+import { QueryFunctionContext, QueryKey } from "react-query";
+import { OkNullDataReservationResponse, OkReservationsListResponse } from "../shared/types";
 
 export const adminApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
@@ -23,4 +24,10 @@ export const logout = async () => {
             return response.data;
         })
         .catch((error) => error);
+};
+
+export const getMonthReservations = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
+    const [, params] = queryKey as [string, [number | string, number | string]];
+    const response = await adminApi.get<OkReservationsListResponse>(`api/admin/reservations/${params[0]}/${params[1]}`);
+    return response.data;
 };
