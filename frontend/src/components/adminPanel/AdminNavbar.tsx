@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { AdminNavbarProps } from "../../shared/types";
 import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
 import { logout } from "../../api/adminApi";
 import styles from "../../styles/admin/navbar.module.css";
+import { useAdminPanelContext } from "../../hooks/AdminPanelContext";
 
-const AdminNavbar = ({ setAdminView }: AdminNavbarProps) => {
+const AdminNavbar = () => {
+    const { setAdminView } = useAdminPanelContext();
     const navigate = useNavigate();
 
     return (
@@ -24,6 +25,12 @@ const AdminNavbar = ({ setAdminView }: AdminNavbarProps) => {
                     onClick={() => setAdminView(AdminViewEnum.Reservations)}
                 >
                     Reservations
+                </li>
+                <li
+                    className={`${styles.hoverSpecialEffect} ${styles.item} ${styles.secondaryColor}`}
+                    onClick={() => setAdminView(AdminViewEnum.Restrictions)}
+                >
+                    Restrictions
                 </li>
             </ul>
         </>

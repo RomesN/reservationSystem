@@ -1,12 +1,12 @@
-import { useState } from "react";
 import AdminNavbar from "../../components/adminPanel/AdminNavbar";
 import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import ReservationsView from "../../components/adminPanel/ReservationsView";
 import styles from "../../styles/admin/adminPage.module.css";
+import { useAdminPanelContext } from "../../hooks/AdminPanelContext";
 
 const AdminPanel = () => {
-    const [adminView, setAdminView] = useState(AdminViewEnum.Reservations);
+    const { adminView } = useAdminPanelContext();
 
     const content = () => {
         switch (adminView) {
@@ -20,7 +20,7 @@ const AdminPanel = () => {
             <div>
                 <div className={styles.navbarContainer}>
                     <ErrorBoundary>
-                        <AdminNavbar setAdminView={setAdminView} />
+                        <AdminNavbar />
                     </ErrorBoundary>
                 </div>
                 <div>

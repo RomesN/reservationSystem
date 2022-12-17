@@ -1,9 +1,4 @@
 import { ReactNode } from "react";
-import { AdminViewEnum } from "../utils/enums/AdminViewEnum";
-
-type AdminNavbarProps = {
-    setAdminView: React.Dispatch<React.SetStateAction<AdminViewEnum>>;
-};
 
 type Props = {
     children?: ReactNode;
@@ -169,7 +164,6 @@ type ErrorResponse = {
 };
 
 export type {
-    AdminNavbarProps,
     ErrorResponse,
     IntervalString,
     LoginInputs,
