@@ -81,3 +81,12 @@ export const deleteTemporaryReservation = async (temporaryReservation: Reservati
     }
     return "After validity";
 };
+
+export const deleteFinalReservation = async (reservationToken: string) => {
+    return await api
+        .delete<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${reservationToken}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
+};

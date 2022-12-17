@@ -99,6 +99,12 @@ type OkDeleteTemporaryReservationResponse = {
     data: null;
 };
 
+type OkDeleteFinalReservationResponse = {
+    status: string;
+    message: string;
+    data: null;
+};
+
 type OkServiceResponse = {
     status: string;
     message: string;

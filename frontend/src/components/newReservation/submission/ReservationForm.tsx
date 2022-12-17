@@ -102,7 +102,6 @@ const ReservationForm = () => {
                 email,
                 phone
             );
-            console.log(response);
             if (!axios.isAxiosError(response) && response.data.id) {
                 Swal.fire({
                     icon: "success",

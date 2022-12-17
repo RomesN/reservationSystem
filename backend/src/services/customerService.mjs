@@ -47,11 +47,15 @@ class CustomerService {
 
     async rescheduleCustomerDeletition(customer) {
         const latestReservation = await this.getLatestReservation(customer);
-        schedule.cancelJob(customer.scheduledJobId);
-        customer.scheduledJobId = this.scheduleCustomerDeletion(customer, latestReservation);
-        return await this.CustomerRepository.updateCustomer(customer.id, {
-            scheduledJobId: customer.scheduledJobId,
-        });
+        if (latestReservation) {
+            schedule.cancelJob(customer.scheduledJobId);
+            customer.scheduledJobId = this.scheduleCustomerDeletion(customer, latestReservation);
+            return await this.CustomerRepository.updateCustomer(customer.id, {
+                scheduledJobId: customer.scheduledJobId,
+            });
+        } else {
+            await this.deleteCustomerById(customer.id);
+        }
     }
 
     formatPersonalData(firstName, lastName, email, phone) {
@@ -119,6 +123,17 @@ class CustomerService {
                 this.deleteCustomerWithInvalidReservations(customer);
             }
         ).name;
+    }
+
+    async getCustomerByReservationToken(token) {
+        if (!token) {
+            throw new CoveredError(400, "Token not provided.");
+        }
+        return await this.CustomerRepository.getCustomerByReservationToken(token);
+    }
+
+    async deleteCustomerById(customerId) {
+        return await this.CustomerRepository.deleteCustomerById(customerId);
     }
 }
 

@@ -129,6 +129,20 @@ class ReservationsController {
             next(error);
         }
     }
+
+    async deleteFinalReservation(req, res, next) {
+        const { reservationToken } = req.params;
+
+        try {
+            const customer = await this.CustomerService.getCustomerByReservationToken(reservationToken);
+            await this.ReservationsService.deleteFinalReservation(reservationToken);
+            await this.CustomerService.rescheduleCustomerDeletition(customer);
+
+            return res.json(okJsonResponse(`Temporary reservation was deleted.`));
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new ReservationsController(

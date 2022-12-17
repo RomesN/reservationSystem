@@ -5,6 +5,17 @@ class CustomerRepository {
         return await models.Customer.findOne({ where: { firstName, lastName, email, telephoneNumber } });
     }
 
+    async getCustomerByReservationToken(token) {
+        return await models.Customer.findOne({
+            include: [
+                {
+                    model: models.Reservation,
+                    where: { reservationToken: token },
+                },
+            ],
+        });
+    }
+
     async createCustomer(newCustomer) {
         return await models.Customer.create(newCustomer);
     }
@@ -16,7 +27,10 @@ class CustomerRepository {
     }
 
     async deleteCustomerById(customerId) {
-        return await models.Customer.destroy(customerId);
+        return await models.Customer.destroy({
+            where: { id: customerId },
+            force: true,
+        });
     }
 }
 

@@ -70,6 +70,8 @@
 }
 
 .errorMessageContainer {
+    position: absolute;
     color: var(--errorColor);
     text-align: center;
+    top: 530px;
 }

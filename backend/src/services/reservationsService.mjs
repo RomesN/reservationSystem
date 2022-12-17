@@ -257,8 +257,11 @@ class ReservationsService {
 
         // #region ---TEMPLATE RESERVATION CREATION---
         let reservationToken;
+        const tokenLength = Number.isNaN(parseInt(process.env.RESERVATION_TOKEN_LENGTH))
+            ? 10
+            : parseInt(process.env.RESERVATION_TOKEN_LENGTH);
         do {
-            reservationToken = generateCustomToken(10);
+            reservationToken = generateCustomToken(tokenLength);
         } while (await this.ReservationsRepository.getReservationByToken(reservationToken));
 
         const temporaryReservation = {
@@ -287,7 +290,12 @@ class ReservationsService {
     }
 
     async deleteTemporaryReservation(reservationToken) {
-        const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
+        if (!reservationToken) {
+            throw new CoveredError(400, "Token not provided.");
+        }
+
+        const reservationToDelete = await this.ReservationsRepository.getTemporaryReservationByToken(reservationToken);
+
         if (!reservationToDelete) {
             throw new CoveredError(400, "No temporary reservation exists with provided token.");
         }
@@ -296,12 +304,24 @@ class ReservationsService {
     }
 
     async deleteFinalReservation(reservationToken) {
-        const reservationToDelete = await this.ReservationsRepository.getReservationByToken(reservationToken);
-        if (!reservationToDelete) {
-            throw new CoveredError(400, "No temporary reservation exists with provided token.");
+        if (!reservationToken) {
+            throw new CoveredError(400, "Token not provided.");
         }
 
-        await this.ReservationsRepository.deleteReservationByToken(reservationToken);
+        const reservationToDelete = await this.ReservationsRepository.getActiveReservationByToken(reservationToken);
+
+        if (!reservationToDelete) {
+            throw new CoveredError(400, "No final reservation exists with provided token.");
+        }
+
+        if (isBefore(add(reservationToDelete.date, { minutes: -1 * 60 * 24 }), reservationToDelete.date)) {
+            throw new CoveredError(403, "Reservation cannot be canceled less than 24 hours before.");
+        }
+
+        if (reservationToDelete.scheduledReminderJobId) {
+            schedule.cancelJob(reservationToDelete.scheduledReminderJobId);
+        }
+        return await this.ReservationsRepository.deleteReservationByToken(reservationToken);
     }
 
     async deleteReservationIfInvalid(reservationToken) {
