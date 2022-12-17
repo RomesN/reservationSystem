@@ -1,14 +1,21 @@
 .rowOne,
 .rowTwo,
 .rowThree,
-.rowFour {
+.rowFour,
+.rowFive {
     padding: 0;
     animation: fadeIn 0.5s;
 }
 
 .rowOne div,
-.rowTwo div {
+.rowTwo div,
+.rowThree div {
     color: var(--errorColor) !important;
+}
+
+.noteError {
+    position: absolute;
+    width: 500px;
 }
 
 .rowOne,
@@ -18,12 +25,26 @@
 }
 
 .rowThree {
+    width: 100%;
+    padding: 0;
     align-items: center;
     justify-content: center;
     margin: 0 2px 30px;
 }
 
+.rowThree > div {
+    width: 100%;
+    padding: 0;
+    padding: 0 5px 0 1px;
+}
+
 .rowFour {
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px 30px;
+}
+
+.rowFive {
     align-items: center;
     justify-content: center;
     margin: 0 2px;

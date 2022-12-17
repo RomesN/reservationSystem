@@ -5,8 +5,8 @@ const getModelReservation = (db, { DataTypes }) => {
             allowNull: false,
             unique: true,
         },
-        detail: {
-            type: DataTypes.STRING(250),
+        note: {
+            type: DataTypes.STRING(60),
             allowNull: true,
         },
         reservationToken: {

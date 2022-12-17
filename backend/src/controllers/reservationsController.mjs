@@ -88,7 +88,7 @@ class ReservationsController {
 
     async createFinalReservation(req, res, next) {
         const { reservationToken } = req.params;
-        const { firstName, lastName, email, phone } = req.body;
+        const { firstName, lastName, email, phone, note } = req.body;
 
         try {
             const temporaryReservation = await this.ReservationsService.getTemporaryReservationByToken(
@@ -101,7 +101,7 @@ class ReservationsController {
                 phone,
                 temporaryReservation
             );
-            await this.ReservationsService.makeReservationFinal(temporaryReservation, customer);
+            await this.ReservationsService.makeReservationFinal(temporaryReservation, customer, note);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
 
             const finalBooking = await this.ReservationsService.getActiveReservationByToken(reservationToken);

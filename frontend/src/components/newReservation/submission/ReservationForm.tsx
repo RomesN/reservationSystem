@@ -15,12 +15,14 @@ const ReservationForm = () => {
     const [email, setEmail] = useState<string | null>(null);
     const [phone, setPhone] = useState<string | null>(null);
     const [agree, setAgree] = useState(false);
+    const [note, setNote] = useState("");
 
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [phoneError, setPhoneError] = useState("");
     const [agreeError, setAgreeError] = useState(false);
+    const [noteError, setNoteError] = useState(false);
 
     const { bookedDate, temporaryReservation, setTimerOn } = useNewReservationContext();
     const navigate = useNavigate();
@@ -41,6 +43,10 @@ const ReservationForm = () => {
         return !/^(\+42[0-1])? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$/g.test(phone)
             ? "Must be valid SK/CZ phone number."
             : "";
+    };
+
+    const validateNote = (note: string) => {
+        return note.length < 60;
     };
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +72,10 @@ const ReservationForm = () => {
                 setPhone(value);
                 setPhoneError(validatePhone(value));
                 break;
+            case "note":
+                setNote(value);
+                setNoteError(!validateNote(value));
+                break;
         }
     };
 
@@ -82,14 +92,23 @@ const ReservationForm = () => {
         const secondNameValidated = validateName(lastName || "");
         const emailValidated = validateEmail(email || "");
         const phoneValidated = validatePhone(phone || "");
+        const noteValidated = validateNote(note || "");
 
         setFirstNameError(firstNameValidated);
         setLastNameError(secondNameValidated);
         setEmailError(emailValidated);
         setPhoneError(phoneValidated);
         setAgreeError(!agree);
+        setNoteError(!noteValidated);
 
-        if (!firstNameValidated && !secondNameValidated && !emailValidated && !phoneValidated && agree) {
+        if (
+            !firstNameValidated &&
+            !secondNameValidated &&
+            !emailValidated &&
+            !phoneValidated &&
+            noteValidated &&
+            agree
+        ) {
             if (!temporaryReservation || !firstName || !lastName || !phone || !email) {
                 throw new Error("Unexpected scenario");
             }
@@ -100,7 +119,8 @@ const ReservationForm = () => {
                 firstName,
                 lastName,
                 email,
-                phone
+                phone,
+                note
             );
             if (!axios.isAxiosError(response) && response.data.id) {
                 Swal.fire({
@@ -186,6 +206,22 @@ const ReservationForm = () => {
                 </Col>
             </Row>
             <Row className={styles.rowThree}>
+                <Form.Group>
+                    <Form.Label className={styles.label}>Note</Form.Label>
+                    <Form.Control
+                        className={styles.input}
+                        name="note"
+                        type="text"
+                        placeholder="note"
+                        onChange={handleInput}
+                        isInvalid={!!noteError}
+                    />
+                    <Form.Control.Feedback type="invalid" className={styles.noteError}>
+                        {"Note cannot be longer than 60 characters."}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Row>
+            <Row className={styles.rowFour}>
                 <Form.Check
                     type="switch"
                     className={styles.checkbox}
@@ -194,7 +230,7 @@ const ReservationForm = () => {
                     isInvalid={!!agreeError}
                 />
             </Row>
-            <Row className={styles.rowFour}>
+            <Row className={styles.rowFive}>
                 <Button type="submit" className={styles.button}>
                     Submit reservation
                 </Button>

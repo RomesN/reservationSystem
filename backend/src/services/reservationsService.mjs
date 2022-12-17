@@ -373,14 +373,19 @@ class ReservationsService {
         return reservation;
     }
 
-    async makeReservationFinal(reservation, customer) {
+    async makeReservationFinal(reservation, customer, note) {
         const scheduleCancel = schedule.cancelJob(reservation.scheduledDeletionJobId);
+
+        if (note && note.length > 60) {
+            throw new CoveredError("Note cannot exceed 60 characters.");
+        }
 
         const update = {
             validityEnd: reservation.date,
             reservationStatus: enums.status.ACTIVE,
             customerId: customer.id,
             scheduledDeletionJobId: null,
+            note: note || null,
         };
 
         const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);

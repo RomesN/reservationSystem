@@ -53,7 +53,8 @@ export const createFinalReservation = async (
     firstName: string,
     lastName: string,
     email: string,
-    phone: string
+    phone: string,
+    note: string
 ) => {
     return await api
         .put<OkMakeFinalReservationResponse>(`api/reservations/final-reservation/${temporaryToken}`, {
@@ -61,6 +62,7 @@ export const createFinalReservation = async (
             lastName,
             email,
             phone,
+            note,
         })
         .then((response) => {
             return response.data;

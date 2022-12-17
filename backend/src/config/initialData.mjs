@@ -223,22 +223,24 @@ export default async () => {
     //#region ---RESERVATION---
     await models.Reservation.bulkCreate([
         {
-            date: new Date(Date.UTC(2022, 11, 5, 9, 0, 0)),
-            detail: "I hope it will be perfect.",
+            date: new Date(Date.UTC(2022, 20, 5, 9, 0, 0)),
+            note: "I hope it will be perfect.",
             serviceId: 1,
             reservationStatus: "Active",
             customer: 1,
             reservationToken: "1234567",
-            validityEnd: new Date(Date.UTC(2022, 11, 5, 9, 0, 0)),
+            validityEnd: new Date(Date.UTC(2022, 20, 5, 9, 0, 0)),
+            customerId: 1,
         },
         {
-            date: new Date(Date.UTC(2022, 11, 6, 11, 0, 0)),
-            detail: null,
+            date: new Date(Date.UTC(2022, 18, 6, 11, 0, 0)),
+            note: null,
             serviceId: 2,
             reservationStatus: "Active",
             customer: 2,
             reservationToken: "12345678",
-            validityEnd: new Date(Date.UTC(2022, 11, 6, 11, 0, 0)),
+            validityEnd: new Date(Date.UTC(2022, 18, 6, 11, 0, 0)),
+            customerId: 2,
         },
     ]);
     //#endregion ---RESERVATION---
