@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
+import AdminPanel from "./pages/admin/AdminPanel";
 import CancelReservation from "./pages/user/CancelReservation";
 import LandingPage from "./pages/user/LandingPage";
 import Login from "./pages/admin/Login";
@@ -21,6 +22,7 @@ function App() {
             />
             <Route path="/" element={<LandingPage />} />
             <Route path="/admin/login" element={<Login />}></Route>
+            <Route path="/admin/panel" element={<AdminPanel />}></Route>
         </Routes>
     );
 }

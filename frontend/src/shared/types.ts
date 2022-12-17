@@ -1,4 +1,13 @@
 import { ReactNode } from "react";
+import { AdminViewEnum } from "../utils/enums/AdminViewEnum";
+
+type AdminNavbarProps = {
+    setAdminView: React.Dispatch<React.SetStateAction<AdminViewEnum>>;
+};
+
+type Props = {
+    children?: ReactNode;
+};
 
 type Service = {
     id: number;
@@ -6,10 +15,6 @@ type Service = {
     minutesRequired: number;
     createdAt: Date;
     updatedAt: Date;
-};
-
-type Props = {
-    children?: ReactNode;
 };
 
 type IntervalString = {
@@ -122,6 +127,7 @@ type ErrorResponse = {
 };
 
 export type {
+    AdminNavbarProps,
     ErrorResponse,
     IntervalString,
     LoginInputs,
@@ -131,7 +137,7 @@ export type {
     OkMakeTemporaryReservationResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
+    Props,
     Reservation,
     Service,
-    Props,
 };

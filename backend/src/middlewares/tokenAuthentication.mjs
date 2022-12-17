@@ -8,7 +8,7 @@ export default (req, res, next) => {
         return res.sendStatus(401);
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, admin) => {
+    jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (error, admin) => {
         if (error) {
             return res.sendStatus(403);
         }

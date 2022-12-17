@@ -13,12 +13,21 @@ class AdminController {
 
         try {
             const token = await this.AdminService.login(login, password);
-            res.cookie("jwtToken", token, {
+            res.cookie("accessToken", token, {
                 httpOnly: true,
                 maxAge: hoursToMilliseconds(parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_IN_HOURS || "24")),
             });
 
             return res.json(okJsonResponse("Login was successful"));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async logout(req, res, next) {
+        try {
+            res.clearCookie("accessToken");
+            return res.json(okJsonResponse("Logout was successful"));
         } catch (error) {
             next(error);
         }

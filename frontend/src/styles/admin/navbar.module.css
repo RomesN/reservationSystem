@@ -1,0 +1,168 @@
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    height: fit-content;
+    border-radius: 5px;
+    margin-top: 20px;
+    background-color: var(--mainColor);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* FONTS */
+/* Large devices */
+@media only screen and (min-width: 992px) {
+    .navbar {
+        flex-direction: row;
+        padding: 0 20px;
+        font-size: 16px;
+    }
+
+    .hoverSpecialEffect {
+        padding: 12px 16px;
+    }
+
+    .navbar .serachInputOff,
+    .navbar .serachInputOn {
+        padding: 12px 16px;
+    }
+}
+
+/* Smaller devices */
+@media screen and (max-width: 992px) {
+    .navbar {
+        width: 75vw;
+        flex-direction: column;
+        padding: 10px;
+        font-size: 17px;
+    }
+
+    .hoverSpecialEffect {
+        padding: 12px 16px;
+    }
+
+    .navbar .serachInputOff,
+    .navbar .serachInputOn {
+        padding: 10px 10px;
+    }
+}
+
+/* LIST ITEMS */
+
+.navbar .item {
+    list-style: none;
+}
+
+.navbar .secondaryColor {
+    color: var(--secondaryColor);
+}
+
+.navbar .tertiaryColor {
+    color: var(--tertiaryColor);
+}
+
+.navbar .hoverSpecialEffect {
+    font-weight: bold;
+    margin: 0 8px;
+    position: relative;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.navbar .hoverSpecialEffect::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    transition: 0.2s;
+    border-radius: 5px;
+}
+
+.navbar .hoverSpecialEffect:hover {
+    color: var(--fontDark);
+}
+
+.navbar > .hoverSpecialEffect:hover::before {
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+}
+
+.navbar .ascSwitcherShow {
+    width: 2em;
+    text-transform: uppercase;
+    height: fit-content;
+    text-align: center;
+    transition: ease-out 1s;
+}
+
+.navbar .ascSwitcherHide {
+    width: 0;
+    margin: 0;
+    padding: 0;
+    height: 0;
+    text-transform: uppercase;
+    overflow: hidden;
+}
+
+/* Large devices */
+@media only screen and (min-width: 992px) {
+    .navbar .ascSwitcherHide {
+        animation: hideNormal 1s;
+    }
+}
+
+/* Smaller devices */
+@media screen and (max-width: 992px) {
+    .navbar .ascSwitcherHide {
+        animation: hideHeight 1s;
+    }
+}
+
+@keyframes hideNormal {
+    0% {
+        width: 2em;
+        margin: 0 8px;
+        padding: inherit;
+        height: 100%;
+        overflow: hidden;
+    }
+    100% {
+        width: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+}
+
+@keyframes hideHeight {
+    0% {
+        width: 2em;
+        margin: 0 8px;
+        padding: inherit;
+        height: 2em;
+        overflow: hidden;
+    }
+    100% {
+        width: 0;
+        margin: 0;
+        padding: 0;
+        height: 0;
+        overflow: hidden;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
