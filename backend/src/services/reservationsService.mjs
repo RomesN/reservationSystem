@@ -114,7 +114,7 @@ class ReservationsService {
         }
 
         this.sortReservationList(reservationsList);
-        const incrementToRound = parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15") / 2;
+        const incrementToRound = parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15") / 2;
         const result = [];
 
         for (let i = 0; i <= reservationsList.length; i++) {
@@ -129,7 +129,7 @@ class ReservationsService {
                                   incrementToRound,
                           }),
                           {
-                              nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUES || "15"),
+                              nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15"),
                           }
                       );
             const end = i === reservationsList.length ? endOfBusiness : reservationsList[i].date;
@@ -191,6 +191,31 @@ class ReservationsService {
             i++;
             j = 0;
         }
+
+        // if env variables set constrain that closest reservation can be X minutes from now - test it
+        const closestMinutesRestriction = parseInt(process.env.CLOSEST_RESERVATION_MINUTES_FROM_NOW);
+
+        let k = 0;
+        if (!Number.isNaN(closestMinutesRestriction)) {
+            const soonestPossible = add(new Date(), { minutes: closestMinutesRestriction });
+            while (k < result.length) {
+                if (isBefore(result[k].start, soonestPossible)) {
+                    const testingInterval = { start: soonestPossible, end: result[k].end };
+                    if (
+                        isAfter(result[k].end, soonestPossible) &&
+                        intervalToDuration(testingInterval).minutes + intervalToDuration(testingInterval).hours * 60 >=
+                            minutesNeeded + parseInt(process.env.BREAK_BETWEEN_BOOKINGS || "10")
+                    ) {
+                        result.splice(k, 1, testingInterval);
+                    } else {
+                        result.splice(k, 1);
+                    }
+                } else {
+                    k++;
+                }
+            }
+        }
+
         return result;
     }
 
