@@ -1,94 +1,62 @@
-import { addMinutes, Interval, isBefore, parseISO, isEqual } from "date-fns";
-import { useQuery } from "react-query";
-import { useState } from "react";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getTimeSlots } from "../../../api/reservationApi";
-import { IntervalString, TableArrayNewReservation } from "../../../shared/types";
-import Loading from "../../Loading";
-import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { getMonthReservations } from "../../../api/adminApi";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
-import styles from "../../../styles/user/newReservation/daySelection/daySelection.module.css";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import Loading from "../../Loading";
+import { Reservation, TableArrayExistingReservations } from "../../../shared/types";
+import styles from "../../../styles/admin/reservations/reservationCalendar.module.css";
 
-const DaySelection = () => {
+type ReservationsCalendarType = {
+    setDayDetailReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
+    setSelectedReservationsDay: React.Dispatch<React.SetStateAction<Date | null>>;
+};
+
+const ReservationsCalendar = ({ setDayDetailReservations, setSelectedReservationsDay }: ReservationsCalendarType) => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const { bookedDate, bookedService, setAvilableIntervals, setBookedDate, setView } = useNewReservationContext();
 
-    const timeSlots = useQuery(["timeSlotsObject", [bookedService?.id || null, year, month]], getTimeSlots, {
+    const reservationsInfo = useQuery(["reservationsInfoObject", [year, month]], getMonthReservations, {
         useErrorBoundary: true,
     });
 
-    const calculateTimeSlots = (availableTimeSlots: IntervalString[] | null, minutesNeeded: number | undefined) => {
-        const slotsToShow = [] as Interval[];
-        let morningCount = 0;
-        let afternoonCount = 0;
-        if (availableTimeSlots && minutesNeeded) {
-            availableTimeSlots.forEach((timeSlot) => {
-                const maxEnd = parseISO(timeSlot.end);
-                let start = parseISO(timeSlot.start);
-                let end = addMinutes(start, minutesNeeded);
-
-                while (isBefore(end, maxEnd) || isEqual(end, maxEnd)) {
-                    slotsToShow.push({ start, end });
-                    if (start.getHours() < 12) {
-                        morningCount++;
-                    } else {
-                        afternoonCount++;
-                    }
-                    start = addMinutes(start, parseInt(process.env.REACT_APP_BOOKING_EVERY_NEAREST_MINUTES || "15"));
-                    end = addMinutes(end, parseInt(process.env.REACT_APP_BOOKING_EVERY_NEAREST_MINUTES || "15"));
-                }
-            });
-        }
-        return { slotsToShow, morningCount, afternoonCount };
-    };
-
     const generateTableArray = (data: any) => {
-        const tableArray = [[], [], [], [], [], []] as TableArrayNewReservation[][];
+        const tableArray = [[], [], [], [], [], []] as TableArrayExistingReservations[][];
         const monthStartDay = new Date(year, month - 1, 1).getDay();
         const startMonIsOne = monthStartDay === 0 ? 7 : monthStartDay;
 
         // empty cells falling into not current month
         for (let i = 0; i < startMonIsOne - 1; i++) {
-            tableArray[0][i] = { available: false, date: 0, intervalsConnected: [] };
+            tableArray[0][i] = { available: false, date: 0, reservations: [] };
         }
 
         // the rest of the table
         for (let i = startMonIsOne - 1; i < 42; i++) {
             if (data.data[`${i - startMonIsOne + 2}`]) {
-                const { slotsToShow, morningCount, afternoonCount } = calculateTimeSlots(
-                    data.data[`${i - startMonIsOne + 2}`],
-                    data.data.serviceRequiredTime
-                );
-
                 tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: data.data[`${i - startMonIsOne + 2}`].length !== 0,
                     date: i - startMonIsOne + 2,
-                    intervalsConnected: slotsToShow,
-                    morningCount,
-                    afternoonCount,
+                    reservations: data.data[`${i - startMonIsOne + 2}`],
                 };
                 // cells for not days in current month
             } else {
                 tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
                     available: false,
                     date: 0,
-                    intervalsConnected: [],
+                    reservations: [],
                 };
             }
         }
         return tableArray;
     };
 
-    const handleClick = (day: number, availableIntervals: Interval[]) => {
-        setBookedDate(new Date(year, month - 1, day));
-        setAvilableIntervals(availableIntervals);
-        setView(NewReservationViewEnum.Times);
+    const handleClick = (day: number, reservations: Reservation[]) => {
+        setSelectedReservationsDay(new Date(year, month - 1, day));
+        setDayDetailReservations(reservations);
     };
 
-    const generateTableBody = (tableArray: TableArrayNewReservation[][]) => {
+    const generateTableBody = (tableArray: TableArrayExistingReservations[][]) => {
         let keyRow = 0;
         let keyCell = 0;
         return tableArray.map((row) => {
@@ -100,25 +68,16 @@ const DaySelection = () => {
                         }
                         return (
                             <td
-                                data-tooltip={`morning: ${cell.morningCount} slots
-                                afternoon: ${cell.afternoonCount} slots`}
+                                data-tooltip={`number of reservations: ${cell.reservations.length}`}
                                 onClick={
                                     cell.available
                                         ? () => {
-                                              handleClick(cell.date, cell.intervalsConnected);
+                                              handleClick(cell.date, cell.reservations);
                                           }
                                         : undefined
                                 }
                                 key={keyCell++}
-                                className={
-                                    bookedDate?.getDate() === cell.date &&
-                                    (bookedDate?.getMonth() || -2) + 1 === month &&
-                                    bookedDate?.getFullYear() === year
-                                        ? styles.selected
-                                        : cell.available
-                                        ? styles.available
-                                        : styles.unavailable
-                                }
+                                className={cell.available ? styles.available : styles.unavailable}
                             >
                                 {cell.date !== 0 ? `${cell.date}` : ""}
                             </td>
@@ -147,9 +106,9 @@ const DaySelection = () => {
         }
     };
 
-    if (timeSlots.data) {
+    if (reservationsInfo.data) {
         return (
-            <div>
+            <div className={styles.contentContaienr}>
                 <div className={styles.selectionToolbar}>
                     <button
                         className={
@@ -181,7 +140,7 @@ const DaySelection = () => {
                             <th>Sun</th>
                         </tr>
                     </thead>
-                    <tbody>{generateTableBody(generateTableArray(timeSlots.data))}</tbody>
+                    <tbody>{generateTableBody(generateTableArray(reservationsInfo.data))}</tbody>
                 </table>
             </div>
         );
@@ -190,4 +149,4 @@ const DaySelection = () => {
     return <Loading />;
 };
 
-export default DaySelection;
+export default ReservationsCalendar;

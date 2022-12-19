@@ -7,6 +7,12 @@
     z-index: 2;
 }
 
+.contentContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

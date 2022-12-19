@@ -1,15 +1,14 @@
 import { ReactNode } from "react";
 
-type Props = {
-    children?: ReactNode;
-};
-
-type Service = {
-    id: number;
-    name: string;
-    minutesRequired: number;
-    createdAt: Date;
-    updatedAt: Date;
+type ErrorResponse = {
+    status: number | string;
+    message: string;
+    error: [
+        {
+            name: string;
+            stack: string;
+        }
+    ];
 };
 
 type IntervalString = {
@@ -20,19 +19,6 @@ type IntervalString = {
 type LoginInputs = {
     login: string;
     password: string;
-};
-
-type Reservation = {
-    id: string;
-    date: string;
-    detail: string;
-    serviceId: number;
-    reservationStatus: string;
-    updatedAt: string;
-    createdAt: string;
-    customerId: number | null;
-    validityEnd: string;
-    reservationToken: string;
 };
 
 type OkServiceResponseTimeSlots = {
@@ -152,15 +138,43 @@ type OkServiceResponse = {
     data: Service[];
 };
 
-type ErrorResponse = {
-    status: number | string;
-    message: string;
-    error: [
-        {
-            name: string;
-            stack: string;
-        }
-    ];
+type Props = {
+    children?: ReactNode;
+};
+
+type Reservation = {
+    id: string;
+    date: string;
+    detail: string;
+    serviceId: number;
+    reservationStatus: string;
+    updatedAt: string;
+    createdAt: string;
+    customerId: number | null;
+    validityEnd: string;
+    reservationToken: string;
+};
+
+type Service = {
+    id: number;
+    name: string;
+    minutesRequired: number;
+    createdAt: Date;
+    updatedAt: Date;
+};
+
+type TableArrayNewReservation = {
+    available: boolean;
+    date: number;
+    intervalsConnected: Interval[];
+    morningCount?: number;
+    afternoonCount?: number;
+};
+
+type TableArrayExistingReservations = {
+    available: boolean;
+    date: number;
+    reservations: Reservation[];
 };
 
 export type {
@@ -177,4 +191,6 @@ export type {
     Props,
     Reservation,
     Service,
+    TableArrayNewReservation,
+    TableArrayExistingReservations,
 };

@@ -1,7 +1,7 @@
 import AdminNavbar from "../../components/adminPanel/AdminNavbar";
 import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import ReservationsView from "../../components/adminPanel/ReservationsView";
+import ReservationsView from "../../components/adminPanel/reservatinos/ReservationsView";
 import styles from "../../styles/admin/adminPage.module.css";
 import { useAdminPanelContext } from "../../hooks/AdminPanelContext";
 
@@ -23,7 +23,7 @@ const AdminPanel = () => {
                         <AdminNavbar />
                     </ErrorBoundary>
                 </div>
-                <div>
+                <div className={styles.contentContainer}>
                     <ErrorBoundary>{content()}</ErrorBoundary>
                 </div>
             </div>

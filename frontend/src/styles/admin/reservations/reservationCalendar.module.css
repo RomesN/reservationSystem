@@ -1,0 +1,215 @@
+.selectionToolbar {
+    width: 100%;
+    display: flex;
+    animation: fadeIn 1s;
+}
+
+.selectionToolbar .buttonPrevious {
+    width: 14.3%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.buttonPreviousDisabled {
+    width: 14.3%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColorBrighter);
+    font-weight: bolder;
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+.selectionToolbar .buttonPrevious:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+}
+
+.selectionToolbar .buttonNext {
+    width: 14.3%;
+    margin: 0 0 0 2px;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.selectionToolbar .buttonNext:hover {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+}
+
+.selectionToolbar .heading {
+    width: 71.4%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--fontBright);
+    background-color: var(--fontDark);
+    font-weight: bolder;
+    border-radius: 3px;
+}
+
+.selectionToolbar .heading > p {
+    margin: 0;
+    padding: 0;
+}
+
+.contentContaienr {
+    width: 70vw;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .selectionToolbar .heading > p {
+        font-size: 18px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 18px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .selectionToolbar .heading > p {
+        font-size: 13px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 13px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 13px;
+    }
+}
+
+.daySelectionTable {
+    width: 100%;
+    table-layout: fixed;
+    margin: 2px 0 0 0;
+    text-align: center;
+    vertical-align: center;
+    border-collapse: separate;
+    border-spacing: 1px;
+    animation: fadeIn 1s;
+}
+
+.daySelectionTable th {
+    background-color: var(--fontDark);
+    color: var(--fontBright);
+}
+
+.daySelectionTable th,
+td {
+    padding: 10px 0;
+    margin: 10px;
+    border-radius: 2px;
+}
+
+.daySelectionTable .selected {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+}
+
+.daySelectionTable .unavailable {
+    background-color: var(--fontDark);
+    color: var(--fontBright);
+}
+
+.daySelectionTable .available {
+    background-color: var(--secondaryColor);
+}
+
+/* tooltip */
+.daySelectionTable td {
+    position: relative;
+}
+
+.daySelectionTable .selected:hover::before,
+.daySelectionTable .selected:hover::after,
+.daySelectionTable .available:hover:before,
+.daySelectionTable .available:hover::after {
+    --scale: 1;
+}
+
+.daySelectionTable .selected::before,
+.daySelectionTable .selected::after,
+.daySelectionTable .available::before,
+.daySelectionTable .available::after {
+    --scale: 0;
+    --arrow-size: 20px;
+    --tooltip-color: var(--mainColorBrighter);
+
+    position: absolute;
+    top: -0.25em;
+    left: 50%;
+    transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+    transition: 150ms transform;
+    transform-origin: bottom center;
+    font-size: 0.6em;
+}
+
+.daySelectionTable .selected:hover::before,
+.daySelectionTable .available::before {
+    --translate-y: calc(-100% - var(--arrow-size));
+
+    content: attr(data-tooltip);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    text-align: center;
+    width: max-content;
+    max-width: 100%;
+    background: var(--tooltip-color);
+}
+
+.daySelectionTable .selected:hover::after,
+.daySelectionTable .available:hover::after {
+    --translate-y: calc(-1 * var(--arrow-size));
+
+    content: "";
+    border: var(--arrow-size) solid transparent;
+    border-top-color: var(--tooltip-color);
+    transform-origin: top center;
+}
+
+.daySelectionTable .available:hover,
+.selected:hover {
+    background-color: var(--tertiaryColor);
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 992px) {
+    .daySelectionTable {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .daySelectionTable {
+        font-size: 13px;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
