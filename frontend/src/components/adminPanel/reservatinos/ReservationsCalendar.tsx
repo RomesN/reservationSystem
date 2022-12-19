@@ -11,9 +11,14 @@ import styles from "../../../styles/admin/reservations/reservationCalendar.modul
 type ReservationsCalendarType = {
     setDayDetailReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
     setSelectedReservationsDay: React.Dispatch<React.SetStateAction<Date | null>>;
+    setIsDetailOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ReservationsCalendar = ({ setDayDetailReservations, setSelectedReservationsDay }: ReservationsCalendarType) => {
+const ReservationsCalendar = ({
+    setDayDetailReservations,
+    setSelectedReservationsDay,
+    setIsDetailOn,
+}: ReservationsCalendarType) => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
 
@@ -54,6 +59,7 @@ const ReservationsCalendar = ({ setDayDetailReservations, setSelectedReservation
     const handleClick = (day: number, reservations: Reservation[]) => {
         setSelectedReservationsDay(new Date(year, month - 1, day));
         setDayDetailReservations(reservations);
+        setIsDetailOn(true);
     };
 
     const generateTableBody = (tableArray: TableArrayExistingReservations[][]) => {

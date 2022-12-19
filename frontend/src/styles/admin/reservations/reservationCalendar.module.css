@@ -25,10 +25,17 @@
 }
 
 .selectionToolbar .buttonPrevious:hover {
-    background-color: var(--tertiaryColor);
     color: var(--fontDark);
     --bs-btn-active-color: var(--fontDark);
     --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
 }
 
 .selectionToolbar .buttonNext {
@@ -42,10 +49,17 @@
 }
 
 .selectionToolbar .buttonNext:hover {
-    background-color: var(--tertiaryColor);
     color: var(--fontDark);
     --bs-btn-active-color: var(--fontDark);
     --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
 }
 
 .selectionToolbar .heading {
@@ -64,12 +78,12 @@
     padding: 0;
 }
 
-.contentContaienr {
-    width: 70vw;
-}
-
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+    .contentContaienr {
+        width: 70vw;
+    }
+
     .selectionToolbar .heading > p {
         font-size: 18px;
     }
@@ -84,6 +98,10 @@
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 991px) {
+    .contentContaienr {
+        width: 90vw;
+    }
+
     .selectionToolbar .heading > p {
         font-size: 13px;
     }
@@ -105,6 +123,7 @@
     border-collapse: separate;
     border-spacing: 1px;
     animation: fadeIn 1s;
+    position: relative;
 }
 
 .daySelectionTable th {
@@ -117,11 +136,6 @@ td {
     padding: 10px 0;
     margin: 10px;
     border-radius: 2px;
-}
-
-.daySelectionTable .selected {
-    background-color: var(--tertiaryColor);
-    color: var(--fontDark);
 }
 
 .daySelectionTable .unavailable {
@@ -138,15 +152,11 @@ td {
     position: relative;
 }
 
-.daySelectionTable .selected:hover::before,
-.daySelectionTable .selected:hover::after,
 .daySelectionTable .available:hover:before,
 .daySelectionTable .available:hover::after {
     --scale: 1;
 }
 
-.daySelectionTable .selected::before,
-.daySelectionTable .selected::after,
 .daySelectionTable .available::before,
 .daySelectionTable .available::after {
     --scale: 0;
@@ -162,7 +172,6 @@ td {
     font-size: 0.6em;
 }
 
-.daySelectionTable .selected:hover::before,
 .daySelectionTable .available::before {
     --translate-y: calc(-100% - var(--arrow-size));
 
@@ -176,7 +185,6 @@ td {
     background: var(--tooltip-color);
 }
 
-.daySelectionTable .selected:hover::after,
 .daySelectionTable .available:hover::after {
     --translate-y: calc(-1 * var(--arrow-size));
 
@@ -186,10 +194,15 @@ td {
     transform-origin: top center;
 }
 
-.daySelectionTable .available:hover,
-.selected:hover {
-    background-color: var(--tertiaryColor);
+.daySelectionTable .available:hover {
     cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
 }
 
 @media only screen and (min-width: 992px) {
