@@ -34,10 +34,34 @@ class NotificationService {
 
         Have a nice day!`;
 
-        const htmlText = `<p>Hello!<br><br>Your reservation for ${seviceName} has been successfully deleted.<br><br>Have a nice day!</p>`;
+        const htmlText = `<p>Hello!<br><br>Your reservation for ${seviceName} has been successfully canceled.<br><br>Have a nice day!</p>`;
 
         const mail = {
-            from: `${process.env.EMAIL_HOST} <${process.env.EMAIL_ADDRESS}>`,
+            from: `${process.env.APP_NAME} <${process.env.EMAIL_ADDRESS}>`,
+            to: (await reservation.getCustomer()).email,
+            subject: subject,
+            text: text,
+            html: htmlText,
+        };
+
+        return mail;
+    }
+
+    async createAdminCancelReservationEmail(reservation) {
+        const seviceName = (await reservation.getService()).name;
+        const subject = `The reservation for ${seviceName} was canceled`;
+
+        const text = `Hello!
+
+
+        We are very sorry, but due to unforeseen circumstances, we had to cancel your reservation for ${seviceName}.
+
+        Please create a new reervation for different date or contact us via phone.`;
+
+        const htmlText = `<p>Hello!<br><br> We are very sorry, but due to unforeseen circumstances, we had to cancel your reservation for ${seviceName}.<br><br>Please create a new reervation for different date or contact us via phone.</p>`;
+
+        const mail = {
+            from: `${process.env.APP_NAME} <${process.env.EMAIL_ADDRESS}>`,
             to: (await reservation.getCustomer()).email,
             subject: subject,
             text: text,
@@ -52,6 +76,7 @@ class NotificationService {
         const subject = `New reservation for ${seviceName}`;
 
         const text = `Hello!
+
         Thank you for your reservation for ${seviceName}.
 
         Your unique reservation token is: ${reservation.reservationToken}
@@ -63,7 +88,7 @@ class NotificationService {
         }<br><br>We will be happy to see you on ${format(reservation.date, "dd.MM.yyyy HH:mm")}</p>`;
 
         const mail = {
-            from: `${process.env.EMAIL_HOST} <${process.env.EMAIL_ADDRESS}>`,
+            from: `${process.env.APP_NAME} <${process.env.EMAIL_ADDRESS}>`,
             to: (await reservation.getCustomer()).email,
             subject: subject,
             text: text,
@@ -94,7 +119,7 @@ class NotificationService {
         const htmlText = `<p>${text}<p>`;
 
         const mail = {
-            from: `${process.env.EMAIL_HOST} <${process.env.EMAIL_ADDRESS}>`,
+            from: `${process.env.APP_NAME} <${process.env.EMAIL_ADDRESS}>`,
             to: reservation.getCustomer().email,
             subject: subject,
             text: text,

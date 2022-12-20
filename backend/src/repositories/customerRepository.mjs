@@ -9,7 +9,7 @@ class CustomerRepository {
     }
 
     async getCustomerByReservationToken(token) {
-        return await this.Reservationmodels.Customer.findOne({
+        return await this.models.Customer.findOne({
             include: [
                 {
                     model: this.models.Reservation,

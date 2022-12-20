@@ -80,10 +80,6 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .contentContaienr {
-        width: 70vw;
-    }
-
     .selectionToolbar .heading > p {
         font-size: 18px;
     }
@@ -98,10 +94,6 @@
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 991px) {
-    .contentContaienr {
-        width: 90vw;
-    }
-
     .selectionToolbar .heading > p {
         font-size: 13px;
     }

@@ -1,14 +1,14 @@
-import { useNewReservationContext } from "../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../hooks/useNewReservationContext";
 import DaySelection from "../../components/newReservation/daySelection/DaySelection";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import NewBookingToolbar from "../../components/newReservation/toolbar/NewReservationToolbar";
+import NewReservationToolbar from "../../components/newReservation/toolbar/NewReservationToolbar";
 import { NewReservationViewEnum } from "../../utils/enums/newReservationViewEnum";
 import ReservationSubmission from "../../components/newReservation/submission/ReservationSubmission";
 import ServiceSelection from "../../components/newReservation/serviceSelection/ServiceSelection";
 import styles from "../../styles/user/newReservation/newReservation.module.css";
 import TimeSelection from "../../components/newReservation/timeSelection/TimeSelection";
 
-const NewBooking = () => {
+const NewReservation = () => {
     const { view } = useNewReservationContext();
 
     const content = () => {
@@ -26,10 +26,10 @@ const NewBooking = () => {
 
     return (
         <>
-            <div className={styles.newBookingContainer}>
+            <div className={styles.NewReservationContainer}>
                 <div>
                     <ErrorBoundary>
-                        <NewBookingToolbar />
+                        <NewReservationToolbar />
                     </ErrorBoundary>
                 </div>
                 <div>
@@ -43,4 +43,4 @@ const NewBooking = () => {
     );
 };
 
-export default NewBooking;
+export default NewReservation;

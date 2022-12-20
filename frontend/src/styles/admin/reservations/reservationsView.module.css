@@ -1,0 +1,195 @@
+.contentContainer {
+    animation: fadeIn 1s;
+}
+
+.listContainer {
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.hiddenBox,
+.visibleTransitBox,
+.visibleBox {
+    position: relative;
+    top: 0;
+    z-index: 0;
+}
+
+.hiddenBox {
+    opacity: 0;
+    -webkit-animation: fadeOut 0.5s;
+    animation: fadeOut 0.5s;
+}
+
+.visibleTransitBox {
+    opacity: 0.5;
+    -webkit-animation: fadeOutTransit 0.5s;
+    animation: fadeOutTransit 0.5s;
+}
+
+.visibleBox {
+    opacity: 1;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .contentContainer {
+        width: 70vw;
+        font-size: 18px;
+    }
+    .dayToolbar .buttonBack {
+        width: 14.3%;
+    }
+    .dayToolbar .heading {
+        width: calc(66.4% - 4px);
+    }
+    .dayToolbar .cancelAll {
+        width: 19.3%;
+    }
+
+    .dayToolbar {
+        width: 70vw;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 991px) {
+    .contentContainer {
+        width: 90vw;
+        font-size: 13px;
+    }
+    .dayToolbar .buttonBack {
+        width: 10%;
+    }
+    .dayToolbar .heading {
+        width: calc(65% - 4px);
+    }
+    .dayToolbar .cancelAll {
+        width: 25%;
+    }
+
+    .dayToolbar {
+        width: 90vw;
+    }
+}
+
+.dayToolbar {
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 3px;
+    z-index: 1;
+}
+
+.dayToolbar .buttonBack {
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.dayToolbar .buttonBack:hover {
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
+}
+
+.dayToolbar .heading {
+    display: flex;
+    justify-content: center;
+    color: var(--fontBright);
+    background-color: var(--fontDark);
+    font-weight: bolder;
+    border-radius: 3px;
+    align-items: center;
+}
+
+.dayToolbar p {
+    margin: 0;
+}
+
+.dayToolbar .cancelAll {
+    color: var(--fontBright);
+    box-sizing: border-box;
+    margin: 0 0 0 2px;
+    border: var(--errorColor);
+    background-color: var(--errorColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.dayToolbar .cancelAll:hover {
+    color: var(--fontDark);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 0;
+    }
+}
+@keyframes fadeOut {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes fadeOutTransit {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
+@keyframes fadeOutTransit {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}

@@ -1,11 +1,13 @@
 import "dotenv";
 import { hoursToMilliseconds } from "date-fns";
-import { AdminService, ReservationsService } from "../services/index.mjs";
+import { AdminService, CustomerService, NotificationService, ReservationsService } from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
 class AdminController {
-    constructor(AdminService, ReservationsService) {
+    constructor(AdminService, CustomerService, NotificationService, ReservationsService) {
         this.AdminService = AdminService;
+        this.CustomerService = CustomerService;
+        this.NotificationService = NotificationService;
         this.ReservationsService = ReservationsService;
     }
 
@@ -43,6 +45,24 @@ class AdminController {
         }
     }
 
+    async deleteReservation(req, res, next) {
+        const token = req.params.token;
+
+        try {
+            const customer = await this.CustomerService.getCustomerByReservationToken(token);
+            const reservationToCancel = await this.ReservationsService.getActiveReservationByToken(token);
+            const cancelEmail = await this.NotificationService.createAdminCancelReservationEmail(reservationToCancel);
+
+            await this.ReservationsService.deleteFinalReservation(token);
+            await this.CustomerService.rescheduleCustomerDeletition(customer);
+            await this.NotificationService.sendEmail(cancelEmail);
+
+            return res.json(okJsonResponse(`Final reservation was deleted.`));
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async logout(req, res, next) {
         try {
             res.clearCookie("accessToken");
@@ -53,4 +73,4 @@ class AdminController {
     }
 }
 
-export default new AdminController(AdminService, ReservationsService);
+export default new AdminController(AdminService, CustomerService, NotificationService, ReservationsService);

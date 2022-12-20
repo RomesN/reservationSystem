@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { faChevronLeft, faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { deleteTemporaryReservation } from "../../../api/reservationApi";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import styles from "../../../styles/user/newReservation/toolbar/newReservationToolbar.module.css";
 
-const NewBookingToolbar = () => {
+const NewReservationToolbar = () => {
     const { view, temporaryReservation, setView, setTemporaryReservation } = useNewReservationContext();
 
     const handleClickBack = () => {
@@ -84,4 +84,4 @@ const NewBookingToolbar = () => {
     );
 };
 
-export default NewBookingToolbar;
+export default NewReservationToolbar;

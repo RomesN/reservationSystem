@@ -1,12 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
 import AdminPanel from "./pages/admin/AdminPanel";
-import { AdminPanelContextProvider } from "./hooks/AdminPanelContext";
+import { AdminPanelContextProvider } from "./hooks/useAdminPanelContext";
 import CancelReservation from "./pages/user/CancelReservation";
 import LandingPage from "./pages/user/LandingPage";
 import Login from "./pages/admin/Login";
-import NewBooking from "./pages/user/NewReservation";
-import { NewReservationDataProvider } from "./hooks/NewReservationContext";
+import NewReservation from "./pages/user/NewReservation";
+import { NewReservationDataProvider } from "./hooks/useNewReservationContext";
 import "./styles/general/index.css";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
                 path="/new-booking"
                 element={
                     <NewReservationDataProvider>
-                        <NewBooking />
+                        <NewReservation />
                     </NewReservationDataProvider>
                 }
             />

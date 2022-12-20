@@ -9,7 +9,7 @@ import Loading from "../../Loading";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
 import styles from "../../../styles/user/newReservation/daySelection/daySelection.module.css";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 
 const DaySelection = () => {
     const [year, setYear] = useState(new Date().getFullYear());

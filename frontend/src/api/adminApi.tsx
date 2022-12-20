@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { QueryFunctionContext, QueryKey } from "react-query";
-import { OkNullDataReservationResponse, OkReservationsListResponse } from "../shared/types";
+import { ErrorResponse, OkNullDataReservationResponse, OkReservationsListResponse } from "../shared/types";
 
 export const adminApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
@@ -30,4 +30,13 @@ export const getMonthReservations = async ({ queryKey }: QueryFunctionContext<Qu
     const [, params] = queryKey as [string, [number | string, number | string]];
     const response = await adminApi.get<OkReservationsListResponse>(`api/admin/reservations/${params[0]}/${params[1]}`);
     return response.data;
+};
+
+export const deleteFinalReservationByAdmin = async (reservationToken: string) => {
+    return await adminApi
+        .delete<OkNullDataReservationResponse>(`api/admin/reservations/${reservationToken}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
 };

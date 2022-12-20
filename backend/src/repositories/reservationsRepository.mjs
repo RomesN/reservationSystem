@@ -37,7 +37,10 @@ class ReservationsRepository {
             reservationStatus: { [this.Op.or]: [enums.status.ACTIVE] },
         };
 
-        return await this.models.Reservation.findAll({ include: { model: this.models.Customer }, where });
+        return await this.models.Reservation.findAll({
+            include: [{ model: this.models.Customer }, { model: this.models.Service }],
+            where,
+        });
     }
 
     async getReservationByToken(token) {

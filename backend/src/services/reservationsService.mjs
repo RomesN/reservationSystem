@@ -232,9 +232,11 @@ class ReservationsService {
 
         let k = 0;
         if (!Number.isNaN(closestMinutesRestriction)) {
-            const soonestPossible = add(new Date(), { minutes: closestMinutesRestriction });
+            const soonestPossible = roundToNearestMinutes(add(new Date(), { minutes: closestMinutesRestriction }), {
+                nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15"),
+            });
             while (k < result.length) {
-                if (isBefore(result[k].start, soonestPossible)) {
+                if (isBefore(result[k].start, soonestPossible) && isAfter(result[k].end, soonestPossible)) {
                     const testingInterval = { start: soonestPossible, end: result[k].end };
                     if (
                         isAfter(result[k].end, soonestPossible) &&

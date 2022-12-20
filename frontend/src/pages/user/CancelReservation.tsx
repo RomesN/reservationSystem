@@ -21,60 +21,91 @@ const CancelReservation = () => {
         if (!ref.current || ref.current.value.length === 0) {
             setErrorMessge("the field is required");
         } else {
-            const result = await deleteFinalReservation(ref.current.value);
-            console.log(result);
-            if (result.status === "OK") {
-                Swal.fire({
-                    icon: "success",
-                    text: `Reservation was canceled.`,
-                    iconColor: "#6d9886",
-                    customClass: {
-                        popup: stylesSweetAlert.bookingCollision,
-                        confirmButton: stylesSweetAlert.bookingCollisionButton,
-                        title: stylesSweetAlert.bookingCollisionTitle,
-                        icon: stylesSweetAlert.bookingCollisionIcon,
-                        htmlContainer: stylesSweetAlert.bookingCollisionContainer,
-                    },
-                }).then(() => {
-                    navigate("/");
-                });
-            } else if (axios.isAxiosError(result) && result.response?.status === 403) {
-                Swal.fire({
-                    icon: "error",
-                    text: `Reservation cannot be canceled online less than 24 hours before. Please call the service provider.`,
-                    customClass: {
-                        popup: stylesSweetAlert.bookingCollision,
-                        confirmButton: stylesSweetAlert.bookingCollisionButton,
-                        title: stylesSweetAlert.bookingCollisionTitle,
-                        icon: stylesSweetAlert.bookingCollisionIcon,
-                        htmlContainer: stylesSweetAlert.bookingCollisionContainer,
-                    },
-                }).then(() => {
-                    navigate("/");
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    text: `Wrong token provided.`,
-                    customClass: {
-                        popup: stylesSweetAlert.bookingCollision,
-                        confirmButton: stylesSweetAlert.bookingCollisionButton,
-                        title: stylesSweetAlert.bookingCollisionTitle,
-                        icon: stylesSweetAlert.bookingCollisionIcon,
-                        htmlContainer: stylesSweetAlert.bookingCollisionContainer,
-                    },
-                });
-            }
+            Swal.fire({
+                icon: "info",
+                title: "The reservation will be canceled. Are you sure that you want to continue?",
+                showDenyButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `No`,
+                customClass: {
+                    popup: stylesSweetAlert.popup,
+                    confirmButton: stylesSweetAlert.primaryButton,
+                    title: stylesSweetAlert.title,
+                    icon: stylesSweetAlert.infoIcon,
+                    denyButton: stylesSweetAlert.denyButton,
+                    actions: stylesSweetAlert.actionsContainer,
+                },
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const result = await deleteFinalReservation(ref?.current?.value || "");
+                    if (result.status === "OK") {
+                        Swal.fire({
+                            icon: "success",
+                            text: `Reservation was canceled.`,
+                            iconColor: "#6d9886",
+                            customClass: {
+                                popup: stylesSweetAlert.popup,
+                                confirmButton: stylesSweetAlert.primaryButton,
+                                title: stylesSweetAlert.title,
+                                icon: stylesSweetAlert.infoIcon,
+                                actions: stylesSweetAlert.actionsContainer,
+                            },
+                        }).then(() => {
+                            navigate("/");
+                        });
+                    } else if (axios.isAxiosError(result) && result.response?.status === 403) {
+                        Swal.fire({
+                            icon: "error",
+                            text: `Reservation cannot be canceled online less than 24 hours before. Please call the service provider.`,
+                            iconColor: "#6d9886",
+                            customClass: {
+                                popup: stylesSweetAlert.popup,
+                                confirmButton: stylesSweetAlert.primaryButton,
+                                title: stylesSweetAlert.title,
+                                icon: stylesSweetAlert.errorIcon,
+                                actions: stylesSweetAlert.actionsContainer,
+                            },
+                        }).then(() => {
+                            navigate("/");
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            text: `Wrong token provided.`,
+                            iconColor: "#6d9886",
+                            customClass: {
+                                popup: stylesSweetAlert.popup,
+                                confirmButton: stylesSweetAlert.primaryButton,
+                                title: stylesSweetAlert.title,
+                                icon: stylesSweetAlert.errorIcon,
+                                actions: stylesSweetAlert.actionsContainer,
+                            },
+                        });
+                    }
+                } else if (result.isDenied) {
+                    Swal.fire({
+                        icon: "info",
+                        text: `The reservation was not canceled.`,
+                        customClass: {
+                            popup: stylesSweetAlert.popup,
+                            confirmButton: stylesSweetAlert.primaryButton,
+                            title: stylesSweetAlert.title,
+                            icon: stylesSweetAlert.infoIcon,
+                            actions: stylesSweetAlert.actionsContainer,
+                        },
+                    });
+                }
+            });
         }
     };
 
     return (
         <ErrorBoundary>
             <div className={styles.cancelReservationContainer}>
-                <div className={`${styles.cancelItemContainer} ${styles.cancelTextContainer}`}>
+                <div className={`${styles.cancelItemContainerText} ${styles.cancelTextContainer}`}>
                     <p className={styles.cancelText}>Please enter the reservation token received in the email</p>
                 </div>
-                <div className={styles.cancelItemContainer}>
+                <div className={styles.cancelItemContainerInput}>
                     <input
                         className={styles.cancelInput}
                         name="tokenInput"
@@ -83,7 +114,7 @@ const CancelReservation = () => {
                         ref={ref}
                     ></input>
                 </div>
-                <div className={styles.cancelItemContainer}>
+                <div className={`${styles.cancelItemContainerButton}`}>
                     <button className={styles.cancelButton} onClick={handleSubmit}>
                         Cancel booking
                     </button>

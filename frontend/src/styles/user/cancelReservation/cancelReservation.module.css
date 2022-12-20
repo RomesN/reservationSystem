@@ -11,36 +11,58 @@
 
 /* Large displays */
 @media only screen and (min-width: 992px) {
+    .cancelItemContainerText,
+    .cancelItemContainerInput,
+    .cancelItemContainerButton {
+        font-size: 25px;
+    }
+
     .cancelButton,
     .cancelInput,
     .cancelText {
         width: 15em;
         height: 3em;
-        font-size: 25px;
     }
 }
 
 /* smaller displays*/
 @media screen and (max-width: 992px) {
+    .cancelItemContainerText,
+    .cancelItemContainerInput,
+    .cancelItemContainerButton {
+        font-size: 20px;
+    }
+
     .cancelButton,
     .cancelInput,
     .cancelText {
-        font-size: 20px;
         width: 15em;
         height: 3em;
     }
 }
 
-.cancelTextContainer {
+.cancelItemContainerText,
+.cancelItemContainerInput,
+.cancelItemContainerButton {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+}
+
+.cancelItemContainerText {
     color: var(--secondaryDarker);
     text-align: center;
     font-weight: 500;
 }
 
-.cancelItemContainer {
-    display: flex;
-    width: 100vw;
-    justify-content: center;
+.cancelItemContainerButton {
+    position: relative;
+}
+
+.errorMessageContainer {
+    position: absolute;
+    color: var(--errorColor);
+    top: 3.7em;
 }
 
 .cancelButton {
@@ -68,13 +90,6 @@
 
 .cancelInput:focus {
     outline: 1px solid var(--secondaryDarker);
-}
-
-.errorMessageContainer {
-    position: absolute;
-    color: var(--errorColor);
-    text-align: center;
-    top: 530px;
 }
 
 @keyframes fadeIn {

@@ -1,49 +1,82 @@
-.bookingCollision {
-    background-color: var(--mainColor);
-    color: var(--fontBright);
+.popup {
+    background-color: var(--mainColor) !important;
+    color: var(--fontBright) !important;
+    padding: 10px;
 }
 
-.bookingCollision {
-    background-color: var(--mainColor);
-    color: var(--fontBright);
-}
-
-.bookingCollisionLoader {
+.loader {
     background-color: var(--secondaryColor) !important;
 }
 
-.bookingCollisionButton {
+.primaryButton {
     background-color: var(--secondaryColor) !important;
     color: var(--fontBright);
 }
 
-.bookingCollisionButton:focus {
+.denyButton {
+    background-color: var(--errorColor) !important;
+    color: var(--fontBright);
+}
+
+.denyButton:focus {
     box-shadow: 0 0 5px 3px var(--tertiaryColor) !important;
+    outline: var(--tertiaryColor) !important;
 }
 
-.bookingCollisionButton:hover {
+.primaryButton:focus {
+    box-shadow: 0 0 5px 3px var(--tertiaryColor) !important;
+    outline: var(--tertiaryColor) !important;
+}
+
+.primaryButton:hover {
     background-color: var(--tertiaryColor) !important;
     color: var(--fontDark);
 }
 
+.denyButton:hover {
+    background-color: var(--tertiaryColor) !important;
+    color: var(--fontDark);
+}
+
+.actionsContainer {
+    display: flex !important;
+    justify-content: space-around !important;
+    margin: 2em 0 2em 0 !important;
+}
+
+.infoIcon {
+    border-color: var(--tertiaryColor) !important;
+    color: var(--tertiaryColor) !important;
+}
+
+.successIcon {
+    border-color: var(--secondaryColor) !important;
+    color: var(--secondaryColor) !important;
+}
+
+.errorIcon {
+    border-color: var(--secondaryColor) !important;
+    color: var(--secondaryColor) !important;
+}
+
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .bookingCollisionContainer {
+    .popupHtmlContainer {
         font-size: 18px;
     }
 
-    .bookingCollisionTitle {
+    .title {
         font-size: 20px;
     }
 }
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 992px) {
-    .bookingCollisionContainer {
+    .popupHtmlContainer {
         font-size: 13px;
     }
 
-    .bookingCollisionTitle {
+    .title {
         font-size: 15px;
     }
 }

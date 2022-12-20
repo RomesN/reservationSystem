@@ -1,6 +1,6 @@
 import { Service } from "../../../shared/types";
 import styles from "../../../styles/user/newReservation/serviceSelection/serviceBox.module.css";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 
 type ServiceBoxProps = {

@@ -5,7 +5,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { createFinalReservation } from "../../../api/reservationApi";
 import styles from "../../../styles/user/newReservation/submission/reservationForm.module.css";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -129,11 +129,11 @@ const ReservationForm = () => {
                     text: `We will be happy to see you on ${bookDateToShow}.`,
                     iconColor: "#6d9886",
                     customClass: {
-                        popup: stylesSweetAlert.bookingCollision,
-                        confirmButton: stylesSweetAlert.bookingCollisionButton,
-                        title: stylesSweetAlert.bookingCollisionTitle,
-                        icon: stylesSweetAlert.bookingCollisionIcon,
-                        htmlContainer: stylesSweetAlert.bookingCollisionContainer,
+                        popup: stylesSweetAlert.popup,
+                        confirmButton: stylesSweetAlert.primaryButton,
+                        title: stylesSweetAlert.title,
+                        icon: stylesSweetAlert.successIcon,
+                        actions: stylesSweetAlert.actionsContainer,
                     },
                 }).then(() => {
                     navigate("/");

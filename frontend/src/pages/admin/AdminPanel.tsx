@@ -1,9 +1,9 @@
 import AdminNavbar from "../../components/adminPanel/AdminNavbar";
 import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import ReservationsView from "../../components/adminPanel/reservatinos/ReservationsView";
+import ReservationsView from "../../components/adminPanel/reservations/ReservationsView";
 import styles from "../../styles/admin/adminPage.module.css";
-import { useAdminPanelContext } from "../../hooks/AdminPanelContext";
+import { useAdminPanelContext } from "../../hooks/useAdminPanelContext";
 
 const AdminPanel = () => {
     const { adminView } = useAdminPanelContext();

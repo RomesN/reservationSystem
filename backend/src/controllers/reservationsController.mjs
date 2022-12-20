@@ -142,13 +142,14 @@ class ReservationsController {
         try {
             const customer = await this.CustomerService.getCustomerByReservationToken(reservationToken);
             const reservationToCancel = await this.ReservationsService.getActiveReservationByToken(reservationToken);
+
             const cancelEmail = await this.NotificationService.createCancelReservationEmail(reservationToCancel);
 
             await this.ReservationsService.deleteFinalReservation(reservationToken);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
             await this.NotificationService.sendEmail(cancelEmail);
 
-            return res.json(okJsonResponse(`Temporary reservation was deleted.`));
+            return res.json(okJsonResponse(`Final reservation was deleted.`));
         } catch (error) {
             next(error);
         }

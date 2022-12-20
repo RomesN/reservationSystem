@@ -5,7 +5,7 @@ import { createTemporaryReservation, isDateAvailable } from "../../../api/reserv
 import Loading from "../../Loading";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import TimeBox from "./TimeBox";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import styles from "../../../styles/user/newReservation/timeSelection/timeSelection.module.css";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 
@@ -20,7 +20,7 @@ const TimeSelection = () => {
         setView,
     } = useNewReservationContext();
 
-    const checkAndMakeTemporaryBooking = useCallback(
+    const checkAndMakeTemporaryReservation = useCallback(
         async (date: Date, serviceId: number) => {
             const isFree = await isDateAvailable(date.toISOString(), serviceId);
             if (isFree && !axios.isAxiosError(isFree) && isFree.data.isAvailable) {
@@ -38,11 +38,11 @@ const TimeSelection = () => {
                 text: "Improbable as it is, but somebody booked the same time slot just few moments ago. Please pick another date/time or try your luck later.",
                 iconColor: "#6d9886",
                 customClass: {
-                    popup: stylesSweetAlert.bookingCollision,
-                    confirmButton: stylesSweetAlert.bookingCollisionButton,
-                    title: stylesSweetAlert.bookingCollisionTitle,
-                    icon: stylesSweetAlert.bookingCollisionIcon,
-                    htmlContainer: stylesSweetAlert.bookingCollisionContainer,
+                    popup: stylesSweetAlert.popup,
+                    confirmButton: stylesSweetAlert.primaryButton,
+                    title: stylesSweetAlert.title,
+                    icon: stylesSweetAlert.errorIcon,
+                    actions: stylesSweetAlert.actionsContainer,
                 },
             }).then(() => {
                 setBookedDate(null);
@@ -55,9 +55,9 @@ const TimeSelection = () => {
 
     useEffect(() => {
         if (bookedDate?.getHours() !== 0 && bookedService && bookedDate) {
-            checkAndMakeTemporaryBooking(bookedDate, bookedService.id);
+            checkAndMakeTemporaryReservation(bookedDate, bookedService.id);
         }
-    }, [bookedDate, bookedService, checkAndMakeTemporaryBooking]);
+    }, [bookedDate, bookedService, checkAndMakeTemporaryReservation]);
 
     if (availableIntervals) {
         return (

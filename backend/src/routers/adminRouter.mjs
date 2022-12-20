@@ -7,4 +7,8 @@ router.get("/logout", AdminController.logout.bind(AdminController));
 
 router.get("/reservations/:year/:month", AdminController.getMonthReservations.bind(AdminController));
 
+router.delete("/reservations/:token", AdminController.deleteReservation.bind(AdminController));
+
+// router.delete("/reservations/:year/:month/:day", AdminController.cancelAllReservations.bind(AdminController));
+
 export default router;

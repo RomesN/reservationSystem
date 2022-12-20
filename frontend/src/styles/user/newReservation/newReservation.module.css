@@ -1,4 +1,4 @@
-.newBookingContainer {
+.NewReservationContainer {
     display: block;
 }
 
@@ -9,7 +9,7 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .newBookingContainer {
+    .NewReservationContainer {
         width: 70%;
         margin-left: auto;
         margin-right: auto;
@@ -18,7 +18,7 @@
 
 /* SMALLER DISPLAYS */
 @media screen and (max-width: 992px) {
-    .newBookingContainer {
+    .NewReservationContainer {
         margin-left: 5px;
         margin-right: 5px;
     }

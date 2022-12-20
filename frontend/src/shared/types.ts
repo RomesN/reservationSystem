@@ -1,5 +1,17 @@
 import { ReactNode } from "react";
 
+type Customer = {
+    id: number;
+    createdAt: string;
+    customerStatus: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    scheduledJobId: null | string;
+    telephoneNumber: string;
+    updatedAt: string;
+};
+
 type ErrorResponse = {
     status: number | string;
     message: string;
@@ -138,6 +150,10 @@ type OkServiceResponse = {
     data: Service[];
 };
 
+type Position = { x: number; y: number };
+
+type Positions = { prevPos: Position; currPos: Position };
+
 type Props = {
     children?: ReactNode;
 };
@@ -147,10 +163,12 @@ type Reservation = {
     date: string;
     detail: string;
     serviceId: number;
+    service: Service;
     reservationStatus: string;
     updatedAt: string;
     createdAt: string;
     customerId: number | null;
+    customer: Customer;
     validityEnd: string;
     reservationToken: string;
 };
@@ -177,6 +195,8 @@ type TableArrayExistingReservations = {
     reservations: Reservation[];
 };
 
+type TargetProps = { element?: React.MutableRefObject<HTMLElement | null> | null; useWindow?: boolean };
+
 export type {
     ErrorResponse,
     IntervalString,
@@ -188,9 +208,12 @@ export type {
     OkReservationsListResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
+    Position,
+    Positions,
     Props,
     Reservation,
     Service,
     TableArrayNewReservation,
     TableArrayExistingReservations,
+    TargetProps,
 };

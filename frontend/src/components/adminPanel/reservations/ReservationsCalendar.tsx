@@ -114,7 +114,7 @@ const ReservationsCalendar = ({
 
     if (reservationsInfo.data) {
         return (
-            <div className={styles.contentContaienr}>
+            <>
                 <div className={styles.selectionToolbar}>
                     <button
                         className={
@@ -148,7 +148,7 @@ const ReservationsCalendar = ({
                     </thead>
                     <tbody>{generateTableBody(generateTableArray(reservationsInfo.data))}</tbody>
                 </table>
-            </div>
+            </>
         );
     }
 

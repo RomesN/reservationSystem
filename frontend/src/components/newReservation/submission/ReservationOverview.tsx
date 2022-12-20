@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBusinessTime, faClockFour } from "@fortawesome/free-solid-svg-icons";
 import Timer from "./Timer";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import styles from "../../../styles/user/newReservation/submission/reservationOverview.module.css";
 
 const ReservationOverview = () => {

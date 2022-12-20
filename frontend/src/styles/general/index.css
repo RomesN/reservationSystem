@@ -22,7 +22,7 @@
 }
 
 body::before {
-    position: absolute;
+    position: fixed;
     content: "";
     filter: blur(8px);
     background-image: url("../../assets/images/pexels-monstera-6621367.jpg");
@@ -30,8 +30,10 @@ body::before {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    width: 100vw;
-    height: 100vh;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     opacity: 1;
     z-index: -1;
 }

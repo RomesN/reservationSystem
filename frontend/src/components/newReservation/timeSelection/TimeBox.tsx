@@ -1,7 +1,7 @@
 import { faCalendar, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format, Interval } from "date-fns";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import styles from "../../../styles/user/newReservation/timeSelection/timeBox.module.css";
 
 type TimeBoxProps = {

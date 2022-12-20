@@ -3,7 +3,7 @@ import { differenceInMilliseconds, parseISO } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useNewReservationContext } from "../../../hooks/NewReservationContext";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
 import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 import styles from "../../../styles/user/newReservation/submission/timer.module.css";
@@ -34,11 +34,11 @@ const ReservationSubmission = () => {
                 text: "Your time for confirming the reservation elapsed.",
                 iconColor: "#6d9886",
                 customClass: {
-                    popup: stylesSweetAlert.bookingCollision,
-                    confirmButton: stylesSweetAlert.bookingCollisionButton,
-                    title: stylesSweetAlert.bookingCollisionTitle,
-                    icon: stylesSweetAlert.bookingCollisionIcon,
-                    htmlContainer: stylesSweetAlert.bookingCollisionContainer,
+                    popup: stylesSweetAlert.popup,
+                    confirmButton: stylesSweetAlert.primaryButton,
+                    title: stylesSweetAlert.title,
+                    icon: stylesSweetAlert.errorIcon,
+                    actions: stylesSweetAlert.actionsContainer,
                 },
             }).then(() => {
                 setBookedDate(() => null);
