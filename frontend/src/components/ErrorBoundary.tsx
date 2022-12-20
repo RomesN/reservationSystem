@@ -2,7 +2,7 @@ import { Props } from "../shared/types";
 import React, { ErrorInfo } from "react";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "../styles/errorBoundary.module.css";
+import styles from "../styles/general/errorBoundary.module.css";
 
 type State = {
     hasError: boolean;

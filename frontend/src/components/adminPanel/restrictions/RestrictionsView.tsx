@@ -16,9 +16,21 @@ const RestrictionsView = () => {
     const getContent = (restrictionView: string) => {
         switch (restrictionView) {
             case "businessHours":
-                return <HoursSelection dataGetter={getAllBusinesshours} dataUpdater={updateBusinessHours} />;
+                return (
+                    <HoursSelection
+                        dataGetter={getAllBusinesshours}
+                        dataUpdater={updateBusinessHours}
+                        view={restrictionView}
+                    />
+                );
             case "regularBreaks":
-                return <HoursSelection dataGetter={getAllBusinesshours} dataUpdater={updateBusinessHours} />;
+                return (
+                    <HoursSelection
+                        dataGetter={getAllBusinesshours}
+                        dataUpdater={updateBusinessHours}
+                        view={restrictionView}
+                    />
+                );
             case "businessClosed":
                 return <></>;
             case "intervalsClosed":

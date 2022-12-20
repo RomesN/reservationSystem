@@ -6,9 +6,10 @@ type GeneralResctrictionBoxType = {
     restriction: IntervalGeneralRestriction;
     index: number;
     setter: React.Dispatch<React.SetStateAction<IntervalGeneralRestriction[]>>;
+    clearLabel: string;
 };
 
-const GeneralResctrictionBox = ({ restriction, index, setter }: GeneralResctrictionBoxType) => {
+const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: GeneralResctrictionBoxType) => {
     const handleChangeStart = (value: TimePickerValue) => {
         setter((prevValue) => {
             const previousArray = [...prevValue];
@@ -55,6 +56,7 @@ const GeneralResctrictionBox = ({ restriction, index, setter }: GeneralResctrict
                     onChange={handleChangeStart}
                     format="hh:mm"
                     clearIcon={null}
+                    className={styles.timePicker}
                 ></TimePicker>
             </div>
             <div className={styles.to}>
@@ -64,15 +66,16 @@ const GeneralResctrictionBox = ({ restriction, index, setter }: GeneralResctrict
                     value={restriction.endTime}
                     onChange={(value) => handleChangeEnd(value)}
                     clearIcon={null}
+                    className={styles.timePicker}
                 ></TimePicker>
             </div>
-            <div className={styles.closedCheckInput}>
+            <div className={styles.checkContainer}>
                 <input
                     type="checkbox"
                     checked={!restriction.endTime && !restriction.startTime}
                     onChange={handleChangeClosed}
                 />
-                <label> Closed</label>
+                <label> {`${clearLabel}`}</label>
             </div>
         </div>
     );

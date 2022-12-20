@@ -10,7 +10,7 @@ import {
 } from "../../../shared/types";
 import GeneralResctrictionBox from "./GeneralResctrictionBox";
 import styles from "../../../styles/admin/restrictions/hoursSelection.module.css";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 
 type HoursSelectionProps = {
     dataGetter: (
@@ -20,9 +20,10 @@ type HoursSelectionProps = {
     dataUpdater: (
         timesArray: IntervalGeneralRestriction[]
     ) => Promise<OkNullDataReservationResponse | AxiosError<ErrorResponse, any>>;
+    view: string;
 };
 
-const HoursSelection = ({ dataGetter, dataUpdater }: HoursSelectionProps) => {
+const HoursSelection = ({ dataGetter, dataUpdater, view }: HoursSelectionProps) => {
     const [data, setData] = useState<Restriction[] | null>(null);
     const [isError, setIsError] = useState<boolean | null>(null);
     const [timesArray, setTimesArray] = useState<IntervalGeneralRestriction[]>([]);
@@ -83,9 +84,17 @@ const HoursSelection = ({ dataGetter, dataUpdater }: HoursSelectionProps) => {
             <>
                 <div className={styles.mainContainer}>
                     {timesArray.map((restriction, i) => (
-                        <GeneralResctrictionBox key={i} restriction={restriction} index={i} setter={setTimesArray} />
+                        <GeneralResctrictionBox
+                            key={i}
+                            restriction={restriction}
+                            index={i}
+                            setter={setTimesArray}
+                            clearLabel={view === "businessHours" ? "Closed" : "None"}
+                        />
                     ))}
-                    <button onClick={() => handleSubmit(timesArray)}>Save changes</button>
+                    <button onClick={() => handleSubmit(timesArray)} className={styles.saveButton}>
+                        Save changes
+                    </button>
                 </div>
             </>
         );

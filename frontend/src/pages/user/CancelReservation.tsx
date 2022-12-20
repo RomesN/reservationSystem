@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { deleteFinalReservation } from "../../api/reservationApi";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import styles from "../../styles/user/cancelReservation/cancelReservation.module.css";
-import stylesSweetAlert from "../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../styles/general/sweetAlert.module.css";
 
 const CancelReservation = () => {
     const [token, setToken] = useState("");

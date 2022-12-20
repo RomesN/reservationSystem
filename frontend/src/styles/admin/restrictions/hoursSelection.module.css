@@ -17,4 +17,28 @@
 .mainContainer {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.saveButton {
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 0.7em 1em;
+    border: 1px solid var(--mainColor);
+    background-color: var(--mainColor);
+    color: var(--fontBright);
+}
+
+.saveButton:hover {
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    transition: transform 0.5s;
+    border: var(--tertiaryColor);
 }

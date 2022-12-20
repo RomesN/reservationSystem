@@ -5,7 +5,7 @@ import { faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { NewReservationViewEnum } from "../../../shared/utils/enums/newReservationViewEnum";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 import styles from "../../../styles/user/newReservation/submission/timer.module.css";
 
 const ReservationSubmission = () => {

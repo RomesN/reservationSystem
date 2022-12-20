@@ -1,13 +1,13 @@
+import axios from "axios";
 import { format } from "date-fns";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { createFinalReservation } from "../../../api/reservationApi";
 import styles from "../../../styles/user/newReservation/submission/reservationForm.module.css";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
-import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 
 const ReservationForm = () => {
     const [firstName, setFirstName] = useState<string | null>(null);

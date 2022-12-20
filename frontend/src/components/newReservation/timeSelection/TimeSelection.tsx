@@ -7,7 +7,7 @@ import { NewReservationViewEnum } from "../../../shared/utils/enums/newReservati
 import TimeBox from "./TimeBox";
 import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import styles from "../../../styles/user/newReservation/timeSelection/timeSelection.module.css";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 
 const TimeSelection = () => {
     const {

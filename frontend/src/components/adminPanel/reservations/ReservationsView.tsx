@@ -8,7 +8,7 @@ import { Reservation } from "../../../shared/types";
 import ReservationBox from "./ReservationBox";
 import ReservationsCalendar from "./ReservationsCalendar";
 import styles from "../../../styles/admin/reservations/reservationsView.module.css";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 
 const ReservationsView = () => {
     const [dayDetailReservations, setDayDetailReservations] = useState([] as Reservation[]);

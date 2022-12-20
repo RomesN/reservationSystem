@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { deleteFinalReservationByAdmin } from "../../../api/adminApi";
 import { Reservation } from "../../../shared/types";
 import styles from "../../../styles/admin/reservations/reservationBox.module.css";
-import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
+import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
 
 type ReservationBoxProps = {
     reservation: Reservation;

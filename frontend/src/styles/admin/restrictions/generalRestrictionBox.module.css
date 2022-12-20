@@ -1,23 +1,28 @@
 .rowDay {
     display: flex;
     width: 100%;
-    margin-top: 10px;
     align-items: center;
     align-content: center;
-    padding: 0.2em 0;
+    padding: 0.8em 0;
 }
 
 /* larger displays */
 @media only screen and (min-width: 992px) {
-    .rowDay {
+    .rowDay,
+    .timePicker {
         font-size: 18px;
     }
 }
 
 /* smaller displays*/
 @media screen and (max-width: 991px) {
-    .rowDay {
+    .rowDay,
+    .timePicker {
         font-size: 10px;
+    }
+
+    .timePicker svg {
+        height: 1.1em !important;
     }
 }
 
@@ -55,22 +60,46 @@
     margin-right: 10px;
 }
 
-.to > input,
-.from > input {
-    min-width: 6em;
-    text-align: center;
-    /* background-color: var(--mainColor);
-    color: var(--fontBright);
-    border: 1px solid var(--secondaryDark); */
-}
+/* checkbox */
 
-.closedCheckInput {
+.checkContainer {
     display: flex;
     width: 19%;
     font-weight: bold;
     justify-content: right;
+    user-select: none;
+    align-items: center;
 }
 
-.closedCheckInput > label {
+.checkContainer > label {
     margin-left: 10px;
+}
+
+.checkContainer > input[type="checkbox"] {
+    appearance: none;
+    background-color: var(--tertiaryColor);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+}
+
+.checkContainer > input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    background-color: var(--mainColor);
+}
+
+.checkContainer > input[type="checkbox"]:checked::before {
+    transform: scale(1);
 }
