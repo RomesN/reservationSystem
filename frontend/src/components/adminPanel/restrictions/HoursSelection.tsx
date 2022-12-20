@@ -53,7 +53,7 @@ const HoursSelection = ({ dataGetter, dataUpdater, view }: HoursSelectionProps) 
         if (!axios.isAxiosError(result)) {
             Swal.fire({
                 icon: "success",
-                text: `Business hours were adjusted.`,
+                text: `${view === "businessHours" ? "Business hours" : "Regular breaks"} were adjusted.`,
                 iconColor: "#6d9886",
                 customClass: {
                     popup: stylesSweetAlert.popup,
@@ -79,19 +79,35 @@ const HoursSelection = ({ dataGetter, dataUpdater, view }: HoursSelectionProps) 
         }
     };
 
+    const sorter = {
+        monday: 1,
+        tuesday: 2,
+        wednesday: 3,
+        thursday: 4,
+        friday: 5,
+        saturday: 6,
+        sunday: 7,
+    };
+
     if (data) {
         return (
             <>
                 <div className={styles.mainContainer}>
-                    {timesArray.map((restriction, i) => (
-                        <GeneralResctrictionBox
-                            key={i}
-                            restriction={restriction}
-                            index={i}
-                            setter={setTimesArray}
-                            clearLabel={view === "businessHours" ? "Closed" : "None"}
-                        />
-                    ))}
+                    {timesArray
+                        .sort((a, b) => {
+                            let day1 = a.weekday.toLowerCase();
+                            let day2 = b.weekday.toLowerCase();
+                            return sorter[day1 as keyof typeof sorter] - sorter[day2 as keyof typeof sorter];
+                        })
+                        .map((restriction, i) => (
+                            <GeneralResctrictionBox
+                                key={i}
+                                restriction={restriction}
+                                index={i}
+                                setter={setTimesArray}
+                                clearLabel={view === "businessHours" ? "Closed" : "None"}
+                            />
+                        ))}
                     <button onClick={() => handleSubmit(timesArray)} className={styles.saveButton}>
                         Save changes
                     </button>

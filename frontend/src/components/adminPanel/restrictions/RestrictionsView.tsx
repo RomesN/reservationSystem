@@ -1,7 +1,12 @@
 import { faBusinessTime, faMugSaucer, faShopLock, faUserLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { getAllBusinesshours, updateBusinessHours } from "../../../api/adminApi";
+import {
+    getAllBusinesshours,
+    getAllRegularBrakes,
+    updateBusinessHours,
+    updateRegularBrakes,
+} from "../../../api/adminApi";
 import styles from "../../../styles/admin/restrictions/restrictionsView.module.css";
 import HoursSelection from "./HoursSelection";
 
@@ -26,8 +31,8 @@ const RestrictionsView = () => {
             case "regularBreaks":
                 return (
                     <HoursSelection
-                        dataGetter={getAllBusinesshours}
-                        dataUpdater={updateBusinessHours}
+                        dataGetter={getAllRegularBrakes}
+                        dataUpdater={updateRegularBrakes}
                         view={restrictionView}
                     />
                 );

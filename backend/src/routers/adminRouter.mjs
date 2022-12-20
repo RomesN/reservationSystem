@@ -9,7 +9,11 @@ router.get("/reservations/:year/:month", AdminController.getMonthReservations.bi
 
 router.get("/restrictions/business-hours", AdminController.getBusinessHours.bind(AdminController));
 
+router.get("/restrictions/regular-brakes", AdminController.getRegularBrakes.bind(AdminController));
+
 router.patch("/restrictions/business-hours", AdminController.updateBusinessHours.bind(AdminController));
+
+router.patch("/restrictions/regular-brakes", AdminController.updateRegularBrakes.bind(AdminController));
 
 router.delete("/reservations/:token", AdminController.deleteReservation.bind(AdminController));
 

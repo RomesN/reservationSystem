@@ -54,9 +54,9 @@ const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: Gene
                     disabled={!restriction.endTime && !restriction.startTime}
                     value={restriction.startTime}
                     onChange={handleChangeStart}
-                    format="hh:mm"
                     clearIcon={null}
                     className={styles.timePicker}
+                    format="HH:mm"
                 ></TimePicker>
             </div>
             <div className={styles.to}>
@@ -67,6 +67,7 @@ const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: Gene
                     onChange={(value) => handleChangeEnd(value)}
                     clearIcon={null}
                     className={styles.timePicker}
+                    format="HH:mm"
                 ></TimePicker>
             </div>
             <div className={styles.checkContainer}>

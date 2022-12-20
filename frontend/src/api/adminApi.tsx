@@ -70,11 +70,35 @@ export const getAllBusinesshours = async (
         .catch((error: AxiosError<ErrorResponse>) => setIsError(true));
 };
 
+export const getAllRegularBrakes = async (
+    setData: React.Dispatch<React.SetStateAction<Restriction[] | null>>,
+    setIsError: React.Dispatch<React.SetStateAction<boolean | null>>
+) => {
+    return await adminApi
+        .get<OkBusinessHoursResponse>(`api/admin/restrictions/regular-brakes`)
+        .then((response) => {
+            setData(response.data.data);
+        })
+        .catch((error: AxiosError<ErrorResponse>) => setIsError(true));
+};
+
 export const updateBusinessHours = async (timesArray: IntervalGeneralRestriction[]) => {
     const dataToSend = timesArrayConverter(timesArray);
     return await adminApi
         .patch<OkNullDataReservationResponse>(`api/admin/restrictions/business-hours`, {
             businessHours: dataToSend,
+        })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
+};
+
+export const updateRegularBrakes = async (timesArray: IntervalGeneralRestriction[]) => {
+    const dataToSend = timesArrayConverter(timesArray);
+    return await adminApi
+        .patch<OkNullDataReservationResponse>(`api/admin/restrictions/regular-brakes`, {
+            regularBrakes: dataToSend,
         })
         .then((response) => {
             return response.data;

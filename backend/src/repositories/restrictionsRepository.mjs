@@ -22,6 +22,12 @@ class RestrictionsRepository {
         });
     }
 
+    async getAllRegularBrakes() {
+        return await this.models.Restriction.findAll({
+            where: { restrictionType: enums.restrictionType.REGULAR_BREAK },
+        });
+    }
+
     async getWholeDayRestriction(date) {
         const where = {
             date: format(date, "yyyy-MM-dd"),
@@ -49,6 +55,20 @@ class RestrictionsRepository {
     async updateBusinessHours(data) {
         const where = {
             restrictionType: enums.restrictionType.BUSINESS_HOURS,
+            weekday: data.weekday,
+        };
+
+        const update = {
+            startTime: data.startTime,
+            endTime: data.endTime,
+        };
+
+        return await this.models.Restriction.update(update, { where });
+    }
+
+    async updateRegularBrake(data) {
+        const where = {
+            restrictionType: enums.restrictionType.REGULAR_BREAK,
             weekday: data.weekday,
         };
 

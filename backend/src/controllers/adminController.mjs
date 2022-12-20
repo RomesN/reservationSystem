@@ -62,12 +62,33 @@ class AdminController {
         }
     }
 
+    async getRegularBrakes(req, res, next) {
+        try {
+            const regularBrakes = await this.RestrictionsService.getAllRegularBrakes();
+
+            return res.json(okJsonResponse("Requested regular brakes can be seen below.", regularBrakes));
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async updateBusinessHours(req, res, next) {
         const businessHours = req.body.businessHours;
         this.RestrictionsService.updateBusinessHours(businessHours);
 
         try {
             return res.json(okJsonResponse("Requested business hours were updated."));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateRegularBrakes(req, res, next) {
+        const regularBrakes = req.body.regularBrakes;
+        this.RestrictionsService.updateRegularBrakes(regularBrakes);
+
+        try {
+            return res.json(okJsonResponse("Requested regular brakes hours were updated."));
         } catch (error) {
             next(error);
         }

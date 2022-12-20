@@ -58,6 +58,10 @@ class RestrictionsService {
         return await this.RestrictionsRepository.getAllBusinessHours();
     }
 
+    async getAllRegularBrakes() {
+        return await this.RestrictionsRepository.getAllRegularBrakes();
+    }
+
     async getGeneralPartialDayRestrictions(date) {
         return await this.RestrictionsRepository.getGeneralPartialDayRestrictions(
             daysOfTheWeekNum[getWeekdayNumberMonIsOne(date)]
@@ -107,6 +111,46 @@ class RestrictionsService {
             }
 
             await this.RestrictionsRepository.updateBusinessHours(updateObject);
+        });
+
+        return true;
+    }
+
+    async updateRegularBrakes(regularBrakes) {
+        if (!regularBrakes) {
+            throw new CoveredError("No business hours provided.");
+        }
+
+        if (!Array.isArray(regularBrakes)) {
+            throw new CoveredError("Data should be provided as array.");
+        }
+
+        regularBrakes.forEach(async (brake) => {
+            const startTimeDate = parseISO(brake.startTime);
+            const endTimeDate = parseISO(brake.endTime);
+
+            const updateObject = { weekday: brake.weekday };
+
+            if (startTimeDate.toString() === "Invalid Date" || endTimeDate.toString() === "Invalid Date") {
+                updateObject.startTime = null;
+                updateObject.endTime = null;
+            } else {
+                const startHours =
+                    startTimeDate.getHours() < 10 ? `0${startTimeDate.getHours()}` : `${startTimeDate.getHours()}`;
+                const endHours =
+                    endTimeDate.getHours() < 10 ? `0${endTimeDate.getHours()}` : `${endTimeDate.getHours()}`;
+                const startMinutes =
+                    startTimeDate.getMinutes() < 10
+                        ? `0${startTimeDate.getMinutes()}`
+                        : `${startTimeDate.getMinutes()}`;
+                const endMinutes =
+                    endTimeDate.getMinutes() < 10 ? `0${endTimeDate.getMinutes()}` : `${endTimeDate.getMinutes()}`;
+
+                updateObject.startTime = `${startHours}:${startMinutes}:00`;
+                updateObject.endTime = `${endHours}:${endMinutes}:00`;
+            }
+
+            await this.RestrictionsRepository.updateRegularBrake(updateObject);
         });
 
         return true;
