@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Props } from "../shared/types";
-import { AdminViewEnum } from "../utils/enums/AdminViewEnum";
+import { AdminViewEnum } from "../shared/utils/enums/AdminViewEnum";
 
 type AdminPanelContextType = {
     adminView: AdminViewEnum;

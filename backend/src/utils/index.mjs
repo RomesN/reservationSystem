@@ -11,12 +11,14 @@ import {
     getUTCDate,
     getUTCFromDateAndLocalTimeString,
     sortIntervalList,
+    roundToNearestMinutesUp,
 } from "./helperFunctions.mjs";
 import { okJsonResponse } from "./jsonResponse.mjs";
 import { monthsOfTheYearNumString } from "./enumHelpers/monthsOfTheYear.mjs";
 
 export {
     CoveredError,
+    errorJsonResponse,
     daysOfTheWeekNum,
     formatEmail,
     formatName,
@@ -26,8 +28,8 @@ export {
     getWeekdayNumberMonIsOne,
     getUTCDate,
     getUTCFromDateAndLocalTimeString,
-    sortIntervalList,
-    errorJsonResponse,
-    okJsonResponse,
     monthsOfTheYearNumString,
+    okJsonResponse,
+    roundToNearestMinutesUp,
+    sortIntervalList,
 };

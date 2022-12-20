@@ -1,7 +1,7 @@
 import { Service } from "../../../shared/types";
 import styles from "../../../styles/user/newReservation/serviceSelection/serviceBox.module.css";
 import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
-import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
+import { NewReservationViewEnum } from "../../../shared/utils/enums/newReservationViewEnum";
 
 type ServiceBoxProps = {
     id: number;

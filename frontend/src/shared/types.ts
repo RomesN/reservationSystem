@@ -23,6 +23,12 @@ type ErrorResponse = {
     ];
 };
 
+type IntervalGeneralRestriction = {
+    weekday: string;
+    startTime: string;
+    endTime: string;
+};
+
 type IntervalString = {
     start: string;
     end: string;
@@ -144,6 +150,12 @@ type OkNullDataReservationResponse = {
     data: null;
 };
 
+type OkBusinessHoursResponse = {
+    status: string;
+    message: string;
+    data: Restriction[];
+};
+
 type OkServiceResponse = {
     status: string;
     message: string;
@@ -173,6 +185,14 @@ type Reservation = {
     reservationToken: string;
 };
 
+type Restriction = {
+    weekday: string | null;
+    date: string | null;
+    startTime: string | null;
+    endTime: string | null;
+    type: string;
+};
+
 type Service = {
     id: number;
     name: string;
@@ -199,8 +219,10 @@ type TargetProps = { element?: React.MutableRefObject<HTMLElement | null> | null
 
 export type {
     ErrorResponse,
+    IntervalGeneralRestriction,
     IntervalString,
     LoginInputs,
+    OkBusinessHoursResponse,
     OkNullDataReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,
@@ -212,6 +234,7 @@ export type {
     Positions,
     Props,
     Reservation,
+    Restriction,
     Service,
     TableArrayNewReservation,
     TableArrayExistingReservations,

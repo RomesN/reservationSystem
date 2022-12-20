@@ -1,0 +1,76 @@
+.restrictionsViewContainer {
+    width: 100%;
+}
+
+.restrictionsToolbar {
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 1s;
+}
+
+.toolbarItem,
+.toolbarItemHighlighted {
+    padding: 5px 10px;
+    width: 11em;
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.toolbarItem {
+    color: var(--fontBright);
+    background-color: var(--secondaryColor);
+    border: 1px solid var(--secondaryDarker);
+}
+
+.toolbarItemHighlighted {
+    color: var(--fontDark);
+    background-color: var(--tertiaryColor);
+    border: 1px solid var(--secondaryDarker);
+    transition: 1s;
+}
+
+.toolbarItem:hover {
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    transition: transform 0.5s;
+    border: var(--tertiaryColor);
+}
+
+.contentContainer {
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 1s;
+}
+
+/* larger displays */
+@media only screen and (min-width: 992px) {
+    .restrictionsViewContainer {
+        width: 70vw;
+        font-size: 18px;
+    }
+}
+
+/* smaller displays*/
+@media screen and (max-width: 991px) {
+    .restrictionsViewContainer {
+        width: 90vw;
+        font-size: 13px;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

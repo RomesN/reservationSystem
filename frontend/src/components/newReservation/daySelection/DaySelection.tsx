@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getTimeSlots } from "../../../api/reservationApi";
 import { IntervalString, TableArrayNewReservation } from "../../../shared/types";
 import Loading from "../../Loading";
-import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
-import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
+import { NewReservationViewEnum } from "../../../shared/utils/enums/newReservationViewEnum";
+import { numberMonthEnum } from "../../../shared/utils/enums/numberMonthEnum";
 import styles from "../../../styles/user/newReservation/daySelection/daySelection.module.css";
 import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 

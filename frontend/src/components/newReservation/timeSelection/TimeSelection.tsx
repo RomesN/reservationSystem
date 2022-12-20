@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useEffect, useCallback } from "react";
 import { createTemporaryReservation, isDateAvailable } from "../../../api/reservationApi";
 import Loading from "../../Loading";
-import { NewReservationViewEnum } from "../../../utils/enums/newReservationViewEnum";
+import { NewReservationViewEnum } from "../../../shared/utils/enums/newReservationViewEnum";
 import TimeBox from "./TimeBox";
 import { useNewReservationContext } from "../../../hooks/useNewReservationContext";
 import styles from "../../../styles/user/newReservation/timeSelection/timeSelection.module.css";

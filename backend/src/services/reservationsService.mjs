@@ -10,7 +10,6 @@ import {
     isEqual,
     isSameSecond,
     parseISO,
-    roundToNearestMinutes,
 } from "date-fns";
 import schedule from "node-schedule";
 import {
@@ -19,6 +18,7 @@ import {
     getDaysInMonth,
     getUTCDate,
     getUTCFromDateAndLocalTimeString,
+    roundToNearestMinutesUp,
 } from "../utils/index.mjs";
 import { ReservationsRepository } from "../repositories/index.mjs";
 import enums from "../model/enums/index.mjs";
@@ -145,27 +145,27 @@ class ReservationsService {
 
     async calculateNotBookedIntervals(minutesNeeded, reservationsList, startOfBusiness, endOfBusiness) {
         if (reservationsList.length === 0) {
-            return [{ start: startOfBusiness, end: endOfBusiness }];
+            return [
+                {
+                    start: roundToNearestMinutesUp(startOfBusiness),
+                    end: endOfBusiness,
+                },
+            ];
         }
 
         this.sortReservationList(reservationsList);
-        const incrementToRound = parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15") / 2;
         const result = [];
 
         for (let i = 0; i <= reservationsList.length; i++) {
             const start =
                 i === 0
                     ? startOfBusiness
-                    : roundToNearestMinutes(
+                    : roundToNearestMinutesUp(
                           add(reservationsList[i - 1].date, {
                               minutes:
                                   (await reservationsList[i - 1].getService()).minutesRequired +
-                                  parseInt(process.env.BREAK_BETWEEN_BOOKINGS || "10") +
-                                  incrementToRound,
-                          }),
-                          {
-                              nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15"),
-                          }
+                                  parseInt(process.env.BREAK_BETWEEN_BOOKINGS || "10"),
+                          })
                       );
             const end = i === reservationsList.length ? endOfBusiness : reservationsList[i].date;
             const testingSuitableInterval = { start, end };
@@ -232,11 +232,11 @@ class ReservationsService {
 
         let k = 0;
         if (!Number.isNaN(closestMinutesRestriction)) {
-            const soonestPossible = roundToNearestMinutes(add(new Date(), { minutes: closestMinutesRestriction }), {
-                nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15"),
-            });
+            const soonestPossible = roundToNearestMinutesUp(add(new Date(), { minutes: closestMinutesRestriction }));
             while (k < result.length) {
-                if (isBefore(result[k].start, soonestPossible) && isAfter(result[k].end, soonestPossible)) {
+                if (isBefore(result[k].start, soonestPossible) && isBefore(result[k].end, soonestPossible)) {
+                    result.splice(k, 1);
+                } else if (isBefore(result[k].start, soonestPossible) && isAfter(result[k].end, soonestPossible)) {
                     const testingInterval = { start: soonestPossible, end: result[k].end };
                     if (
                         isAfter(result[k].end, soonestPossible) &&

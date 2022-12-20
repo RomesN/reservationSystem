@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Props, Reservation, Service } from "../shared/types";
-import { NewReservationViewEnum } from "../utils/enums/newReservationViewEnum";
+import { NewReservationViewEnum } from "../shared/utils/enums/newReservationViewEnum";
 
 type NewReservationContextType = {
     view: NewReservationViewEnum;

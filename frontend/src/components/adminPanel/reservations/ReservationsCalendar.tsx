@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getMonthReservations } from "../../../api/adminApi";
-import { numberMonthEnum } from "../../../utils/enums/numberMonthEnum";
+import { numberMonthEnum } from "../../../shared/utils/enums/numberMonthEnum";
 import Loading from "../../Loading";
 import { Reservation, TableArrayExistingReservations } from "../../../shared/types";
 import styles from "../../../styles/admin/reservations/reservationCalendar.module.css";

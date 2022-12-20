@@ -1,0 +1,76 @@
+.rowDay {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    align-items: center;
+    align-content: center;
+    padding: 0.2em 0;
+}
+
+/* larger displays */
+@media only screen and (min-width: 992px) {
+    .rowDay {
+        font-size: 18px;
+    }
+}
+
+/* smaller displays*/
+@media screen and (max-width: 991px) {
+    .rowDay {
+        font-size: 10px;
+    }
+}
+
+.rowDay .dayname > p {
+    margin: 0;
+}
+
+.dayname {
+    display: flex;
+    width: 25%;
+    font-weight: bold;
+    justify-content: left;
+}
+
+.from {
+    display: flex;
+    width: 28%;
+    font-weight: bold;
+    justify-content: center;
+}
+
+.from > label {
+    margin-right: 10px;
+}
+
+.to {
+    display: flex;
+    width: 28%;
+    font-weight: bold;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.to > label {
+    margin-right: 10px;
+}
+
+.to > input,
+.from > input {
+    min-width: 6em;
+    text-align: center;
+    /* background-color: var(--mainColor);
+    color: var(--fontBright);
+    border: 1px solid var(--secondaryDark); */
+}
+
+.closedCheckInput {
+    display: flex;
+    width: 19%;
+    font-weight: bold;
+    justify-content: right;
+}
+
+.closedCheckInput > label {
+    margin-left: 10px;
+}

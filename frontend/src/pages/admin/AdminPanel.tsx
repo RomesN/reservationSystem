@@ -1,7 +1,8 @@
 import AdminNavbar from "../../components/adminPanel/AdminNavbar";
-import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
+import { AdminViewEnum } from "../../shared/utils/enums/AdminViewEnum";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import ReservationsView from "../../components/adminPanel/reservations/ReservationsView";
+import RestrictionsView from "../../components/adminPanel/restrictions/RestrictionsView";
 import styles from "../../styles/admin/adminPage.module.css";
 import { useAdminPanelContext } from "../../hooks/useAdminPanelContext";
 
@@ -12,6 +13,8 @@ const AdminPanel = () => {
         switch (adminView) {
             case AdminViewEnum.Reservations:
                 return <ReservationsView />;
+            case AdminViewEnum.Restrictions:
+                return <RestrictionsView />;
         }
     };
 

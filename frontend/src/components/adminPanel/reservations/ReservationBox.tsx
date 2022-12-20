@@ -30,7 +30,6 @@ const ReservationBox = ({ reservation }: ReservationBoxProps) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const result = await deleteFinalReservationByAdmin(reservationToken);
-                console.log(result);
                 if (result.status === "OK") {
                     Swal.fire({
                         icon: "success",

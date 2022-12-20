@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AdminViewEnum } from "../../utils/enums/AdminViewEnum";
+import { AdminViewEnum } from "../../shared/utils/enums/AdminViewEnum";
 import { logout } from "../../api/adminApi";
 import styles from "../../styles/admin/navbar.module.css";
 import { useAdminPanelContext } from "../../hooks/useAdminPanelContext";

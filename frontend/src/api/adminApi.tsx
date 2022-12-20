@@ -1,6 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { QueryFunctionContext, QueryKey } from "react-query";
-import { ErrorResponse, OkNullDataReservationResponse, OkReservationsListResponse } from "../shared/types";
+import {
+    ErrorResponse,
+    IntervalGeneralRestriction,
+    OkBusinessHoursResponse,
+    OkNullDataReservationResponse,
+    OkReservationsListResponse,
+    Restriction,
+} from "../shared/types";
+import { timesArrayConverter } from "../shared/utils/helpers/functions";
 
 export const adminApi = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
@@ -44,6 +52,30 @@ export const deleteFinalReservationByAdmin = async (reservationToken: string) =>
 export const deleteAllFinalReservationsOnGivenDay = async (year: number, month: number, day: number) => {
     return await adminApi
         .delete<OkNullDataReservationResponse>(`api/admin/reservations/${year}/${month}/${day}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
+};
+
+export const getAllBusinesshours = async (
+    setData: React.Dispatch<React.SetStateAction<Restriction[] | null>>,
+    setIsError: React.Dispatch<React.SetStateAction<boolean | null>>
+) => {
+    return await adminApi
+        .get<OkBusinessHoursResponse>(`api/admin/restrictions/business-hours`)
+        .then((response) => {
+            setData(response.data.data);
+        })
+        .catch((error: AxiosError<ErrorResponse>) => setIsError(true));
+};
+
+export const updateBusinessHours = async (timesArray: IntervalGeneralRestriction[]) => {
+    const dataToSend = timesArrayConverter(timesArray);
+    return await adminApi
+        .patch<OkNullDataReservationResponse>(`api/admin/restrictions/business-hours`, {
+            businessHours: dataToSend,
+        })
         .then((response) => {
             return response.data;
         })

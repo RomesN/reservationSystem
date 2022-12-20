@@ -1,14 +1,21 @@
 import "dotenv";
 import { hoursToMilliseconds } from "date-fns";
-import { AdminService, CustomerService, NotificationService, ReservationsService } from "../services/index.mjs";
+import {
+    AdminService,
+    CustomerService,
+    NotificationService,
+    ReservationsService,
+    RestrictionsService,
+} from "../services/index.mjs";
 import { okJsonResponse } from "../utils/index.mjs";
 
 class AdminController {
-    constructor(AdminService, CustomerService, NotificationService, ReservationsService) {
+    constructor(AdminService, CustomerService, NotificationService, ReservationsService, RestrictionsService) {
         this.AdminService = AdminService;
         this.CustomerService = CustomerService;
         this.NotificationService = NotificationService;
         this.ReservationsService = ReservationsService;
+        this.RestrictionsService = RestrictionsService;
     }
 
     async login(req, res, next) {
@@ -40,6 +47,27 @@ class AdminController {
                     info
                 )
             );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getBusinessHours(req, res, next) {
+        try {
+            const businessHours = await this.RestrictionsService.getAllBusinessHours();
+
+            return res.json(okJsonResponse("Requested business hours can be seen below.", businessHours));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateBusinessHours(req, res, next) {
+        const businessHours = req.body.businessHours;
+        this.RestrictionsService.updateBusinessHours(businessHours);
+
+        try {
+            return res.json(okJsonResponse("Requested business hours were updated."));
         } catch (error) {
             next(error);
         }
@@ -102,4 +130,10 @@ class AdminController {
     }
 }
 
-export default new AdminController(AdminService, CustomerService, NotificationService, ReservationsService);
+export default new AdminController(
+    AdminService,
+    CustomerService,
+    NotificationService,
+    ReservationsService,
+    RestrictionsService
+);

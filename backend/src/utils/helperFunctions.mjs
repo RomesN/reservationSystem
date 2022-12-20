@@ -1,5 +1,5 @@
+import { add, parseISO, roundToNearestMinutes } from "date-fns";
 import crypto from "crypto";
-import { parseISO } from "date-fns";
 import CoveredError from "./coveredError.mjs";
 
 const getDaysInMonth = (year, month) => {
@@ -74,6 +74,18 @@ const formatPhone = (phone) => {
     return phone.replaceAll(" ", "");
 };
 
+const roundToNearestMinutesUp = (date) => {
+    const incrementToRound = parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15") / 2;
+    return roundToNearestMinutes(
+        add(date, {
+            minutes: incrementToRound,
+        }),
+        {
+            nearestTo: parseInt(process.env.BOOKING_EVERY_NEAREST_MINUTES || "15"),
+        }
+    );
+};
+
 export {
     formatEmail,
     formatName,
@@ -83,5 +95,6 @@ export {
     getUTCDate,
     getWeekdayNumberMonIsOne,
     getUTCFromDateAndLocalTimeString,
+    roundToNearestMinutesUp,
     sortIntervalList,
 };

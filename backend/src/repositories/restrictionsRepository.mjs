@@ -16,6 +16,12 @@ class RestrictionsRepository {
         });
     }
 
+    async getAllBusinessHours() {
+        return await this.models.Restriction.findAll({
+            where: { restrictionType: enums.restrictionType.BUSINESS_HOURS },
+        });
+    }
+
     async getWholeDayRestriction(date) {
         const where = {
             date: format(date, "yyyy-MM-dd"),
@@ -38,6 +44,20 @@ class RestrictionsRepository {
         };
 
         return await this.models.Restriction.findAll({ where });
+    }
+
+    async updateBusinessHours(data) {
+        const where = {
+            restrictionType: enums.restrictionType.BUSINESS_HOURS,
+            weekday: data.weekday,
+        };
+
+        const update = {
+            startTime: data.startTime,
+            endTime: data.endTime,
+        };
+
+        return await this.models.Restriction.update(update, { where });
     }
 }
 

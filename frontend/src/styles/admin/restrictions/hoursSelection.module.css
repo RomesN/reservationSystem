@@ -1,0 +1,20 @@
+/* larger displays */
+@media only screen and (min-width: 992px) {
+    .mainContainer {
+        font-size: 18px;
+        width: 70vw;
+    }
+}
+
+/* smaller displays*/
+@media screen and (max-width: 991px) {
+    .mainContainer {
+        font-size: 13px;
+        width: 90vw;
+    }
+}
+
+.mainContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
