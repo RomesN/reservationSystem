@@ -40,3 +40,12 @@ export const deleteFinalReservationByAdmin = async (reservationToken: string) =>
         })
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
+
+export const deleteAllFinalReservationsOnGivenDay = async (year: number, month: number, day: number) => {
+    return await adminApi
+        .delete<OkNullDataReservationResponse>(`api/admin/reservations/${year}/${month}/${day}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error: AxiosError<ErrorResponse>) => error);
+};

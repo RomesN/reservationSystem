@@ -2,10 +2,13 @@ import { faChevronLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
+import { deleteAllFinalReservationsOnGivenDay } from "../../../api/adminApi";
 import { Reservation } from "../../../shared/types";
 import ReservationBox from "./ReservationBox";
 import ReservationsCalendar from "./ReservationsCalendar";
 import styles from "../../../styles/admin/reservations/reservationsView.module.css";
+import stylesSweetAlert from "../../../styles/sweetAlert.module.css";
 
 const ReservationsView = () => {
     const [dayDetailReservations, setDayDetailReservations] = useState([] as Reservation[]);
@@ -78,6 +81,75 @@ const ReservationsView = () => {
         setIsDetailOn(false);
     };
 
+    const handleCancelAll = (dateOfEvents: Date | null) => {
+        Swal.fire({
+            icon: "info",
+            title: "All reservations on chosen day will be canceled. Are you sure that you want to continue?",
+            showDenyButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `No`,
+            customClass: {
+                popup: stylesSweetAlert.popup,
+                confirmButton: stylesSweetAlert.primaryButton,
+                title: stylesSweetAlert.title,
+                icon: stylesSweetAlert.infoIcon,
+                denyButton: stylesSweetAlert.denyButton,
+                actions: stylesSweetAlert.actionsContainer,
+            },
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                let result = null;
+                if (dateOfEvents) {
+                    result = await deleteAllFinalReservationsOnGivenDay(
+                        dateOfEvents?.getFullYear(),
+                        dateOfEvents?.getMonth(),
+                        dateOfEvents?.getDate()
+                    );
+                }
+                if (result && result.status === "OK") {
+                    Swal.fire({
+                        icon: "success",
+                        text: `Reservations were canceled.`,
+                        iconColor: "#6d9886",
+                        customClass: {
+                            popup: stylesSweetAlert.popup,
+                            confirmButton: stylesSweetAlert.primaryButton,
+                            title: stylesSweetAlert.title,
+                            icon: stylesSweetAlert.infoIcon,
+                            actions: stylesSweetAlert.actionsContainer,
+                        },
+                    });
+                    setIsDetailOn(false);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        text: `Something went wrong.`,
+                        iconColor: "#6d9886",
+                        customClass: {
+                            popup: stylesSweetAlert.popup,
+                            confirmButton: stylesSweetAlert.primaryButton,
+                            title: stylesSweetAlert.title,
+                            icon: stylesSweetAlert.errorIcon,
+                            actions: stylesSweetAlert.actionsContainer,
+                        },
+                    });
+                }
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: "info",
+                    text: `The reservations were not canceled.`,
+                    customClass: {
+                        popup: stylesSweetAlert.popup,
+                        confirmButton: stylesSweetAlert.primaryButton,
+                        title: stylesSweetAlert.title,
+                        icon: stylesSweetAlert.infoIcon,
+                        actions: stylesSweetAlert.actionsContainer,
+                    },
+                });
+            }
+        });
+    };
+
     if (!isDetailOn) {
         return (
             <div className={styles.contentContainer}>
@@ -98,7 +170,7 @@ const ReservationsView = () => {
                     <div className={styles.heading}>
                         <p>{selectedReservationsDay && format(selectedReservationsDay, "dd.MM.yyyy")}</p>
                     </div>
-                    <button className={styles.cancelAll}>
+                    <button className={styles.cancelAll} onClick={() => handleCancelAll(selectedReservationsDay)}>
                         <FontAwesomeIcon size="sm" icon={faTrashCan} />
                         {` Cancel all`}
                     </button>

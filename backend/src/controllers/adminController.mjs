@@ -53,11 +53,40 @@ class AdminController {
             const reservationToCancel = await this.ReservationsService.getActiveReservationByToken(token);
             const cancelEmail = await this.NotificationService.createAdminCancelReservationEmail(reservationToCancel);
 
-            await this.ReservationsService.deleteFinalReservation(token);
+            await this.ReservationsService.deleteFinalReservationByAdmin(token);
             await this.CustomerService.rescheduleCustomerDeletition(customer);
             await this.NotificationService.sendEmail(cancelEmail);
 
             return res.json(okJsonResponse(`Final reservation was deleted.`));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteAllReservationsOnGivenDay(req, res, next) {
+        const { year, month, day } = req.params;
+
+        try {
+            const reservationsOnGivenDay = await this.ReservationsService.getActiveReservationsBetween(
+                new Date(Date.UTC(year, month, day)),
+                new Date(Date.UTC(year, month, day, 23, 59))
+            );
+            for (let i = 0; i < reservationsOnGivenDay.length; i++) {
+                const customer = await this.CustomerService.getCustomerByReservationToken(
+                    reservationsOnGivenDay[i].reservationToken
+                );
+                const cancelEmail = await this.NotificationService.createAdminCancelReservationEmail(
+                    reservationsOnGivenDay[i]
+                );
+
+                await this.ReservationsService.deleteFinalReservationByAdmin(
+                    reservationsOnGivenDay[i].reservationToken
+                );
+                await this.CustomerService.rescheduleCustomerDeletition(customer);
+                await this.NotificationService.sendEmail(cancelEmail);
+            }
+
+            return res.json(okJsonResponse(`All final reservations on given day deleted.`));
         } catch (error) {
             next(error);
         }

@@ -13,20 +13,65 @@ type ReservationBoxProps = {
 
 const ReservationBox = ({ reservation }: ReservationBoxProps) => {
     const handleCancel = async (reservationToken: string) => {
-        const result = await deleteFinalReservationByAdmin(reservationToken);
-        if (result.status === "OK") {
-            Swal.fire({
-                icon: "success",
-                text: `Reservation was canceled.`,
-                iconColor: "#6d9886",
-                customClass: {
-                    popup: stylesSweetAlert.popup,
-                    confirmButton: stylesSweetAlert.primaryButton,
-                    title: stylesSweetAlert.title,
-                    icon: stylesSweetAlert.successIcon,
-                },
-            });
-        }
+        Swal.fire({
+            icon: "info",
+            title: "The reservation will be canceled. Are you sure that you want to continue?",
+            showDenyButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `No`,
+            customClass: {
+                popup: stylesSweetAlert.popup,
+                confirmButton: stylesSweetAlert.primaryButton,
+                title: stylesSweetAlert.title,
+                icon: stylesSweetAlert.infoIcon,
+                denyButton: stylesSweetAlert.denyButton,
+                actions: stylesSweetAlert.actionsContainer,
+            },
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const result = await deleteFinalReservationByAdmin(reservationToken);
+                console.log(result);
+                if (result.status === "OK") {
+                    Swal.fire({
+                        icon: "success",
+                        text: `Reservation was canceled.`,
+                        iconColor: "#6d9886",
+                        customClass: {
+                            popup: stylesSweetAlert.popup,
+                            confirmButton: stylesSweetAlert.primaryButton,
+                            title: stylesSweetAlert.title,
+                            icon: stylesSweetAlert.infoIcon,
+                            actions: stylesSweetAlert.actionsContainer,
+                        },
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        text: `Something went wrong.`,
+                        iconColor: "#6d9886",
+                        customClass: {
+                            popup: stylesSweetAlert.popup,
+                            confirmButton: stylesSweetAlert.primaryButton,
+                            title: stylesSweetAlert.title,
+                            icon: stylesSweetAlert.errorIcon,
+                            actions: stylesSweetAlert.actionsContainer,
+                        },
+                    });
+                }
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: "info",
+                    text: `The reservation was not canceled.`,
+                    customClass: {
+                        popup: stylesSweetAlert.popup,
+                        confirmButton: stylesSweetAlert.primaryButton,
+                        title: stylesSweetAlert.title,
+                        icon: stylesSweetAlert.infoIcon,
+                        actions: stylesSweetAlert.actionsContainer,
+                    },
+                });
+            }
+        });
     };
 
     return (

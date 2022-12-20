@@ -286,6 +286,10 @@ class ReservationsService {
         return await this.ReservationsRepository.getValidReservationsBetween(startDate, endDate);
     }
 
+    async getActiveReservationsBetween(startDate, endDate) {
+        return await this.ReservationsRepository.getActiveReservationsBetween(startDate, endDate);
+    }
+
     async createNewTemporaryReservation(isoTimeString, serviceIdString, ServicesService, RestrictionsService) {
         // #region ---VARIABLES CALCULATION---
         const service = await ServicesService.getServiceRequired(serviceIdString);
@@ -378,6 +382,23 @@ class ReservationsService {
 
         if (isBefore(add(reservationToDelete.date, { minutes: -1 * 60 * 24 }), new Date())) {
             throw new CoveredError(403, "Reservation cannot be canceled less than 24 hours before.");
+        }
+
+        if (reservationToDelete.scheduledReminderJobId) {
+            schedule.cancelJob(reservationToDelete.scheduledReminderJobId);
+        }
+        return await this.ReservationsRepository.deleteReservationByToken(reservationToken);
+    }
+
+    async deleteFinalReservationByAdmin(reservationToken) {
+        if (!reservationToken) {
+            throw new CoveredError(400, "Token not provided.");
+        }
+
+        const reservationToDelete = await this.ReservationsRepository.getActiveReservationByToken(reservationToken);
+
+        if (!reservationToDelete) {
+            throw new CoveredError(400, "No final reservation exists with provided token.");
         }
 
         if (reservationToDelete.scheduledReminderJobId) {

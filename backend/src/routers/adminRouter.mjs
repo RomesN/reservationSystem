@@ -9,6 +9,6 @@ router.get("/reservations/:year/:month", AdminController.getMonthReservations.bi
 
 router.delete("/reservations/:token", AdminController.deleteReservation.bind(AdminController));
 
-// router.delete("/reservations/:year/:month/:day", AdminController.cancelAllReservations.bind(AdminController));
+router.delete("/reservations/:year/:month/:day", AdminController.deleteAllReservationsOnGivenDay.bind(AdminController));
 
 export default router;
