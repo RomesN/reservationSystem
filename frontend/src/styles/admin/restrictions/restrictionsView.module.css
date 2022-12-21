@@ -1,11 +1,14 @@
 .restrictionsViewContainer {
     width: 100%;
+    position: relative;
 }
 
 .restrictionsToolbar {
+    position: sticky;
     display: flex;
     justify-content: center;
     animation: fadeIn 1s;
+    z-index: 1;
 }
 
 .toolbarItem,
@@ -52,6 +55,10 @@
 
 /* larger displays */
 @media only screen and (min-width: 992px) {
+    .restrictionsToolbar {
+        top: 85px;
+    }
+
     .restrictionsViewContainer,
     .contentContainer {
         width: 70vw;
@@ -61,6 +68,10 @@
 
 /* smaller displays*/
 @media screen and (max-width: 991px) {
+    .restrictionsToolbar {
+        top: 205px;
+    }
+
     .restrictionsViewContainer,
     .contentContainer {
         width: 90vw;

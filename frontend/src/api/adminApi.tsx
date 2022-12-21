@@ -34,20 +34,6 @@ export const logout = async () => {
         .catch((error) => error);
 };
 
-export const getMonthReservations = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
-    const [, params] = queryKey as [string, [number | string, number | string]];
-    const response = await adminApi.get<OkReservationsListResponse>(`api/admin/reservations/${params[0]}/${params[1]}`);
-    return response.data.data;
-};
-
-export const getMonthBusinessClosedRestrictions = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
-    const [, params] = queryKey as [string, [number | string, number | string]];
-    const response = await adminApi.get<OkRestrictionsArrayResponse>(
-        `api/admin/restrictions/business-closed/${params[0]}/${params[1]}`
-    );
-    return response.data.data;
-};
-
 export const deleteAllFinalReservationsOnGivenDay = async (year: number, month: number, day: number) => {
     return await adminApi
         .delete<OkNullDataReservationResponse>(`api/admin/reservations/${year}/${month}/${day}`)
@@ -105,6 +91,31 @@ export const updateRegularBrakes = async (timesArray: IntervalGeneralRestriction
         .catch((error: AxiosError<ErrorResponse>) => error);
 };
 
+// react query getters
+
+export const getMonthReservations = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
+    const [, params] = queryKey as [string, [number | string, number | string]];
+    const response = await adminApi.get<OkReservationsListResponse>(`api/admin/reservations/${params[0]}/${params[1]}`);
+    return response.data.data;
+};
+
+export const getMonthBusinessClosedRestrictions = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
+    const [, params] = queryKey as [string, [number | string, number | string]];
+    const response = await adminApi.get<OkRestrictionsArrayResponse>(
+        `api/admin/restrictions/business-closed/${params[0]}/${params[1]}`
+    );
+    return response.data.data;
+};
+
+export const getMonthIntervalsClosedRestrictions = async ({ queryKey }: QueryFunctionContext<QueryKey>) => {
+    const [, params] = queryKey as [string, [number | string, number | string]];
+    const response = await adminApi.get<OkRestrictionsArrayResponse>(
+        `api/admin/restrictions/intervals-closed/${params[0]}/${params[1]}`
+    );
+    return response.data.data;
+};
+
+// react query mutations
 const mutationRequest = async ({ ...options }) => {
     const onSuccess = (response: AxiosResponse) => response.data.data;
     return adminApi(options).then(onSuccess);
@@ -116,6 +127,10 @@ export const createBusinessClosedRestriction = async (date: string) => {
 
 export const deleteBusinessClosedRestriction = async (id: number) => {
     return mutationRequest({ url: `/api/admin/restrictions/business-closed/${id}`, method: "delete" });
+};
+
+export const deleteIntervalClosedRestriction = async (id: number) => {
+    return mutationRequest({ url: `/api/admin/restrictions/intervals-closed/${id}`, method: "delete" });
 };
 
 export const deleteFinalReservationByAdmin = async (reservationToken: string) => {

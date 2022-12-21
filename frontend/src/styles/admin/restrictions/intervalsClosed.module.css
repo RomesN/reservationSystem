@@ -1,0 +1,208 @@
+/* month selection toolbar */
+.selectionToolbar {
+    position: sticky;
+    display: flex;
+    width: 100%;
+    animation: fadeIn 1s;
+    z-index: 1;
+}
+
+.selectionToolbar .buttonPrevious {
+    width: 14.3%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.buttonPreviousDisabled {
+    width: 14.3%;
+    margin: 0 2px 0 0;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColorBrighter);
+    font-weight: bolder;
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+.selectionToolbar .buttonPrevious:hover {
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
+}
+
+.selectionToolbar .buttonNext {
+    width: 14.3%;
+    margin: 0 0 0 2px;
+    border: var(--secondaryColor);
+    background-color: var(--secondaryColor);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
+}
+
+.selectionToolbar .buttonNext:hover {
+    color: var(--fontDark);
+    --bs-btn-active-color: var(--fontDark);
+    --bs-btn-active-bg: var(--tertiaryColor);
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
+}
+
+.selectionToolbar .heading {
+    width: 71.4%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--fontBright);
+    background-color: var(--fontDark);
+    font-weight: bolder;
+    border-radius: 3px;
+}
+
+.selectionToolbar .heading > p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .selectionToolbar {
+        top: 133px;
+    }
+
+    .selectionToolbar .heading > p {
+        font-size: 18px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 18px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 18px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 992px) {
+    .selectionToolbar {
+        top: 245px;
+    }
+
+    .selectionToolbar .heading > p {
+        font-size: 13px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 13px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 13px;
+    }
+}
+
+/* SMALLER DISPLAYS */
+@media screen and (max-width: 769px) {
+    .selectionToolbar {
+        top: 285px;
+    }
+
+    .selectionToolbar .heading > p {
+        font-size: 13px;
+    }
+
+    .selectionToolbar .buttonPrevious {
+        font-size: 13px;
+    }
+    .selectionToolbar .buttonNext {
+        font-size: 13px;
+    }
+}
+
+/* content */
+
+.intervalsClosedListContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeIn 1s;
+}
+
+.hiddenBox,
+.visibleTransitBox,
+.visibleBox {
+    width: 100%;
+    position: relative;
+    top: 0;
+    z-index: 0;
+}
+
+.hiddenBox {
+    opacity: 0;
+    -webkit-animation: fadeOut 0.5s;
+    animation: fadeOut 0.5s;
+}
+
+.visibleTransitBox {
+    opacity: 0.5;
+    -webkit-animation: fadeOutTransit 0.5s;
+    animation: fadeOutTransit 0.5s;
+}
+
+.visibleBox {
+    opacity: 1;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOutTransit {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
