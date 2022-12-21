@@ -1,11 +1,18 @@
+import { Op } from "sequelize";
 import { format } from "date-fns";
 import models from "../model/index.mjs";
 import enums from "../model/enums/index.mjs";
 
 class RestrictionsRepository {
-    constructor(models) {
+    constructor(models, Op) {
         this.models = models;
+        this.Op = Op;
     }
+
+    async createBusinessClosedRestriction(restriction) {
+        return await this.models.Restriction.create(restriction);
+    }
+
     async getServicesList() {
         return await this.models.Service.findAll();
     }
@@ -28,10 +35,36 @@ class RestrictionsRepository {
         });
     }
 
-    async getWholeDayRestriction(date) {
+    async getAllWholeDayRestrictionBetweenDates(startDate, endDate) {
+        const where = {
+            date: {
+                [this.Op.between]: [startDate, endDate],
+            },
+            restrictionType: enums.restrictionType.BUSINESS_CLOSED,
+        };
+
+        return await this.models.Restriction.findAll({ where });
+    }
+
+    async getBusinessClosedById(id) {
+        return await this.models.Restriction.findOne({
+            where: { id, restrictionType: enums.restrictionType.BUSINESS_CLOSED },
+        });
+    }
+
+    async getBusinessClosedByDate(date) {
         const where = {
             date: format(date, "yyyy-MM-dd"),
-            restrictionType: enums.restrictionType.WHOLE_DAY_BUSINESS_CLOSED,
+            restrictionType: enums.restrictionType.BUSINESS_CLOSED,
+        };
+
+        return await this.models.Restriction.findOne({ where });
+    }
+
+    async getBusinessClosedByDateString(date) {
+        const where = {
+            date: date,
+            restrictionType: enums.restrictionType.BUSINESS_CLOSED,
         };
 
         return await this.models.Restriction.findOne({ where });
@@ -79,6 +112,19 @@ class RestrictionsRepository {
 
         return await this.models.Restriction.update(update, { where });
     }
+
+    async updateBusinessClosedById(data, id) {
+        const where = {
+            restrictionType: enums.restrictionType.BUSINESS_CLOSED,
+            id: id,
+        };
+
+        return await this.models.Restriction.update(data, { where });
+    }
+
+    async deleteBusinessClosedById(id) {
+        return await models.Restriction.destroy({ where: { id }, force: true });
+    }
 }
 
-export default new RestrictionsRepository(models);
+export default new RestrictionsRepository(models, Op);

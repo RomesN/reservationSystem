@@ -34,6 +34,17 @@ class AdminController {
         }
     }
 
+    async createBusinessClosedRestriction(req, res, next) {
+        try {
+            const date = req.params.date;
+            const restriction = await this.RestrictionsService.createBusinessClosedRestriction(date);
+
+            return res.json(okJsonResponse("The business closed restriction was created.", restriction));
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getMonthReservations(req, res, next) {
         const year = req.params.year;
         const month = req.params.month;
@@ -67,6 +78,21 @@ class AdminController {
             const regularBrakes = await this.RestrictionsService.getAllRegularBrakes();
 
             return res.json(okJsonResponse("Requested regular brakes can be seen below.", regularBrakes));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getBusinessClosedForMonth(req, res, next) {
+        try {
+            const year = req.params.year;
+            const month = req.params.month;
+
+            const businessClosed = await this.RestrictionsService.getAllWholeDayRestrictionBetweenDates(year, month);
+
+            return res.json(
+                okJsonResponse("Requested business closed restrictions can be seen below.", businessClosed)
+            );
         } catch (error) {
             next(error);
         }
@@ -136,6 +162,17 @@ class AdminController {
             }
 
             return res.json(okJsonResponse(`All final reservations on given day deleted.`));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteBusinessClosedRestrictionById(req, res, next) {
+        const id = req.params.id;
+
+        try {
+            await this.RestrictionsService.deleteBusinessClosedByidAndDeleteJob(id);
+            return res.json(okJsonResponse(`The requested restriction was deleted.`));
         } catch (error) {
             next(error);
         }

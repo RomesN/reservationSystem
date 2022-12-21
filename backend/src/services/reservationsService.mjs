@@ -110,7 +110,7 @@ class ReservationsService {
         }
 
         const businessHours = await restrictionService.getBusinessHours(date);
-        const wholeDayClosed = await restrictionService.getWholeDayRestriction(date);
+        const wholeDayClosed = await restrictionService.getBusinessClosedByDate(date);
 
         // is generally closed on given day
         if (!businessHours.startTime || !businessHours.endTime || wholeDayClosed) {

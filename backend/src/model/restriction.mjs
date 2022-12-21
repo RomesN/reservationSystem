@@ -16,6 +16,10 @@ const getModelRestriction = (db, { DataTypes }) => {
             type: DataTypes.TIME,
             allowNull: true,
         },
+        scheduledDeletionJobId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     });
 
     Restriction.associate = (models) => {
