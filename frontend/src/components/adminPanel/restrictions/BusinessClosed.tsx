@@ -8,7 +8,8 @@ import {
     deleteBusinessClosedRestriction,
     getMonthBusinessClosedRestrictions,
 } from "../../../api/adminApi";
-import styles from "../../../styles/admin/calendar.module.css";
+import stylesCalendar from "../../../styles/admin/calendar.module.css";
+import styles from "../../../styles/admin/restrictions/businessClosed.module.css";
 import Loading from "../../Loading";
 import { numberMonthEnum } from "../../../shared/utils/enums/numberMonthEnum";
 import { queryClient } from "../../../shared/utils/helpers/functions";
@@ -140,11 +141,11 @@ const BusinessClosed = () => {
                                 key={keyCell++}
                                 className={`${
                                     cell.isInPastOrNextMonth
-                                        ? styles.unavailable
+                                        ? stylesCalendar.unavailable
                                         : cell.isClosed
-                                        ? styles.selected
-                                        : styles.availableToSelect
-                                } ${!cell.isInPastOrNextMonth ? styles.selectable : ""}`}
+                                        ? stylesCalendar.selected
+                                        : stylesCalendar.availableToSelect
+                                } ${!cell.isInPastOrNextMonth ? stylesCalendar.selectable : ""}`}
                             >
                                 {cell.date !== 0 ? `${cell.date}` : ""}
                             </td>
@@ -158,26 +159,26 @@ const BusinessClosed = () => {
     if (businessClosed.data) {
         return (
             <>
-                <div className={styles.selectionToolbar}>
+                <div className={stylesCalendar.selectionToolbar}>
                     <button
                         className={
                             new Date().getMonth() + 1 >= month && new Date().getFullYear() === year
-                                ? styles.buttonPreviousDisabled
-                                : styles.buttonPrevious
+                                ? stylesCalendar.buttonPreviousDisabled
+                                : stylesCalendar.buttonPrevious
                         }
                         disabled={new Date().getMonth() + 1 >= month && new Date().getFullYear() === year}
                         onClick={previousMonth}
                     >
                         <FontAwesomeIcon size="sm" icon={faChevronLeft} />
                     </button>
-                    <div className={styles.heading}>
+                    <div className={stylesCalendar.heading}>
                         <p>{`${numberMonthEnum[month]} ${year}`}</p>
                     </div>
-                    <button onClick={nextMonth} className={styles.buttonNext}>
+                    <button onClick={nextMonth} className={stylesCalendar.buttonNext}>
                         <FontAwesomeIcon size="sm" icon={faChevronRight} />
                     </button>
                 </div>
-                <table className={styles.daySelectionTable}>
+                <table className={stylesCalendar.daySelectionTable}>
                     <thead>
                         <tr>
                             <th>Mon</th>
@@ -191,6 +192,23 @@ const BusinessClosed = () => {
                     </thead>
                     <tbody>{generateTableBody(generateTableArray(businessClosed.data))}</tbody>
                 </table>
+                <div className={styles.legendContainer}>
+                    <div className={styles.past}>
+                        <p>
+                            <span></span>Past
+                        </p>
+                    </div>
+                    <div className={styles.possibleToSelect}>
+                        <p>
+                            <span></span>Possible to select
+                        </p>
+                    </div>
+                    <div className={styles.closedDay}>
+                        <p>
+                            <span></span>Closed day
+                        </p>
+                    </div>
+                </div>
             </>
         );
     }

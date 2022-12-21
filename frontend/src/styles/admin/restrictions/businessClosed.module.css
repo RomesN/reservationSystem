@@ -1,0 +1,43 @@
+.legendContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.past,
+.possibleToSelect,
+.closedDay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.past p,
+.possibleToSelect p,
+.closedDay p {
+    margin: 0;
+}
+
+.past span,
+.possibleToSelect span,
+.closedDay span {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin: 0 5px 0 0;
+}
+
+.past span {
+    background-color: var(--mainColor);
+}
+
+.possibleToSelect span {
+    background-color: var(--secondaryColor);
+}
+
+.closedDay span {
+    background-color: var(--tertiaryColor);
+}

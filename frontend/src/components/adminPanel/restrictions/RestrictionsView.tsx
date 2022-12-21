@@ -10,6 +10,7 @@ import {
 import styles from "../../../styles/admin/restrictions/restrictionsView.module.css";
 import BusinessClosed from "./BusinessClosed";
 import HoursSelection from "./HoursSelection";
+import IntervalClosed from "./IntervalsClosed";
 
 const RestrictionsView = () => {
     const [restrictionView, setRestrictionView] = useState("businessHours");
@@ -40,7 +41,7 @@ const RestrictionsView = () => {
             case "businessClosed":
                 return <BusinessClosed />;
             case "intervalsClosed":
-                return <></>;
+                return <IntervalClosed />;
             default:
                 throw new Error("Unexpected view.");
         }
