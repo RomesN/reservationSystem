@@ -1,3 +1,4 @@
+import { QueryClient } from "react-query";
 import { IntervalGeneralRestriction } from "../../types";
 
 const timesArrayConverter = (timesArray: IntervalGeneralRestriction[]) => {
@@ -26,4 +27,6 @@ const timesArrayConverter = (timesArray: IntervalGeneralRestriction[]) => {
     }));
 };
 
-export { timesArrayConverter };
+const queryClient = new QueryClient();
+
+export { queryClient, timesArrayConverter };

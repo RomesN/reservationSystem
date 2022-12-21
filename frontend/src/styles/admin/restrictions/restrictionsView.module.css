@@ -45,7 +45,6 @@
 }
 
 .contentContainer {
-    display: flex;
     justify-content: center;
     animation: fadeIn 1s;
     margin-top: 10px;
@@ -53,7 +52,8 @@
 
 /* larger displays */
 @media only screen and (min-width: 992px) {
-    .restrictionsViewContainer {
+    .restrictionsViewContainer,
+    .contentContainer {
         width: 70vw;
         font-size: 18px;
     }
@@ -61,7 +61,8 @@
 
 /* smaller displays*/
 @media screen and (max-width: 991px) {
-    .restrictionsViewContainer {
+    .restrictionsViewContainer,
+    .contentContainer {
         width: 90vw;
         font-size: 13px;
     }

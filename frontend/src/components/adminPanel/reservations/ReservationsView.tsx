@@ -2,21 +2,30 @@ import { faChevronLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 import Swal from "sweetalert2";
 import { deleteAllFinalReservationsOnGivenDay } from "../../../api/adminApi";
+import { getMonthReservations } from "../../../api/adminApi";
 import { Reservation } from "../../../shared/types";
 import ReservationBox from "./ReservationBox";
 import ReservationsCalendar from "./ReservationsCalendar";
 import styles from "../../../styles/admin/reservations/reservationsView.module.css";
 import stylesSweetAlert from "../../../styles/general/sweetAlert.module.css";
+import Loading from "../../Loading";
 
 const ReservationsView = () => {
-    const [dayDetailReservations, setDayDetailReservations] = useState([] as Reservation[]);
-    const [selectedReservationsDay, setSelectedReservationsDay] = useState<null | Date>(null);
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [isDetailOn, setIsDetailOn] = useState(false);
     const [isVisibleArray, setIsVisibleArray] = useState<number[] | null>(null);
+    const [selectedReservationsDay, setSelectedReservationsDay] = useState<null | Date>(null);
+    const [dayDetailReservations, setDayDetailReservations] = useState([] as Reservation[]);
     const toolbarRef = useRef<null | HTMLDivElement>(null);
     const boxesRef = useRef<Array<HTMLDivElement | null>>([]);
+
+    const reservationsInfo = useQuery(["reservationsInfoObject", [year, month]], getMonthReservations, {
+        useErrorBoundary: true,
+    });
 
     function checkIfSomeElementIsOverlapping() {
         if (toolbarRef.current && boxesRef.current && isVisibleArray) {
@@ -150,17 +159,22 @@ const ReservationsView = () => {
         });
     };
 
-    if (!isDetailOn) {
+    if (!isDetailOn && reservationsInfo.data) {
         return (
             <div className={styles.contentContainer}>
                 <ReservationsCalendar
+                    data={reservationsInfo.data}
+                    year={year}
+                    month={month}
+                    setYear={setYear}
+                    setMonth={setMonth}
                     setDayDetailReservations={setDayDetailReservations}
                     setSelectedReservationsDay={setSelectedReservationsDay}
                     setIsDetailOn={setIsDetailOn}
                 />
             </div>
         );
-    } else {
+    } else if (isDetailOn) {
         return (
             <div className={styles.contentContainer}>
                 <div className={styles.dayToolbar} ref={toolbarRef}>
@@ -188,12 +202,17 @@ const ReservationsView = () => {
                                     : styles.hiddenBox
                             }`}
                         >
-                            <ReservationBox reservation={reservation} />
+                            <ReservationBox
+                                reservation={reservation}
+                                setDayDetailReservations={setDayDetailReservations}
+                            />
                         </div>
                     ))}
                 </div>
             </div>
         );
+    } else {
+        return <Loading />;
     }
 };
 

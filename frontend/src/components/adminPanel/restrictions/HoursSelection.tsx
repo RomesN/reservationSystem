@@ -105,7 +105,7 @@ const HoursSelection = ({ dataGetter, dataUpdater, view }: HoursSelectionProps) 
                                 restriction={restriction}
                                 index={i}
                                 setter={setTimesArray}
-                                clearLabel={view === "businessHours" ? "Closed" : "None"}
+                                view={view}
                             />
                         ))}
                     <button onClick={() => handleSubmit(timesArray)} className={styles.saveButton}>

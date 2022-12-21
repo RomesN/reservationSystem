@@ -6,10 +6,10 @@ type GeneralResctrictionBoxType = {
     restriction: IntervalGeneralRestriction;
     index: number;
     setter: React.Dispatch<React.SetStateAction<IntervalGeneralRestriction[]>>;
-    clearLabel: string;
+    view: string;
 };
 
-const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: GeneralResctrictionBoxType) => {
+const GeneralResctrictionBox = ({ restriction, index, setter, view }: GeneralResctrictionBoxType) => {
     const handleChangeStart = (value: TimePickerValue) => {
         setter((prevValue) => {
             const previousArray = [...prevValue];
@@ -37,7 +37,11 @@ const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: Gene
         } else {
             setter((prevValue) => {
                 const previousArray = [...prevValue];
-                previousArray[index] = { ...previousArray[index], endTime: "16:00", startTime: "09:00" };
+                previousArray[index] = {
+                    ...previousArray[index],
+                    endTime: view === "businessHours" ? "18:00" : "14:00",
+                    startTime: view === "businessHours" ? "9:00" : "13:00",
+                };
                 return previousArray;
             });
         }
@@ -76,7 +80,7 @@ const GeneralResctrictionBox = ({ restriction, index, setter, clearLabel }: Gene
                     checked={!restriction.endTime && !restriction.startTime}
                     onChange={handleChangeClosed}
                 />
-                <label> {`${clearLabel}`}</label>
+                <label> {`${view === "businessHours" ? "Closed" : "None"}`}</label>
             </div>
         </div>
     );

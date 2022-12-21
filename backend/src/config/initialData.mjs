@@ -213,13 +213,6 @@ export default async () => {
         },
         {
             weekday: null,
-            date: new Date(Date.UTC(2022, 11, 1)),
-            startTime: null,
-            endTime: null,
-            restrictionType: enums.restrictionType.BUSINESS_CLOSED,
-        },
-        {
-            weekday: null,
             date: new Date(Date.UTC(2022, 11, 3)),
             startTime: "16:00",
             endTime: "18:00",

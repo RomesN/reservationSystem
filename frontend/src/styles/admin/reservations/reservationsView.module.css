@@ -81,6 +81,7 @@
     flex-wrap: wrap;
     margin-bottom: 3px;
     z-index: 1;
+    animation: fadeIn 1s;
 }
 
 .dayToolbar .buttonBack {

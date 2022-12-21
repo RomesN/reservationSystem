@@ -1,6 +1,6 @@
 .selectionToolbar {
-    width: 100%;
     display: flex;
+    width: 100%;
     animation: fadeIn 1s;
 }
 
@@ -114,8 +114,8 @@
     vertical-align: center;
     border-collapse: separate;
     border-spacing: 1px;
-    animation: fadeIn 1s;
     position: relative;
+    animation: fadeIn 1s;
 }
 
 .daySelectionTable th {
@@ -142,6 +142,28 @@ td {
 /* tooltip */
 .daySelectionTable td {
     position: relative;
+}
+
+.daySelectionTable .selected {
+    background-color: var(--tertiaryColor);
+    color: var(--fontDark);
+}
+
+.daySelectionTable .availableToSelect {
+    background-color: var(--secondaryColor);
+    color: var(--fontBright);
+}
+
+.daySelectionTable .selectable:hover {
+    cursor: pointer;
+    color: var(--fontDark);
+    background: linear-gradient(to bottom, var(--tertiaryColor), var(--tertiaryColor));
+    box-shadow: 0 0 0.5em var(--tertiaryColor), 0 0 1em var(--tertiaryColor), 0 0 1.5em var(--tertiaryColor),
+        0 0 1em var(--tertiaryColor);
+    transform: scale(1.2);
+    z-index: 2;
+    border-radius: 5px;
+    transition: transform 0.5s;
 }
 
 .daySelectionTable .available:hover:before,

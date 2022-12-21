@@ -1,32 +1,32 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { getMonthReservations } from "../../../api/adminApi";
 import { numberMonthEnum } from "../../../shared/utils/enums/numberMonthEnum";
 import Loading from "../../Loading";
-import { Reservation, TableArrayExistingReservations } from "../../../shared/types";
-import styles from "../../../styles/admin/reservations/reservationCalendar.module.css";
+import { Reservation, ReservationsInfoObject, TableArrayExistingReservations } from "../../../shared/types";
+import styles from "../../../styles/admin/calendar.module.css";
 
 type ReservationsCalendarType = {
+    data: ReservationsInfoObject;
+    year: number;
+    month: number;
+    setYear: React.Dispatch<React.SetStateAction<number>>;
+    setMonth: React.Dispatch<React.SetStateAction<number>>;
     setDayDetailReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
     setSelectedReservationsDay: React.Dispatch<React.SetStateAction<Date | null>>;
     setIsDetailOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ReservationsCalendar = ({
+    data,
+    year,
+    month,
+    setYear,
+    setMonth,
     setDayDetailReservations,
     setSelectedReservationsDay,
     setIsDetailOn,
 }: ReservationsCalendarType) => {
-    const [year, setYear] = useState(new Date().getFullYear());
-    const [month, setMonth] = useState(new Date().getMonth() + 1);
-
-    const reservationsInfo = useQuery(["reservationsInfoObject", [year, month]], getMonthReservations, {
-        useErrorBoundary: true,
-    });
-
-    const generateTableArray = (data: any) => {
+    const generateTableArray = (data: ReservationsInfoObject) => {
         const tableArray = [[], [], [], [], [], []] as TableArrayExistingReservations[][];
         const monthStartDay = new Date(year, month - 1, 1).getDay();
         const startMonIsOne = monthStartDay === 0 ? 7 : monthStartDay;
@@ -38,11 +38,12 @@ const ReservationsCalendar = ({
 
         // the rest of the table
         for (let i = startMonIsOne - 1; i < 42; i++) {
-            if (data.data[`${i - startMonIsOne + 2}`]) {
+            if (data[`${i - startMonIsOne + 2}` as keyof ReservationsInfoObject]) {
+                const reservations = data[`${i - startMonIsOne + 2}` as keyof ReservationsInfoObject];
                 tableArray[i / 7 - ((i / 7) % 1)][i % 7] = {
-                    available: data.data[`${i - startMonIsOne + 2}`].length !== 0,
+                    available: Array.isArray(reservations) && reservations.length !== 0,
                     date: i - startMonIsOne + 2,
-                    reservations: data.data[`${i - startMonIsOne + 2}`],
+                    reservations: Array.isArray(reservations) ? reservations : [],
                 };
                 // cells for not days in current month
             } else {
@@ -112,7 +113,7 @@ const ReservationsCalendar = ({
         }
     };
 
-    if (reservationsInfo.data) {
+    if (data) {
         return (
             <>
                 <div className={styles.selectionToolbar}>
@@ -146,7 +147,7 @@ const ReservationsCalendar = ({
                             <th>Sun</th>
                         </tr>
                     </thead>
-                    <tbody>{generateTableBody(generateTableArray(reservationsInfo.data))}</tbody>
+                    <tbody>{generateTableBody(generateTableArray(data))}</tbody>
                 </table>
             </>
         );

@@ -87,43 +87,7 @@ type OkServiceResponseTimeSlots = {
 type OkReservationsListResponse = {
     status: string;
     message: string;
-    data: {
-        year: Number;
-        monthAsNumber: Number;
-        numberOfDays: Number;
-        timesOffsetedByMinutes: Number;
-        ["1"]: IntervalString[];
-        ["2"]: IntervalString[];
-        ["3"]: IntervalString[];
-        ["4"]: IntervalString[];
-        ["5"]: IntervalString[];
-        ["6"]: IntervalString[];
-        ["7"]: IntervalString[];
-        ["8"]: IntervalString[];
-        ["9"]: IntervalString[];
-        ["10"]: IntervalString[];
-        ["11"]: IntervalString[];
-        ["12"]: IntervalString[];
-        ["13"]: IntervalString[];
-        ["14"]: IntervalString[];
-        ["15"]: IntervalString[];
-        ["16"]: IntervalString[];
-        ["17"]: IntervalString[];
-        ["18"]: IntervalString[];
-        ["19"]: IntervalString[];
-        ["20"]: IntervalString[];
-        ["21"]: IntervalString[];
-        ["22"]: IntervalString[];
-        ["23"]: IntervalString[];
-        ["24"]: IntervalString[];
-        ["25"]: IntervalString[];
-        ["26"]: IntervalString[];
-        ["27"]: IntervalString[];
-        ["28"]: IntervalString[];
-        ["29"]?: IntervalString[];
-        ["30"]?: IntervalString[];
-        ["31"]?: IntervalString[];
-    };
+    data: ReservationsInfoObject;
 };
 
 type OkIsDateAvailableResponse = {
@@ -150,7 +114,7 @@ type OkNullDataReservationResponse = {
     data: null;
 };
 
-type OkBusinessHoursResponse = {
+type OkRestrictionsArrayResponse = {
     status: string;
     message: string;
     data: Restriction[];
@@ -185,7 +149,46 @@ type Reservation = {
     reservationToken: string;
 };
 
+type ReservationsInfoObject = {
+    year: Number;
+    monthAsNumber: Number;
+    numberOfDays: Number;
+    timesOffsetedByMinutes: Number;
+    ["1"]: Reservation[];
+    ["2"]: Reservation[];
+    ["3"]: Reservation[];
+    ["4"]: Reservation[];
+    ["5"]: Reservation[];
+    ["6"]: Reservation[];
+    ["7"]: Reservation[];
+    ["8"]: Reservation[];
+    ["9"]: Reservation[];
+    ["10"]: Reservation[];
+    ["11"]: Reservation[];
+    ["12"]: Reservation[];
+    ["13"]: Reservation[];
+    ["14"]: Reservation[];
+    ["15"]: Reservation[];
+    ["16"]: Reservation[];
+    ["17"]: Reservation[];
+    ["18"]: Reservation[];
+    ["19"]: Reservation[];
+    ["20"]: Reservation[];
+    ["21"]: Reservation[];
+    ["22"]: Reservation[];
+    ["23"]: Reservation[];
+    ["24"]: Reservation[];
+    ["25"]: Reservation[];
+    ["26"]: Reservation[];
+    ["27"]: Reservation[];
+    ["28"]: Reservation[];
+    ["29"]?: Reservation[];
+    ["30"]?: Reservation[];
+    ["31"]?: Reservation[];
+};
+
 type Restriction = {
+    id?: number;
     weekday: string | null;
     date: string | null;
     startTime: string | null;
@@ -199,6 +202,13 @@ type Service = {
     minutesRequired: number;
     createdAt: Date;
     updatedAt: Date;
+};
+
+type TableArrayBusinessClosed = {
+    restrictionId?: number | null;
+    isClosed: boolean;
+    date: number;
+    isInPastOrNextMonth: boolean;
 };
 
 type TableArrayNewReservation = {
@@ -222,20 +232,22 @@ export type {
     IntervalGeneralRestriction,
     IntervalString,
     LoginInputs,
-    OkBusinessHoursResponse,
     OkNullDataReservationResponse,
     OkIsDateAvailableResponse,
     OkMakeFinalReservationResponse,
     OkMakeTemporaryReservationResponse,
     OkReservationsListResponse,
+    OkRestrictionsArrayResponse,
     OkServiceResponseTimeSlots,
     OkServiceResponse,
     Position,
     Positions,
     Props,
     Reservation,
+    ReservationsInfoObject,
     Restriction,
     Service,
+    TableArrayBusinessClosed,
     TableArrayNewReservation,
     TableArrayExistingReservations,
     TargetProps,

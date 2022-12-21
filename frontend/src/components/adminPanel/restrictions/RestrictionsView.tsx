@@ -8,6 +8,7 @@ import {
     updateRegularBrakes,
 } from "../../../api/adminApi";
 import styles from "../../../styles/admin/restrictions/restrictionsView.module.css";
+import BusinessClosed from "./BusinessClosed";
 import HoursSelection from "./HoursSelection";
 
 const RestrictionsView = () => {
@@ -37,7 +38,7 @@ const RestrictionsView = () => {
                     />
                 );
             case "businessClosed":
-                return <></>;
+                return <BusinessClosed />;
             case "intervalsClosed":
                 return <></>;
             default:

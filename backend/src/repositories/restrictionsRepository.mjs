@@ -72,14 +72,14 @@ class RestrictionsRepository {
 
     async getGeneralPartialDayRestrictions(weekday) {
         return await this.models.Restriction.findAll({
-            where: { restrictionType: enums.restrictionType.GENERAL_PARTIAL_BUSINESS_CLOSED, weekday: weekday },
+            where: { restrictionType: enums.restrictionType.INTERVAL_CLSOED, weekday: weekday },
         });
     }
 
     async getOneoffPartialDayRestrictions(date) {
         const where = {
             date: format(date, "yyyy-MM-dd"),
-            restrictionType: enums.restrictionType.ONEOFF_PARTIAL_BUSINESS_CLOSED,
+            restrictionType: enums.restrictionType.INTERVAL_CLSOED,
         };
 
         return await this.models.Restriction.findAll({ where });
