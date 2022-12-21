@@ -129,6 +129,12 @@ const ReservationBox = ({ reservation, setDayDetailReservations }: ReservationBo
                         <span className={styles.highlighted}>Mail: </span>
                         {`${reservation.customer.email}`}
                     </p>
+                    {reservation.note && (
+                        <p>
+                            <span className={styles.highlighted}>Note: </span>
+                            {`${reservation.note}`}
+                        </p>
+                    )}
                 </div>
             </div>
             <div className={styles.columnTwo}>

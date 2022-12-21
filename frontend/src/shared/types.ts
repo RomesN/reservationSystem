@@ -137,7 +137,7 @@ type Props = {
 type Reservation = {
     id: string;
     date: string;
-    detail: string;
+    note: string;
     serviceId: number;
     service: Service;
     reservationStatus: string;

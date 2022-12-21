@@ -150,8 +150,8 @@ class RestrictionsService {
 
         if (startTimeDate.toString() === "Invalid Date" || endTimeDate.toString() === "Invalid Date") {
             updateObject.startTime = null;
-            updateObject.endTime = null;
         } else {
+            updateObject.endTime = null;
             const startHours =
                 startTimeDate.getHours() < 10 ? `0${startTimeDate.getHours()}` : `${startTimeDate.getHours()}`;
             const endHours = endTimeDate.getHours() < 10 ? `0${endTimeDate.getHours()}` : `${endTimeDate.getHours()}`;
@@ -162,9 +162,8 @@ class RestrictionsService {
 
             updateObject.startTime = `${startHours}:${startMinutes}:00`;
             updateObject.endTime = `${endHours}:${endMinutes}:00`;
-
-            return updateObject;
         }
+        return updateObject;
     }
 
     async getBusinessClosedByDate(date) {
