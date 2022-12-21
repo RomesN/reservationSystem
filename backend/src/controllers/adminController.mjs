@@ -35,11 +35,24 @@ class AdminController {
     }
 
     async createBusinessClosedRestriction(req, res, next) {
+        const date = req.params.date;
+
         try {
-            const date = req.params.date;
             const restriction = await this.RestrictionsService.createBusinessClosedRestriction(date);
 
             return res.json(okJsonResponse("The business closed restriction was created.", restriction));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async createIntervalClosedRestriction(req, res, next) {
+        const { startDate, endDate } = req.body;
+
+        try {
+            const restriction = await this.RestrictionsService.createIntervalClosedRestriction(startDate, endDate);
+
+            return res.json(okJsonResponse("The interval closed restriction was created.", restriction));
         } catch (error) {
             next(error);
         }
@@ -92,6 +105,24 @@ class AdminController {
 
             return res.json(
                 okJsonResponse("Requested business closed restrictions can be seen below.", businessClosed)
+            );
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getIntervalsClosedForMonth(req, res, next) {
+        const year = req.params.year;
+        const month = req.params.month;
+
+        try {
+            const businessClosed = await this.RestrictionsService.getAllIntervalsClosedRestrictionBetweenDates(
+                year,
+                month
+            );
+
+            return res.json(
+                okJsonResponse("Requested intervals closed restrictions can be seen below.", businessClosed)
             );
         } catch (error) {
             next(error);
@@ -171,8 +202,19 @@ class AdminController {
         const id = req.params.id;
 
         try {
-            await this.RestrictionsService.deleteBusinessClosedByidAndDeleteJob(id);
-            return res.json(okJsonResponse(`The requested restriction was deleted.`));
+            await this.RestrictionsService.deleteBusinessClosedRestrictionByIdAndDeleteJob(id);
+            return res.json(okJsonResponse(`The requested business closed restriction was deleted.`));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteIntervalClosedRestrictionById(req, res, next) {
+        const id = req.params.id;
+
+        try {
+            await this.RestrictionsService.deleteIntervalClosedRestrictionByIdAndDeleteJob(id);
+            return res.json(okJsonResponse(`The requested interval closed restriction was deleted.`));
         } catch (error) {
             next(error);
         }

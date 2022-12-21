@@ -126,8 +126,8 @@ class ReservationsService {
         }
 
         const reservations = await this.getValidReservationsBetweenDates(startBusinessDate, endBusinessDate);
-        const otherGeneralResctrictions = await restrictionService.getGeneralPartialDayRestrictions(date);
-        const otherOneOffRestrictions = await restrictionService.getOneoffPartialDayRestrictions(date);
+        const otherGeneralResctrictions = await restrictionService.getRegularBreaksOnGivenDay(date);
+        const otherOneOffRestrictions = await restrictionService.getIntervalsClosedOnGivenDay(date);
         const businessClosedIntervals = await restrictionService.getBusinessClosedIntervals(
             date,
             otherGeneralResctrictions,

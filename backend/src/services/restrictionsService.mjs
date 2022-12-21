@@ -1,4 +1,4 @@
-import { areIntervalsOverlapping, isSameSecond, parse, parseISO } from "date-fns";
+import { areIntervalsOverlapping, isBefore, isSameSecond, parse, parseISO } from "date-fns";
 import schedule from "node-schedule";
 import {
     daysOfTheWeekNum,
@@ -39,7 +39,7 @@ class RestrictionsService {
         const existingRestriction = await this.RestrictionsRepository.getBusinessClosedByDateString(date);
 
         if (existingRestriction) {
-            throw new CoveredError(400, "The restriction already exists.");
+            throw new CoveredError(409, "The restriction already exists.");
         } else {
             const createdRestriction = await this.RestrictionsRepository.createBusinessClosedRestriction({
                 date: date,
@@ -51,13 +51,86 @@ class RestrictionsService {
             createdRestriction.scheduledDeletionJobId = schedule.scheduleJob(
                 new Date(Date.UTC(year, month, day + 1, 0, 0, 0)),
                 () => {
-                    this.deleteBusinessClosedByid(createdRestriction.id);
+                    this.deleteRestrictionById(createdRestriction.id);
                 }
             ).name;
 
             // saving the job name
 
             await this.RestrictionsRepository.updateBusinessClosedById(
+                { scheduledDeletionJobId: createdRestriction.scheduledDeletionJobId },
+                createdRestriction.id
+            );
+            return createdRestriction;
+        }
+    }
+
+    async createIntervalClosedRestriction(startDate, endDate) {
+        if (!startDate || !endDate) {
+            throw new CoveredError(400, "Missing input.");
+        }
+
+        const startDateAsDate = parseISO(startDate);
+        const endDateAsDate = parseISO(endDate);
+
+        if (!isBefore(startDateAsDate, endDateAsDate)) {
+            throw new CoveredError("Start date is after end date");
+        }
+
+        if (startDateAsDate.toString() === "Invalid Date" || endDateAsDate.toString() === "Invalid Date") {
+            throw new CoveredError(400, "Wrong format.");
+        }
+
+        // if exists do not create
+        const timezoneOffset = new Date().getTimezoneOffset() / -60;
+        const alreadyCovered = (await this.RestrictionsRepository.getIntervalsClosedOnGivenDay(startDateAsDate)).some(
+            (rest) => {
+                const existingStart = parseISO(
+                    `${rest.date} ${rest.startTime}.000${timezoneOffset > 0 ? "+" : "-"}${
+                        timezoneOffset < 10 ? "0" : ""
+                    }${timezoneOffset < 0 ? timezoneOffset * -1 : timezoneOffset}`
+                );
+                const existingEnd = parseISO(
+                    `${rest.date} ${rest.endTime}.000${timezoneOffset > 0 ? "+" : "-"}${
+                        timezoneOffset < 10 ? "0" : ""
+                    }${timezoneOffset < 0 ? timezoneOffset * -1 : timezoneOffset}`
+                );
+
+                return isSameSecond(existingStart, startDateAsDate) && isSameSecond(existingEnd, endDateAsDate);
+            }
+        );
+
+        if (alreadyCovered) {
+            throw new CoveredError(409, "There is already interval covering this time period.");
+        } else {
+            const createdRestriction = await this.RestrictionsRepository.createBusinessClosedRestriction({
+                date: startDate,
+                startTime: `${startDateAsDate.getHours()}:${startDateAsDate.getMinutes()}:${startDateAsDate.getSeconds()}`,
+                endTime: `${endDateAsDate.getHours()}:${endDateAsDate.getMinutes()}:${endDateAsDate.getSeconds()}`,
+                restrictionType: enums.restrictionType.INTERVAL_CLSOED,
+            });
+
+            // scheduling deletion
+
+            createdRestriction.scheduledDeletionJobId = schedule.scheduleJob(
+                new Date(
+                    Date.UTC(
+                        startDateAsDate.getFullYear(),
+                        startDateAsDate.getMonth(),
+                        startDateAsDate.getDate() + 1,
+                        0,
+                        0,
+                        0
+                    )
+                ),
+                () => {
+                    this.deleteRestrictionById(createdRestriction.id);
+                }
+            ).name;
+
+            // saving the job name
+
+            await this.RestrictionsRepository.updateIntervalClosedById(
                 { scheduledDeletionJobId: createdRestriction.scheduledDeletionJobId },
                 createdRestriction.id
             );
@@ -132,14 +205,32 @@ class RestrictionsService {
         );
     }
 
-    async getGeneralPartialDayRestrictions(date) {
-        return await this.RestrictionsRepository.getGeneralPartialDayRestrictions(
+    async getAllIntervalsClosedRestrictionBetweenDates(year, month) {
+        if (!year || !month) {
+            throw new CoveredError(400, "Inputs missing.");
+        }
+
+        const yearAsNumber = parseInt(year);
+        const monthAsNumber = parseInt(month);
+
+        if (Number.isNaN(yearAsNumber) || Number.isNaN(monthAsNumber)) {
+            throw new CoveredError(400, "Invalid format of inputs.");
+        }
+
+        return await this.RestrictionsRepository.getAllIntervalsClosedRestrictionBetweenDates(
+            new Date(yearAsNumber, monthAsNumber - 1, 1, 0, 0, 0),
+            new Date(yearAsNumber, monthAsNumber - 1, getDaysInMonth(yearAsNumber, monthAsNumber), 23, 59, 59)
+        );
+    }
+
+    async getRegularBreaksOnGivenDay(date) {
+        return await this.RestrictionsRepository.getRegularBreaksOnGivenDay(
             daysOfTheWeekNum[getWeekdayNumberMonIsOne(date)]
         );
     }
 
-    async getOneoffPartialDayRestrictions(date) {
-        return await this.RestrictionsRepository.getOneoffPartialDayRestrictions(date);
+    async getIntervalsClosedOnGivenDay(date) {
+        return await this.RestrictionsRepository.getIntervalsClosedOnGivenDay(date);
     }
 
     getUpdateObject(restrictionReceived) {
@@ -202,16 +293,24 @@ class RestrictionsService {
         return true;
     }
 
-    async deleteBusinessClosedByid(id) {
-        return await this.RestrictionsRepository.deleteBusinessClosedById(id);
+    async deleteRestrictionById(id) {
+        return await this.RestrictionsRepository.deleteRestrictionById(id);
     }
 
-    async deleteBusinessClosedByidAndDeleteJob(id) {
+    async deleteBusinessClosedRestrictionByIdAndDeleteJob(id) {
         const restriction = await this.RestrictionsRepository.getBusinessClosedById(id);
         if (!schedule.cancelJob(restriction.scheduledDeletionJobId)) {
             throw new CoveredError(500, "Job cancelation for the restriction failed.");
         }
-        return await this.deleteBusinessClosedByid(id);
+        return await this.deleteRestrictionById(id);
+    }
+
+    async deleteIntervalClosedRestrictionByIdAndDeleteJob(id) {
+        const restriction = await this.RestrictionsRepository.getIntervalsClosedById(id);
+        if (!schedule.cancelJob(restriction.scheduledDeletionJobId)) {
+            throw new CoveredError(500, "Job cancelation for the restriction failed.");
+        }
+        return await this.deleteRestrictionById(id);
     }
 }
 

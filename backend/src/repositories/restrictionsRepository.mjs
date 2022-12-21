@@ -13,6 +13,10 @@ class RestrictionsRepository {
         return await this.models.Restriction.create(restriction);
     }
 
+    async createIntervalClosedRestriction(restriction) {
+        return await this.models.Restriction.create(restriction);
+    }
+
     async getServicesList() {
         return await this.models.Service.findAll();
     }
@@ -46,6 +50,17 @@ class RestrictionsRepository {
         return await this.models.Restriction.findAll({ where });
     }
 
+    async getAllIntervalsClosedRestrictionBetweenDates(startDate, endDate) {
+        const where = {
+            date: {
+                [this.Op.between]: [startDate, endDate],
+            },
+            restrictionType: enums.restrictionType.INTERVAL_CLSOED,
+        };
+
+        return await this.models.Restriction.findAll({ where });
+    }
+
     async getBusinessClosedById(id) {
         return await this.models.Restriction.findOne({
             where: { id, restrictionType: enums.restrictionType.BUSINESS_CLOSED },
@@ -70,19 +85,25 @@ class RestrictionsRepository {
         return await this.models.Restriction.findOne({ where });
     }
 
-    async getGeneralPartialDayRestrictions(weekday) {
+    async getRegularBreaksOnGivenDay(weekday) {
         return await this.models.Restriction.findAll({
-            where: { restrictionType: enums.restrictionType.INTERVAL_CLSOED, weekday: weekday },
+            where: { restrictionType: enums.restrictionType.REGULAR_BREAK, weekday: weekday },
         });
     }
 
-    async getOneoffPartialDayRestrictions(date) {
+    async getIntervalsClosedOnGivenDay(date) {
         const where = {
             date: format(date, "yyyy-MM-dd"),
             restrictionType: enums.restrictionType.INTERVAL_CLSOED,
         };
 
         return await this.models.Restriction.findAll({ where });
+    }
+
+    async getIntervalsClosedById(id) {
+        return await this.models.Restriction.findOne({
+            where: { id, restrictionType: enums.restrictionType.INTERVAL_CLSOED },
+        });
     }
 
     async updateBusinessHours(data) {
@@ -122,7 +143,16 @@ class RestrictionsRepository {
         return await this.models.Restriction.update(data, { where });
     }
 
-    async deleteBusinessClosedById(id) {
+    async updateIntervalClosedById(data, id) {
+        const where = {
+            restrictionType: enums.restrictionType.INTERVAL_CLSOED,
+            id: id,
+        };
+
+        return await this.models.Restriction.update(data, { where });
+    }
+
+    async deleteRestrictionById(id) {
         return await models.Restriction.destroy({ where: { id }, force: true });
     }
 }
