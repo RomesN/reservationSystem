@@ -42,6 +42,8 @@ body {
     font-family: "Montserrat", sans-serif;
 }
 
+/* react time picker */
+
 .react-time-picker__inputGroup {
     min-width: 3.4em !important;
 }

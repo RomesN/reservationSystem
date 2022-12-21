@@ -51,7 +51,8 @@
     padding: 0.4em 0;
 }
 
-.selectionToolbar .buttonNext:hover {
+.selectionToolbar .buttonNext:hover,
+.selectionToolbar .buttonAdd:hover {
     color: var(--fontDark);
     --bs-btn-active-color: var(--fontDark);
     --bs-btn-active-bg: var(--tertiaryColor);
@@ -66,7 +67,7 @@
 }
 
 .selectionToolbar .heading {
-    width: 71.4%;
+    width: 67.1%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,6 +75,17 @@
     background-color: var(--fontDark);
     font-weight: bolder;
     border-radius: 3px;
+}
+
+.buttonAdd {
+    width: 14.3%;
+    margin: 0 0 0 2px;
+    border: var(--secondaryDarker);
+    background-color: var(--secondaryDarker);
+    color: var(--fontBright);
+    font-weight: bolder;
+    border-radius: 3px;
+    padding: 0.4em 0;
 }
 
 .selectionToolbar .heading > p {

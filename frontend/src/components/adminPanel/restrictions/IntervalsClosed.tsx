@@ -1,4 +1,4 @@
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
@@ -118,6 +118,9 @@ const IntervalClosed = () => {
                 <div className={styles.heading}>
                     <p>{`${numberMonthEnum[month]} ${year}`}</p>
                 </div>
+                <button onClick={() => {}} className={styles.buttonAdd}>
+                    <FontAwesomeIcon size="sm" icon={faPlus} /> Add
+                </button>
                 <button onClick={nextMonth} className={styles.buttonNext}>
                     <FontAwesomeIcon size="sm" icon={faChevronRight} />
                 </button>
