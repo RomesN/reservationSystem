@@ -8,6 +8,8 @@ import Login from "./pages/admin/Login";
 import NewReservation from "./pages/user/NewReservation";
 import { NewReservationDataProvider } from "./hooks/useNewReservationContext";
 import "./styles/general/index.css";
+import "./styles/general/dateTimePicker.css";
+import "./styles/general/timePicker.css";
 
 function App() {
     return (

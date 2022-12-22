@@ -1,0 +1,19 @@
+/* react time picker */
+
+.react-time-picker__inputGroup {
+    min-width: 3.4em !important;
+}
+
+.react-time-picker__clock-button.react-time-picker__button {
+    padding-left: 2px !important;
+    padding-right: 3px !important;
+    border-radius: 5px !important;
+}
+
+.react-time-picker__wrapper {
+    background-color: var(--tertiaryColor);
+}
+
+.react-time-picker__clock.react-time-picker__clock--open {
+    background-color: var(--mainColor);
+}

@@ -52,7 +52,8 @@
 }
 
 .selectionToolbar .buttonNext:hover,
-.selectionToolbar .buttonAdd:hover {
+.selectionToolbar .buttonAdd:hover,
+.submitButtonContainer button:hover {
     color: var(--fontDark);
     --bs-btn-active-color: var(--fontDark);
     --bs-btn-active-bg: var(--tertiaryColor);
@@ -64,10 +65,11 @@
     z-index: 2;
     border-radius: 5px;
     transition: transform 0.5s;
+    border: var(--tertiaryColor);
 }
 
 .selectionToolbar .heading {
-    width: 67.1%;
+    width: 61.1%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,7 +80,7 @@
 }
 
 .buttonAdd {
-    width: 14.3%;
+    width: 20.3%;
     margin: 0 0 0 2px;
     border: var(--secondaryDarker);
     background-color: var(--secondaryDarker);
@@ -91,6 +93,38 @@
 .selectionToolbar .heading > p {
     margin: 0;
     padding: 0;
+}
+
+/* popupform */
+
+.popupFormContainer {
+    display: flex;
+    flex: wrap;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-between;
+    width: 100%;
+}
+
+.fromPickerContainer,
+.toPickerContainer {
+    text-align: center;
+}
+
+.submitButtonContainer {
+    display: flex;
+    width: 100%;
+    height: 4em;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.submitButtonContainer button {
+    border-radius: 5px;
+    padding: 0.3em 1em;
+    background-color: var(--secondaryColor);
+    border: var(--secondaryColor);
+    color: var(--fontBright);
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
