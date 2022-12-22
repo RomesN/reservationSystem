@@ -128,11 +128,9 @@ class ReservationsService {
         const reservations = await this.getValidReservationsBetweenDates(startBusinessDate, endBusinessDate);
         const otherGeneralResctrictions = await restrictionService.getRegularBreaksOnGivenDay(date);
         const otherOneOffRestrictions = await restrictionService.getIntervalsClosedOnGivenDay(date);
-        const businessClosedIntervals = await restrictionService.getBusinessClosedIntervals(
-            date,
-            otherGeneralResctrictions,
-            otherOneOffRestrictions
-        );
+        const businessClosedIntervals = await restrictionService
+            .getBusinessClosedIntervals(date, otherGeneralResctrictions, otherOneOffRestrictions)
+            .filter((interval) => !!interval.startTime && !!interval.endTime);
         const suitableNotBooked = await this.calculateNotBookedIntervals(
             minutesNeeded,
             reservations,

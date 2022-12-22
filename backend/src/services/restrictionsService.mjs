@@ -241,6 +241,7 @@ class RestrictionsService {
 
         if (startTimeDate.toString() === "Invalid Date" || endTimeDate.toString() === "Invalid Date") {
             updateObject.startTime = null;
+            updateObject.endTime = null;
         } else {
             updateObject.endTime = null;
             const startHours =
