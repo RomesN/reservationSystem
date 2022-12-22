@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import { tokenAuthentication } from "./middlewares/index.mjs";
 import { errorHandling } from "./middlewares/index.mjs";
-import { adminRouter, loginRouter, reservationsRouter, servicesRouter } from "./routers/index.mjs";
+import { adminRouter, publicAdminRouter, reservationsRouter, servicesRouter } from "./routers/index.mjs";
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use(cookieParser());
 
 app.use("/api/services", servicesRouter);
 app.use("/api/reservations", reservationsRouter);
-app.use("/api/admin-gate/", loginRouter);
+app.use("/api/admin-gate/", publicAdminRouter);
 
 // Admin verification
 app.use(tokenAuthentication);

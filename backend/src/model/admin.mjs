@@ -15,10 +15,6 @@ const getModelAdmin = (db, { DataTypes }) => {
             allowNull: false,
             unique: true,
         },
-        emailConfirmed: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
         registrationToken: {
             type: DataTypes.STRING,
             allowNull: false,

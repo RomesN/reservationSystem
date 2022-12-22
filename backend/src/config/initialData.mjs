@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import bcrypt from "bcrypt";
 import "dotenv/config";
 import models from "../model/index.mjs";
@@ -50,66 +51,31 @@ export default async () => {
     ]);
     //#endregion ---SERVICES---
 
-    //#region ---CUSTOMER---
-    await models.Customer.bulkCreate([
-        {
-            firstName: "Alexandra",
-            lastName: "Doe",
-            telephoneNumber: "+420444555666",
-            email: "example@example.com",
-            customerStatus: "Active",
-        },
-        {
-            firstName: "John",
-            lastName: "Doe",
-            telephoneNumber: "+420111222333",
-            email: "john.doe.example@example.com",
-            customerStatus: "Active",
-        },
-        {
-            firstName: "Gal",
-            lastName: "Gadot",
-            telephoneNumber: "+4206667777666",
-            email: "galGadot@example.com",
-            customerStatus: "Active",
-        },
-        {
-            firstName: "Lara",
-            lastName: "Croft",
-            telephoneNumber: "+420444555666",
-            email: "lara.croft@example.com",
-            customerStatus: "Active",
-        },
-        {
-            firstName: "Samantha",
-            lastName: "Gardner",
-            telephoneNumber: "+420444555666",
-            email: "exampleSamantha@example.com",
-            customerStatus: "Active",
-        },
-        {
-            firstName: "Scarlett",
-            lastName: "Johansson",
-            telephoneNumber: "+420123456789",
-            email: "scarlett.johansson@example.com",
-            customerStatus: "Active",
-        },
-    ]);
-    //#endregion ---CUSTOMER---
-
     //#region ---ADMIN---
     await models.Admin.bulkCreate([
         {
             username: "admin",
-            password: await bcrypt.hash("testTest1", 10),
-            email: "example@example.com",
+            password: await bcrypt.hash(process.env.ADMIN_INITIAL_DATA_SEED_PASSWORD, 10),
+            email: "example@exampl.com",
             emailConfirmed: true,
-            registrationToken: "regtoken12345!",
-            resetPasswordToken: "restoken12345",
+            registrationToken: "adminTok11",
+            resetPasswordToken: "adminTok12",
             adminStatus: "Active",
         },
     ]);
     //#endregion ---ADMIN---
+
+    //#region ---CUSTOMER---
+    await models.Customer.bulkCreate([
+        {
+            firstName: "Test",
+            lastName: "User",
+            email: "romannemeth1@gmail.com",
+            telephoneNumber: "+420123456789",
+            scheduledJobId: null,
+        },
+    ]);
+    //#endregion ---CUSTOMER---
 
     //#region ---RESTRICTION---
     await models.Restriction.bulkCreate([
@@ -211,37 +177,42 @@ export default async () => {
             endTime: null,
             restrictionType: enums.restrictionType.REGULAR_BREAK,
         },
-        {
-            weekday: null,
-            date: new Date(Date.UTC(2022, 11, 3)),
-            startTime: "16:00",
-            endTime: "18:00",
-            restrictionType: enums.restrictionType.INTERVAL_CLSOED,
-        },
     ]);
     //#endregion ---RESTRICTION---
 
     //#region ---RESERVATION---
     await models.Reservation.bulkCreate([
         {
-            date: new Date(Date.UTC(2022, 11, 20, 9, 0, 0)),
+            date: add(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 10, 0, 0), {
+                days: 3,
+            }),
             note: "I hope it will be perfect.",
             serviceId: 1,
             reservationStatus: "Active",
-            customer: 1,
             reservationToken: "1234567",
-            validityEnd: new Date(Date.UTC(2022, 11, 20, 9, 0, 0)),
+            validityEnd: add(
+                new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 10, 0, 0),
+                {
+                    days: 3,
+                }
+            ),
             customerId: 1,
         },
         {
-            date: new Date(Date.UTC(2022, 11, 23, 11, 0, 0)),
+            date: add(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 10, 0, 0), {
+                days: 5,
+            }),
             note: null,
             serviceId: 2,
             reservationStatus: "Active",
-            customer: 2,
             reservationToken: "12345678",
-            validityEnd: new Date(Date.UTC(2022, 11, 23, 11, 0, 0)),
-            customerId: 2,
+            validityEnd: add(
+                new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 10, 0, 0),
+                {
+                    days: 3,
+                }
+            ),
+            customerId: 1,
         },
     ]);
     //#endregion ---RESERVATION---

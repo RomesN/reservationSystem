@@ -384,6 +384,8 @@ class ReservationsService {
             throw new CoveredError(403, "Reservation cannot be canceled less than 24 hours before.");
         }
 
+        schedule.cancelJob(reservationToDelete.scheduledDeletionJobId);
+
         if (reservationToDelete.scheduledReminderJobId) {
             schedule.cancelJob(reservationToDelete.scheduledReminderJobId);
         }
@@ -400,6 +402,8 @@ class ReservationsService {
         if (!reservationToDelete) {
             throw new CoveredError(400, "No final reservation exists with provided token.");
         }
+
+        schedule.cancelJob(reservationToDelete.scheduledDeletionJobId);
 
         if (reservationToDelete.scheduledReminderJobId) {
             schedule.cancelJob(reservationToDelete.scheduledReminderJobId);
@@ -438,21 +442,23 @@ class ReservationsService {
             throw new CoveredError("Note cannot exceed 60 characters.");
         }
 
-        const update = {
-            validityEnd: reservation.date,
-            reservationStatus: enums.status.ACTIVE,
-            customerId: customer.id,
-            scheduledDeletionJobId: null,
-            note: note || null,
-        };
-
-        const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);
-
-        if (affectedRows[0] !== 1 || !reservation.scheduledDeletionJobId || !scheduleCancel) {
+        if (!reservation.scheduledDeletionJobId || !scheduleCancel) {
             throw new Error(
                 "The operation of making reservation to be final failed. Please make sure that temporary reservation was made first."
             );
         }
+
+        const update = {
+            validityEnd: reservation.date,
+            reservationStatus: enums.status.ACTIVE,
+            customerId: customer.id,
+            scheduledDeletionJobId: schedule.scheduleJob(endOfDay(reservation.date), () => {
+                this.ReservationsRepository.deleteReservationByToken(reservation.reservationToken);
+            }).name,
+            note: note || null,
+        };
+
+        const affectedRows = await this.ReservationsRepository.updateReservation(reservation.id, update);
 
         return affectedRows[0];
     }
