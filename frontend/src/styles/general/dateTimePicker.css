@@ -153,6 +153,18 @@
     color: var(--mainColor) !important;
 }
 
+.react-calendar__tile.react-calendar__month-view__days__day:disabled,
+.react-calendar__navigation__arrow:disabled {
+    background-color: var(--mainColor) !important;
+    color: var(--mainColorBrighter) !important;
+}
+
+.react-calendar__tile.react-calendar__month-view__days__day:disabled:hover,
+.react-calendar__navigation__arrow:disabled:hover {
+    background-color: var(--mainColor) !important;
+    color: var(--mainColorBrighter) !important;
+}
+
 .react-calendar__month-view__days__day--weekend {
     color: var(--secondaryColor);
 }

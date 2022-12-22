@@ -2,14 +2,17 @@ import DateTimePicker from "react-datetime-picker";
 import { faChevronLeft, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
-import { getMonthIntervalsClosedRestrictions } from "../../../api/adminApi";
+import { useMutation, useQuery } from "react-query";
+import AddIntervalPopup from "./AddIntervalPopup";
+import { createIntervalClosedRestriction, getMonthIntervalsClosedRestrictions } from "../../../api/adminApi";
+import { isBefore, isSameDay, isSameMonth } from "date-fns";
 import IntervalClosedBox from "./IntervalClosedBox";
 import Loading from "../../Loading";
 import { numberMonthEnum } from "../../../shared/utils/enums/numberMonthEnum";
+import { parse } from "date-fns/esm";
+import { queryClient } from "../../../shared/utils/helpers/functions";
+import { Restriction } from "../../../shared/types";
 import styles from "../../../styles/admin/restrictions/intervalsClosed.module.css";
-import AddIntervalPopup from "./AddIntervalPopup";
-import { isSameDay } from "date-fns";
 
 const IntervalClosed = () => {
     const [year, setYear] = useState(new Date().getFullYear());
@@ -18,6 +21,7 @@ const IntervalClosed = () => {
     const [addPopupVisibility, setAddPopupVisibility] = useState(false);
     const [newStartTime, setNewStartTime] = useState(new Date());
     const [newEndTime, setNewEndTime] = useState(new Date());
+    const [popupFormInvalidFormat, setPopupFormInvalidFormat] = useState(false);
 
     const popupCloseHandler = (isVisible: boolean) => {
         setAddPopupVisibility(isVisible);
@@ -33,6 +37,18 @@ const IntervalClosed = () => {
             useErrorBoundary: true,
         }
     );
+
+    const createResctrictionMutation = useMutation({
+        mutationFn: createIntervalClosedRestriction,
+        onSuccess: (data: Restriction) => {
+            if (isSameMonth(parse(data.date || "", "yyyy-MM-dd", new Date()), new Date(year, month - 1, 15))) {
+                queryClient.setQueryData(
+                    ["intervalsClosedRestrictions", [year, month]],
+                    (oldData: Restriction[] | null | undefined) => (oldData ? [...oldData, data] : [])
+                );
+            }
+        },
+    });
 
     function checkIfSomeElementIsOverlapping() {
         if (toolbarRef.current && boxesRef.current && isVisibleArray) {
@@ -93,6 +109,12 @@ const IntervalClosed = () => {
         }
     }, [intervalsClosed.data]);
 
+    useEffect(() => {
+        setPopupFormInvalidFormat(false);
+        setNewEndTime(new Date());
+        setNewStartTime(new Date());
+    }, [addPopupVisibility]);
+
     const nextMonth = () => {
         if (month === 12) {
             setMonth(1);
@@ -114,14 +136,32 @@ const IntervalClosed = () => {
     const handleNewStartTime = (value: Date) => {
         setNewStartTime(value);
         if (!isSameDay(value, newEndTime)) {
-            setNewEndTime(new Date(value));
+            setNewEndTime(value);
         }
     };
 
     const handleNewEndTime = (value: Date) => {
         setNewEndTime(value);
         if (!isSameDay(value, newStartTime)) {
-            setNewStartTime(new Date(value));
+            setNewStartTime(value);
+        }
+    };
+
+    const handlePopupSubmit = () => {
+        if (
+            !isBefore(newStartTime, newEndTime) ||
+            isBefore(newStartTime, new Date()) ||
+            isBefore(newEndTime, new Date()) ||
+            !isSameDay(newEndTime, newStartTime)
+        ) {
+            setPopupFormInvalidFormat(true);
+        } else {
+            setPopupFormInvalidFormat(false);
+            createResctrictionMutation.mutate({
+                startDate: newStartTime.toISOString(),
+                endDate: newEndTime.toISOString(),
+            });
+            setAddPopupVisibility(false);
         }
     };
 
@@ -175,26 +215,39 @@ const IntervalClosed = () => {
             </div>
             <AddIntervalPopup onClose={popupCloseHandler} showProp={addPopupVisibility} title="Add new interval">
                 <div className={styles.popupFormContainer}>
-                    <div className={styles.fromPickerContainer}>
-                        <p>From</p>
+                    <div className={styles.fromContainer}>
+                        <p className={styles.labelPicker}>From</p>
                         <DateTimePicker
+                            minDate={new Date()}
+                            className={styles.pickerItself}
                             value={newStartTime}
                             onChange={handleNewStartTime}
                             clearIcon={null}
-                            format="yy.MM.dd HH:mm"
+                            format="dd.MM.yy HH:mm"
+                            locale="cs-CZ"
                         ></DateTimePicker>
                     </div>
-                    <div className={styles.toPickerContainer}>
-                        <p>To</p>
+                    <div className={styles.toContainer}>
+                        <p className={styles.labelPicker}>To</p>
                         <DateTimePicker
+                            minDate={new Date()}
+                            className={styles.pickerItself}
                             value={newEndTime}
                             onChange={handleNewEndTime}
                             clearIcon={null}
-                            format="yy.MM.dd HH:mm"
+                            format="dd.MM.yy HH:mm"
+                            locale={process.env.REACT_APP_LOCALE}
                         ></DateTimePicker>
                     </div>
                     <div className={styles.submitButtonContainer}>
-                        <button>Submit</button>
+                        {popupFormInvalidFormat && (
+                            <div className={styles.invalidInput}>
+                                <p>make sure that start is before end on the same day</p>
+                            </div>
+                        )}
+                        <button className={styles.submitButton} onClick={handlePopupSubmit}>
+                            Submit
+                        </button>
                     </div>
                 </div>
             </AddIntervalPopup>

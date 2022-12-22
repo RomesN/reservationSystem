@@ -10,6 +10,23 @@
     border-radius: 5px !important;
 }
 
+.react-time-picker__clock-button.react-time-picker__button:hover svg,
+.react-time-picker__clock-button__icon.react-time-picker__button__icon:hover svg {
+    stroke: var(--secondaryColor) !important;
+}
+
+.react-time-picker--disabled *,
+.react-time-picker--disabled .react-time-picker__clock-button.react-time-picker__button:hover svg,
+.react-time-picker--disabled .react-time-picker__clock-button.react-time-picker__button svg,
+.react-time-picker--disabled
+    .react-time-picker__clock-button__icon.react-time-picker__button__icon:hover
+    svg
+    .react-time-picker--disabled
+    .react-time-picker__clock-button__icon.react-time-picker__button__icon
+    svg {
+    stroke: var(--mainColorBrighter) !important;
+}
+
 .react-time-picker__wrapper {
     background-color: var(--tertiaryColor);
 }

@@ -14,18 +14,18 @@
     padding: 20px;
     background: var(--mainColor);
     border-radius: 5px;
-    width: 50%;
+    width: 40%;
     position: relative;
     transition: all 5s ease-in-out;
     color: var(--fontBright);
 }
 
 .popup h2 {
-    margin-top: 1em;
-    margin-bottom: 2em;
     color: var(--fontBright);
     text-align: center;
+    margin-top: 0.3em;
 }
+
 .popup .close {
     position: absolute;
     top: 20px;
@@ -34,16 +34,17 @@
     font-size: 30px;
     font-weight: bold;
     text-decoration: none;
-    color: #333;
+    color: var(--secondaryColor);
 }
+
 .popup .close:hover {
     cursor: pointer;
-    color: #000;
+    color: var(--tertiaryColor);
 }
 .popup .content {
-    min-height: 29vh;
+    min-height: 30vh;
     max-height: 80vh;
-    overflow: auto;
+    overflow: visible;
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 2em;

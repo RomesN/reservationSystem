@@ -125,6 +125,10 @@ export const createBusinessClosedRestriction = async (date: string) => {
     return mutationRequest({ url: `/api/admin/restrictions/business-closed/${date}`, method: "put" });
 };
 
+export const createIntervalClosedRestriction = async ({ ...options }: { startDate: string; endDate: string }) => {
+    return mutationRequest({ url: `/api/admin/restrictions/intervals-closed/`, method: "put", data: { ...options } });
+};
+
 export const deleteBusinessClosedRestriction = async (id: number) => {
     return mutationRequest({ url: `/api/admin/restrictions/business-closed/${id}`, method: "delete" });
 };
