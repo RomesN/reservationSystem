@@ -54,6 +54,7 @@ const generateCustomToken = (tokenLength) => {
     let generatedToken = "";
 
     while (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(generatedToken)) {
+        generatedToken = "";
         for (let i = 0; i < tokenLength; i++) {
             generatedToken += characters.charAt(crypto.randomInt(characters.length));
         }
